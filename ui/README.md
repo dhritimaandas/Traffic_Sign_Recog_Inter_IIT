@@ -1,12 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This folder contains the UI part of the project.
 
-## Getting Started
+## Development Setup
 
-First, run the development server:
+1. Clone this repo
 
 ```bash
-npm run dev
-# or
+git clone https://github.com/dhritimaandas/Traffic_Sign_Recog_Inter_IIT.git
+cd Traffic_Sign_Recog_Inter_IIT/ui
+```
+
+2. Checkout to your branch (first one of you already created your branch and second one if not)
+
+```bash
+git checkout <branchname>
+git checkout -b <branchname>
+```
+
+3. Now since you are in the root directory for the Next.Js project, install the required packages. (required whenever someone changes package.json)
+
+```bash
+yarn install
+```
+
+4. Now run the development server.
+
+```bash
 yarn dev
 ```
 
@@ -14,9 +32,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+5. After you have made your changes, you can add your files to the staging area.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+git add . (to add all changes)
+git add <filename> (to add only the changes in this file)
+```
+
+6. Commit changes
+
+```bash
+git commit -m <commit message>
+```
+
+7. Push the changes to your branch.
+
+```bash
+git push origin <yourbranchname>
+```
 
 ## Learn More
 
@@ -27,8 +60,8 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## API Routing (Not required for now)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
