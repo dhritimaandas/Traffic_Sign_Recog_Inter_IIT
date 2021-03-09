@@ -20,17 +20,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+  return ['Add a new image for a class', 'Preprocessing steps', 'Augmentation'];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return 'Select campaign settings...';
+      return 'Add a new image for a class';
     case 1:
-      return 'What is an ad group anyways?';
+      return 'Preprocessing steps';
     case 2:
-      return 'This is the bit I really care about!';
+      return 'Augmentation';
     default:
       return 'Unknown step';
   }
