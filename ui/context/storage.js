@@ -3,7 +3,9 @@ import { loadFirebase } from "./firebase";
 const firebase = loadFirebase();
 
 export const uploadHandler = (
-  files // Expects an array of files from the event.target.files of file input html
+  files // Expects an array of files from the event.target.files
+  // of file input html along with their classes
+  // Type: [{file: File, class: String}]
 ) => {
   // Initialize firebase storage
   const storage = firebase.storage();
@@ -15,13 +17,14 @@ export const uploadHandler = (
     // Create a reference for the image file
     // TODO: Change folder name as per the requirement
     const reference = storage.ref(
-      "testimages/" + // folder name
-        files[i].name // file name
+      "newImages/" + // folder name
+        files[i].class + //class folder
+        "/" +
+        files[i].file.name // file name
     );
-
     promises.push(
       reference
-        .put(files[i]) // Upload the file
+        .put(files[i].file) // Upload the file
         .then(() => {
           filePaths.push(reference.fullPath); // Store the file path in an array
         })
