@@ -17,7 +17,7 @@ export const uploadHandler = (
     // Create a reference for the image file
     // TODO: Change folder name as per the requirement
     const reference = storage.ref(
-      "newImages/" + // folder name
+      "testImages/" + // folder name
         files[i].class + //class folder
         "/" +
         files[i].file.name // file name
