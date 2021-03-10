@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { uploadHandler } from "../context/storage";
+import { uploadHandler,downHandler } from "../context/storage";
 
-export default function firebasPage() {
-  const handle = (event) => {
+export default function FirebasPage() {
+  const [clas, setClas] = useState(0);
+
+  const handleUpload = (event) => {
     let i = 0;
     let files = [];
     while (i < event.target.files.length) {
@@ -14,9 +16,20 @@ export default function firebasPage() {
     }
     uploadHandler(files);
   };
+
+  const handleDown = () => {
+    downHandler(clas);
+  };
+  const inputclas = (event) => {
+      setClas(event.target.value)
+  }
+
+  
   return (
     <>
-      <input type="file" onChange={handle} accept="image/*" multiple />
+      <input type="file" onChange={handleUpload} accept="image/*" multiple />
+      <input type="number" id="down" onChange={inputclas}/>
+      <input type="submit" value="Get Images" onClick={handleDown} />
     </>
   );
 }

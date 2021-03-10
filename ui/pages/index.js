@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
+import FirebasPage from './firebaseTest';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,9 +44,9 @@ export default function Home() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Stepper />
+         <Stepper /> 
         </Container>
       </main>
     </div>
   );
-}
+}        
