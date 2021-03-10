@@ -5,6 +5,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import AddImage from './steps/addImage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +27,9 @@ function getSteps() {
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return 'Add a new image for a class';
+      return (
+        <AddImage />
+      );
     case 1:
       return 'Preprocessing steps';
     case 2:
