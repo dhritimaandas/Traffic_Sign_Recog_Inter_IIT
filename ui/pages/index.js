@@ -6,7 +6,8 @@ import Container from '@material-ui/core/Container';
 import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
 import FirebasPage from './firebaseTest';
-
+import Modalfun from '../components/modal'
+import Augumentation from '../components/aumentation'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,9 +45,10 @@ export default function Home() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-         <Stepper /> 
+        <Stepper /> 
+        <Augumentation />
         </Container>
       </main>
-    </div>
+    </div> 
   );
-}        
+}     
