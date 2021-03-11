@@ -1,85 +1,118 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
+import React, { Component } from 'react'
+import { DropzoneDialog } from 'material-ui-dropzone'
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid'
+import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import ImageTiles from '../imageTiles';
 
-const data = [
-  {
-    src:
-      'https://i.ytimg.com/vi/pLqipJNItIo/hqdefault.jpg?sqp=-oaymwEYCNIBEHZIVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLBkklsyaw9FxDmMKapyBYCn9tbPNQ',
-    title: 'Don Diablo @ Tomorrowland Main Stage 2019 | Official…',
-    channel: 'Don Diablo',
-    views: '396 k views',
-    createdAt: 'a week ago',
+const styles = theme => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
   },
-  {
-    src:
-      'https://i.ytimg.com/vi/_Uu12zY01ts/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLCpX6Jan2rxrCAZxJYDXppTP4MoQA',
-    title: 'Queen - Greatest Hits',
-    channel: 'Queen Official',
-    views: '40 M views',
-    createdAt: '3 years ago',
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
-  {
-    src:
-      'https://i.ytimg.com/vi/kkLk2XWMBf8/hqdefault.jpg?sqp=-oaymwEYCNIBEHZIVfKriqkDCwgBFQAAiEIYAXAB&rs=AOn4CLB4GZTFu1Ju2EPPPXnhMZtFVvYBaw',
-    title: 'Calvin Harris, Sam Smith - Promises (Official Video)',
-    channel: 'Calvin Harris',
-    views: '130 M views',
-    createdAt: '10 months ago',
-  },
-];
+});
 
-function Media(props) {
-  const { loading = false } = props;
 
-  return (
-    <Grid container wrap="nowrap">
-      {(loading ? Array.from(new Array(3)) : data).map((item, index) => (
-        <Box key={index} width={400} marginRight={0.5} my={5}>
-          {item ? (
-            <img style={{ width: 400, height: 200 }} alt={item.title} src={item.src} />
-          ) : (
-            <Skeleton variant="rect" width={400} height={200} />
-          )}
+class DropzoneDialogExample extends Component {
 
-          {item ? (
-            <Box pr={2}>
-              <Typography gutterBottom variant="body2">
-                {item.title}
-              </Typography>
-              <Typography display="block" variant="caption" color="textSecondary">
-                {item.channel}
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {`${item.views} • ${item.createdAt}`}
-              </Typography>
-            </Box>
-          ) : (
-            <Box pt={0.5}>
-              <Skeleton />
-              <Skeleton width="60%" />
-            </Box>
-          )}
-        </Box>
-      ))}
-    </Grid>
-  );
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+      class: '',
+      files: []
+    };
+
+  }
+
+  handleClose() {
+    this.setState({
+      open: false
+    });
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      class: event.target.value
+    });
+  };
+
+  handleSave(files) {
+    //Saving files to state for further use and closing Modal.
+    const filesNew = files.map(file => {
+      var reader = new FileReader();
+      var url = reader.readAsDataURL(file);
+      console.log(file);
+      console.log(url);
+      return [file, this.state.class]
+    });
+    const filesOld = this.state.files;
+    const filesNewState = filesNew.concat(filesOld);
+    this.setState({
+      files: filesNewState,
+      open: false
+    });
+  }
+
+  handleOpen() {
+    this.setState({
+      open: true,
+    });
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <Grid>
+        <Grid
+          container
+          justify="center"
+          alignItems="center">
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-simple-select-helper-label">Class Name</InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={this.state.class}
+              onChange={this.handleChange.bind(this)}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'Class 1'}>Class One</MenuItem>
+              <MenuItem value={'Class 2'}>Class Two</MenuItem>
+              <MenuItem value={'Class 3'}>Class Three</MenuItem>
+            </Select>
+            <FormHelperText>Select a class for the images you are going to add</FormHelperText>
+          </FormControl>
+          <Button disabled={this.state.class === ""} variant="contained" color="primary" onClick={this.handleOpen.bind(this)}>
+            Add Image
+          </Button>
+          <DropzoneDialog
+            open={this.state.open}
+            onSave={this.handleSave.bind(this)}
+            acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+            showPreviews={true}
+            maxFileSize={500000000}
+            onClose={this.handleClose.bind(this)}
+          />
+        </Grid>
+        <div style={{marginTop:'40px', marginBottom:'50px'}}>
+          <h1 style={{marginBottom:'20px'}}>Images Uploaded</h1>
+          {this.state.files.length === 0 ? <h2>No images</h2> : <ImageTiles tileData={this.state.files} />}
+        </div>
+      </Grid>
+    );
+  }
 }
 
-Media.propTypes = {
-  loading: PropTypes.bool,
-};
 
-export default function AddImage() {
-  return (
-    <Box overflow="hidden">
-      <h1>This page is for adding a new Image and editing it and sending it to the database or backend</h1>
-      <span>Remove all the code on this page, I just added it for testing, and build a new page. Keep responsiveness in your mind.</span>
-      <Media loading />
-      <Media />
-    </Box>
-  );
-}
+export default withStyles(styles)(DropzoneDialogExample);
