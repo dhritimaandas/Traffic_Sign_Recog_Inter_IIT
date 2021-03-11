@@ -38,42 +38,37 @@ export const uploadHandler = (
   return filePaths;
 };
 
-export const downHandler = (num) => {
+
+export const downloadHandler = async () => {
   let imgpaths = [];
-
   const storage = firebase.storage();
-  // Create a reference under which you want to list
-var listRef = storage.ref("testImages/" + num);
+  const data = {};
 
-// Find all the prefixes and items.
+  try {
+    // TODO: Change json name to appropriate one
+    const jsonRef = storage.ref("testImages/a.json");
+    const jsonUrl = await jsonRef.getDownloadURL();
+    data.json = jsonUrl;
+  } catch (err) {
+    if (err == "storage/object-not-found") data.json = null;
+  }
 
-listRef.listAll()
-  .then((res) => {
-    res.prefixes.forEach((folderRef) => {
-      // All the prefixes under listRef.
-      // You may call listAll() recursively on them.
-      //console.log(folderRef);
+  // Folders inside the main folder
+  var folder = storage.ref("testImages/");
+  folder.listAll().then((subfolders) => {
+    subfolders.prefixes.forEach(async (folderRef) => {
+      const images = await folderRef.listAll();
+      images.items.forEach(async (image) => {
+        const url = await image.getDownloadURL();
+        imgpaths.push(url);
+      });
     });
-    res.items.forEach((itemRef) => {
-      // All the items under listRef.
-     // paths.push(itemRef.fullPath)
-    
-     storage.ref().child(itemRef.fullPath).getDownloadURL()   //we r fetching urls by the path in firebase
-  .then((url) => { imgpaths.push(url) })
-  .catch((error) => {
-    // Handle any errors
   });
 
-    });
-
-  }).catch((error) => {
-    // Uh-oh, an error occurred!
-  });
-
-  Promise.all(imgpaths)
+  await Promise.all(imgpaths)
     .then(() => console.log("DONE"))
     .catch(() => alert("Some Error Occurred"));
-console.log(imgpaths);
-  return imgpaths;
-  
-}
+
+  data.images = imgpaths;
+  return data;
+};

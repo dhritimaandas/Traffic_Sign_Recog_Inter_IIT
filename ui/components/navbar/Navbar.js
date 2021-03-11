@@ -13,6 +13,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HomeIcon from '@material-ui/icons/Home';
 import { mainListItems, secondaryListItems } from './listItems';
 import style from "./style";
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme) => (style(theme)));
 
@@ -42,9 +43,11 @@ export default function Navbar() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Bosch Traffic Signal Detection
           </Typography>
-          <IconButton color="inherit">
-            <HomeIcon />
-          </IconButton>
+          <Link href='/' passHref color='inherit'>
+            <IconButton color="inherit">
+              <HomeIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
