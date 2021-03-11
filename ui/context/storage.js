@@ -37,3 +37,37 @@ export const uploadHandler = (
     .catch(() => alert("Some Error Occurred"));
   return filePaths;
 };
+
+export const downloadHandler = async () => {
+  let imgpaths = [];
+  const storage = firebase.storage();
+  const data = {};
+
+  try {
+    // TODO: Change json name to appropriate one
+    const jsonRef = storage.ref("testImages/a.json");
+    const jsonUrl = await jsonRef.getDownloadURL();
+    data.json = jsonUrl;
+  } catch (err) {
+    if (err == "storage/object-not-found") data.json = null;
+  }
+
+  // Folders inside the main folder
+  var folder = storage.ref("testImages/");
+  folder.listAll().then((subfolders) => {
+    subfolders.prefixes.forEach(async (folderRef) => {
+      const images = await folderRef.listAll();
+      images.items.forEach(async (image) => {
+        const url = await image.getDownloadURL();
+        imgpaths.push(url);
+      });
+    });
+  });
+
+  await Promise.all(imgpaths)
+    .then(() => console.log("DONE"))
+    .catch(() => alert("Some Error Occurred"));
+
+  data.images = imgpaths;
+  return data;
+};
