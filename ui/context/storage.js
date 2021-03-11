@@ -38,7 +38,7 @@ export const uploadHandler = (
   return filePaths;
 };
 
-export const downHandler = async () => {
+export const downloadHandler = async () => {
   let imgpaths = [];
   const storage = firebase.storage();
   const data = {};
