@@ -6,6 +6,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddImage from './steps/addImage';
+import Augment from './steps/augment'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +34,7 @@ function getStepContent(step) {
     case 1:
       return 'Preprocessing steps';
     case 2:
-      return 'Augmentation';
+      return <Augment/>
     default:
       return 'Unknown step';
   }
