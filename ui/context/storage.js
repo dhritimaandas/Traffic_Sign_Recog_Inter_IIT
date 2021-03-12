@@ -70,5 +70,6 @@ export const downloadHandler = async () => {
     .catch(() => alert("Some Error Occurred"));
 
   data.images = imgpaths;
+  console.log(imgpaths);
   return data;
 };

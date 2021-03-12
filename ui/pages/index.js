@@ -7,8 +7,7 @@ import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
 import FirebasPage from './firebaseTest';
 import Modalfun from '../components/modal'
-import Augumentation from '../components/aumentation'
-
+import AugmentationSec from '../components/augmentation'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +46,7 @@ export default function Home() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
         <Stepper /> 
-        <Augumentation />
+        <AugmentationSec />
         </Container>
       </main>
     </div> 
