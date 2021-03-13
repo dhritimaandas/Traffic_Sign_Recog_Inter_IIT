@@ -1,11 +1,13 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import AddImage from "./steps/addImage";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import AddImage from './steps/addImage';
+import Confirm from './Confirmation';
+// import RangeSlider from './Balance'
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
 
@@ -39,7 +41,7 @@ function getStepContent(step) {
   }
 }
 
-export default function HorizontalLinearStepper() {
+const HorizontalLinearStepper = (props) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -88,6 +90,7 @@ export default function HorizontalLinearStepper() {
   };
 
   return (
+
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
@@ -111,6 +114,7 @@ export default function HorizontalLinearStepper() {
       <div>
         {activeStep === steps.length ? (
           <div>
+            <Confirm open={props.pop} display={props.openBox} /> 
             <Typography className={classes.instructions}>
               All steps completed - you&apos;re finished
             </Typography>
@@ -157,3 +161,5 @@ export default function HorizontalLinearStepper() {
     </div>
   );
 }
+export default HorizontalLinearStepper;
+
