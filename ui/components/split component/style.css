@@ -1,0 +1,92 @@
+/* CSS Document */
+body {
+  user-select: none;
+}
+
+div.aria-widget-slider {
+  clear: both;
+  padding-top: 0.5em;
+  padding-bottom: 1em;
+}
+
+div.rail-label {
+  padding-right: 0.5em;
+  text-align: right;
+  float: left;
+  width: 4em;
+  position: relative;
+  top: -0.5em;
+}
+
+div.rail-label.max {
+  padding-left: 0.5em;
+  text-align: left;
+}
+
+div.aria-widget-slider .rail {
+  background-color: #eee;
+  border: 1px solid #888;
+  position: relative;
+  height: 4px;
+  float: left;
+}
+
+div.aria-widget-slider img[role="slider"] {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  top: -10px;
+}
+
+div.aria-widget-slider img[role="slider"].focus,
+div.aria-widget-slider img[role="slider"]:hover {
+  outline-color: rgb(140, 203, 242);
+  outline-style: solid;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+div.aria-widget-slider .rail.focus {
+  /* background-color: #aaa; */
+  background: linear-gradient(
+    to right,
+    red 0% 25%,
+    yellow 25% 75%,
+    green 75% 100%
+  );
+}
+img {
+  height: 27px;
+  width: 27px;
+}
+
+#partition {
+  height: 30px;
+  width: 30px;
+}
+div.datacount {
+  display: flex;
+  width: 300px;
+  justify-content: space-around;
+  /* padding: 15px; */
+}
+.subset {
+  margin: 15px;
+}
+h1,
+h3,
+h4 {
+  margin: 0px;
+}
+div.rail-label {
+  display: none;
+}
+.train {
+  color: red;
+}
+.valid {
+  color: rgb(240, 240, 13);
+}
+.test {
+  color: green;
+}

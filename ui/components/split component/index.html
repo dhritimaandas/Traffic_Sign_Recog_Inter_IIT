@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>
+      <img src="partition.png" alt="partition" id="partition">
+      Train/Test Split
+    </h1>
+    <div class="datacount">
+      <div class="subset train">
+        <h3>Train</h3>
+        <h4 id="Train">25</h4>
+      </div>
+      <div class="subset valid">
+        <h3>Valid</h3>
+        <h4 id="Valid">25</h4>
+      </div>
+      <div class="subset test">
+        <h3>Test</h3>
+        <h4 id="Test">50</h4>
+      </div>
+    </div>
+    <div class="aria-widget-slider">
+      <div class="rail-label min">
+        0
+      </div>
+      <div class="rail" style="width: 300px;">
+        <img id="minPriceHotel"
+            src="thumb.png"
+            role="slider"
+            tabindex="0"
+            class="min thumb"
+            aria-valuemin="0"
+            aria-valuenow="25"
+            
+            aria-valuemax="100"
+            aria-label="Hotel Minimum Price">
+        <img id="maxPriceHotel"
+            src="thumb.png"
+            role="slider"
+            tabindex="0"
+            class="max thumb"
+            aria-valuemin="0"
+            aria-valuenow="75"
+            
+            aria-valuemax="100"
+            aria-label="Hotel Maximum Price">
+      </div>
+      <div class="rail-label max">
+        0
+      </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+<!-- aria-valuetext="$100" -->
+<!-- aria-valuetext="$250" -->
