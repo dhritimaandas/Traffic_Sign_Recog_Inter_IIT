@@ -1,15 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import AddImage from './steps/addImage';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import AddImage from "./steps/addImage";
+import Augment from "./steps/augment";
+import Preprocess from "./steps/preprocess";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
   },
   button: {
     marginRight: theme.spacing(1),
@@ -21,27 +23,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Add a new image for a class', 'Preprocessing steps', 'Augmentation'];
+  return ["Add a new image for a class", "Preprocessing steps", "Augmentation"];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return (
-        <AddImage />
-      );
+      return <AddImage />;
     case 1:
-      return 'Preprocessing steps';
+      return <Preprocess />;
     case 2:
-      return 'Augmentation';
+      return <Augment />;
     default:
-      return 'Unknown step';
+      return "Unknown step";
   }
 }
 
 export default function HorizontalLinearStepper() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
 
@@ -94,7 +94,9 @@ export default function HorizontalLinearStepper() {
           const stepProps = {};
           const labelProps = {};
           if (isStepOptional(index)) {
-            labelProps.optional = <Typography variant="caption">Optional</Typography>;
+            labelProps.optional = (
+              <Typography variant="caption">Optional</Typography>
+            );
           }
           if (isStepSkipped(index)) {
             stepProps.completed = false;
@@ -118,9 +120,15 @@ export default function HorizontalLinearStepper() {
           </div>
         ) : (
           <div>
-            <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+            <Typography className={classes.instructions}>
+              {getStepContent(activeStep)}
+            </Typography>
             <div>
-              <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.button}
+              >
                 Back
               </Button>
               {isStepOptional(activeStep) && (
@@ -140,7 +148,7 @@ export default function HorizontalLinearStepper() {
                 onClick={handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>
             </div>
           </div>
