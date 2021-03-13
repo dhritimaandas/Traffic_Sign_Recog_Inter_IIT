@@ -24,21 +24,23 @@ const RangeSlider = (props) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    // console.log(props)
+    props.splithandler(value[0],value[1]-value[0],100-value[1]);
   };
 
-  const [slider, setSlider] = React.useState(false);
+  // const [slider, setSlider] = React.useState(false);
 
-  const openSlider = () => {
-    setSlider(true);
-  };
+  // const openSlider = () => {
+  //   setSlider(true);
+  // };
 
-  const closeSlider = () => {
-    setSlider(false);
-  }
+  // const closeSlider = () => {
+  //   setSlider(false);
+  // }
 
-  props = {slider,setSlider};
+  // props = {slider,setSlider};
 
-  var splitValues = [value[0],value[1]-value[0],100-value[1]];
+  // var splitValues = [value[0],value[1]-value[0],100-value[1]];
 
   return (
     <div className={classes.root}>

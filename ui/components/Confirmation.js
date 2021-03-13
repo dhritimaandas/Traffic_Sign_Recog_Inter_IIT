@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,62 +6,88 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import RangeSlider from './Balance';
-import HorizontalLinearStepper from './stepper'
+import {withRouter} from 'next/router';
+// import HorizontalLinearStepper from './stepper'
 
-const Confirm = (props) => {
+class Confirm extends Component {
 
-  const [pop, setOpen] = React.useState(false);
+  state = {
+    pop: false,
+    balanceDataset: false,
+    datasetSplit: {
+      train: 0,
+      validate: 50,
+      test: 50
+    }
+  }
 
-  const openBox = () => {
-    setOpen(true);
+  openBox = () => {
+    this.setState({
+      pop: true
+    })
   };
 
-  const closeBox = () => {
-    setOpen(false);
-    document.querySelector(".mainBtn").style.display="none";
+  closeBox = () => {
+    this.setState({
+      pop: false
+    })
+  };
+
+  changeSplitHandler = (train, validate, test) => {
+    const newSplits = {
+      train,
+      validate,
+      test
+    }
+    this.setState({
+      datasetSplit: newSplits
+    })
   }
 
-  const showSlider = () => {
-      document.getElementById("slider").style.display="block";
+
+  formSubmitHandler = () => {
+    var arr = document.getElementsByName("choice");
+    var balance = arr[0].checked;
+
+    console.log(this.state)
+    this.setState({
+      balanceDataset: balance
+    })
+    this.props.router.push('/dashboard');
   }
 
-  const checkValue = () => {
-      var arr = document.getElementsByName("choice");
-      arr[0].checked?showSlider():closeBox();
+  render() {
+    const pop = this.state.pop;
+    return (
+      <div>
+        <Button onClick={this.openBox} className="mainBtn">Balance the Dataset</Button>
+        <Dialog
+          open={pop}
+          display={this.openBox}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Balance the Dataset"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Do you wish to  balance the Dataset ?
+            <input style={{ margin: 10 }} type="radio" value={true} name="choice" /> Yes
+            <input style={{ margin: 10 }} type="radio" value={false} name="choice" defaultChecked/> No
+            </DialogContentText>
+            <div id="slider" ><RangeSlider splithandler={this.changeSplitHandler}/></div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.formSubmitHandler} variant="contained" color="primary">
+              Confirm
+            </Button>
+            <Button onClick={this.closeBox} variant="contained" color="secondary" autoFocus>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
   }
-
-  props = {pop,openBox};
-
-  return (
-    <div>
-      <Button onClick={openBox} className="mainBtn">Balance the Dataset</Button>
-      <Dialog
-        open={pop}
-        display={openBox}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Balance the Dataset"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you wish to  balance the Dataset ? 
-          </DialogContentText>
-          <input style={{ margin:10 }} type="radio" value="Yes" name="choice" /> Yes
-          <input style={{ margin:10 }} type="radio" value="No" name="choice" /> No
-          <Button style={{ 'float':'right' }} onClick={checkValue}>Submit</Button>
-          <div id="slider" style={{"display":"none"}}><RangeSlider/></div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.handleReset} color="primary">
-            Confirm
-          </Button>
-          <Button onClick={closeBox} color="primary" autoFocus>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
 }
 
-export default Confirm;
+export default withRouter(Confirm);
