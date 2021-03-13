@@ -7,29 +7,35 @@ import Chip from "@material-ui/core/Chip";
 const augmentationOptions = [
   { value: 0, label: "Flip", augments: "Horizontal, Vertical" },
   { value: 1, label: "Crop", augments: "0% Minimum Zoom, 40% Maximum Zoom" },
-  { value: 2, label: "Rotate", augments: "Between -15° and +15°" },
   { value: 3, label: "Blur", augments: "Up to 1.5px" },
 ];
 
 export default function Augment() {
-  const [augs, setAugs] = useState([
-    "Augmentation 1",
-    "Augmentation 2",
-    "Augmentation 3",
-  ]);
+  const [augs, setAugs] = useState({
+    Flip: true,
+    Crop: true,
+    Blur: false,
+  });
   const [selected, setSelected] = useState();
 
   const handleChange = (augment) => {
     setSelected(augment);
   };
-  const handleDelete = (e) =>
-    setAugs(augs.filter((augmentation) => augmentation != e));
+
+  const handleDelete = (augmentationKey) => {
+    let newDict = { ...augs };
+    newDict[augmentationKey] = false;
+    setAugs(newDict);
+  };
+
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
       <AugmentationModal
+        allAugs={augs}
+        setAllAugs={setAugs}
         augmentation={selected || ""}
         show={showModal}
         handleClose={handleClose}
@@ -59,14 +65,17 @@ export default function Augment() {
         <h5>Selected Augmentations</h5>
         <Row className="pt-3">
           <Col>
-            {augs.map((current) => (
-              <Chip
-                className="mx-1"
-                label={current}
-                onDelete={() => handleDelete(current)}
-                color="primary"
-              />
-            ))}
+            {Object.keys(augs).map((current) => {
+              if (augs[current] == true)
+                return (
+                  <Chip
+                    className="mx-1"
+                    label={current}
+                    onDelete={() => handleDelete(current)}
+                    color="primary"
+                  />
+                );
+            })}
           </Col>
         </Row>
       </Col>
@@ -74,7 +83,13 @@ export default function Augment() {
   );
 }
 
-const AugmentationModal = ({ show, handleClose, augmentation }) => {
+const AugmentationModal = ({
+  show,
+  handleClose,
+  augmentation,
+  allAugs,
+  setAllAugs,
+}) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
@@ -119,7 +134,15 @@ const AugmentationModal = ({ show, handleClose, augmentation }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleClose}>
+        <Button
+          variant="primary"
+          onClick={() => {
+            let newDict = { ...allAugs };
+            newDict[augmentation.label] = true; // update with value
+            setAllAugs(newDict);
+            handleClose();
+          }}
+        >
           Add
         </Button>
       </Modal.Footer>

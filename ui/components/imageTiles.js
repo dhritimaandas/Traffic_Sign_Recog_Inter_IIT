@@ -5,6 +5,8 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import CropModal from './cropModal'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,9 +49,15 @@ const useStyles = makeStyles((theme) => ({
  */
 export default function SingleLineGridList(props) {
   const classes = useStyles();
+  const [showModal, setShow] = React.useState(false);
+  const handleClose = () => setShow(false);
 
   return (
     <div className={classes.root}>
+      <CropModal
+        show={showModal}
+        handleClose={handleClose}
+      />
       <GridList className={classes.gridList} cols={2.5}>
         {props.tileData.map((tile) => (
           <GridListTile key={tile[0].name}>
@@ -61,7 +69,7 @@ export default function SingleLineGridList(props) {
                 title: classes.title,
               }}
               actionIcon={
-                <IconButton aria-label={`star ${tile.title}`}>
+                <IconButton onClick={() => setShow(true)} aria-label={`star ${tile.title}`}>
                   <EditIcon className={classes.title} />
                 </IconButton>
               }
