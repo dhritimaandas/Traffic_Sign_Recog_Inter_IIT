@@ -9,7 +9,7 @@ import AddImage from './steps/addImage';
 import Confirm from './Confirmation';
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
-import RangeSlider from './Balance';
+// import RangeSlider from './Balance';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,11 +116,11 @@ const HorizontalLinearStepper = (props) => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Confirm open={props.pop} display={props.openBox} /> 
             <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
+              All the steps are completed. Do you want to reset all your progress or Confirm?
             </Typography>
-            <Button onClick={handleReset} className={classes.button}>
+            <Confirm open={props.pop} display={props.openBox} /> 
+            <Button onClick={handleReset} className={classes.button} color="secondary" variant="contained">
               Reset
             </Button>
           </div>
