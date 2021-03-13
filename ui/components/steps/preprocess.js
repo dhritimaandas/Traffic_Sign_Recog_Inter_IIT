@@ -12,24 +12,32 @@ const preprocessingOptions = [
 ];
 
 export default function Augment() {
-  const [augs, setAugs] = useState([
-    "Preprocessing 1",
-    "Preprocessing 2",
-    "Preprocessing 3",
-  ]);
+  const [augs, setAugs] = useState({
+    Grayscale: true,
+    Contrast: true,
+    Resize: false,
+    Tile: false,
+  });
   const [selected, setSelected] = useState();
 
   const handleChange = (augment) => {
     setSelected(augment);
   };
-  const handleDelete = (e) =>
-    setAugs(augs.filter((preprocessing) => preprocessing != e));
+
+  const handleDelete = (augmentationKey) => {
+    let newDict = { ...augs };
+    newDict[augmentationKey] = false;
+    setAugs(newDict);
+  };
+
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
       <AugmentationModal
+        allAugs={augs}
+        setAllAugs={setAugs}
         preprocessing={selected || ""}
         show={showModal}
         handleClose={handleClose}
@@ -59,14 +67,17 @@ export default function Augment() {
         <h5>Selected Steps</h5>
         <Row className="pt-3">
           <Col>
-            {augs.map((current) => (
-              <Chip
-                className="mx-1"
-                label={current}
-                onDelete={() => handleDelete(current)}
-                color="primary"
-              />
-            ))}
+            {Object.keys(augs).map((current) => {
+              if (augs[current] == true)
+                return (
+                  <Chip
+                    className="mx-1"
+                    label={current}
+                    onDelete={() => handleDelete(current)}
+                    color="primary"
+                  />
+                );
+            })}
           </Col>
         </Row>
       </Col>
@@ -74,7 +85,14 @@ export default function Augment() {
   );
 }
 
-const AugmentationModal = ({ show, handleClose, preprocessing }) => {
+const AugmentationModal = ({
+  show,
+  handleClose,
+  preprocessing,
+  augmentation,
+  allAugs,
+  setAllAugs,
+}) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
@@ -119,7 +137,15 @@ const AugmentationModal = ({ show, handleClose, preprocessing }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleClose}>
+        <Button
+          variant="primary"
+          onClick={() => {
+            let newDict = { ...allAugs };
+            newDict[preprocessing.label] = true; // update with value
+            setAllAugs(newDict);
+            handleClose();
+          }}
+        >
           Add
         </Button>
       </Modal.Footer>
