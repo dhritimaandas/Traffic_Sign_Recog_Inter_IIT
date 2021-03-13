@@ -1,13 +1,15 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import AddImage from "./steps/addImage";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import AddImage from './steps/addImage';
+import Confirm from './Confirmation';
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
+// import RangeSlider from './Balance';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +41,7 @@ function getStepContent(step) {
   }
 }
 
-export default function HorizontalLinearStepper() {
+const HorizontalLinearStepper = (props) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -87,7 +89,10 @@ export default function HorizontalLinearStepper() {
     setActiveStep(0);
   };
 
+  props = {handleReset};
+
   return (
+
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
@@ -112,9 +117,10 @@ export default function HorizontalLinearStepper() {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
+              All the steps are completed. Do you want to reset all your progress or Confirm?
             </Typography>
-            <Button onClick={handleReset} className={classes.button}>
+            <Confirm open={props.pop} display={props.openBox} /> 
+            <Button onClick={handleReset} className={classes.button} color="secondary" variant="contained">
               Reset
             </Button>
           </div>
@@ -157,3 +163,5 @@ export default function HorizontalLinearStepper() {
     </div>
   );
 }
+export default HorizontalLinearStepper;
+
