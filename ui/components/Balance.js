@@ -47,15 +47,15 @@ const RangeSlider = (props) => {
       <Typography id="range-slider" gutterBottom>
        <Container>
            <Row>
-               <Col md={4}>
+               <Col xs={4} md={4}>
                     Train <br></br>
                     {value[0]}
                </Col>
-               <Col md={4}>
+               <Col xs={4} md={4}>
                    Valid <br></br>
                    {value[1]-value[0]}
                </Col>
-               <Col md={4}>
+               <Col xs={4} md={4}>
                    Test <br></br>
                    {100-value[1]}
                </Col>
