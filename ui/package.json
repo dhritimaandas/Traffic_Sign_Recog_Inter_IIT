@@ -16,6 +16,7 @@
     "bootstrap": "^4.6.0",
     "clsx": "^1.1.1",
     "firebase": "^8.2.10",
+    "jimp": "^0.16.1",
     "material-ui-dropzone": "^3.5.0",
     "next": "10.0.8",
     "react": "17.0.1",
