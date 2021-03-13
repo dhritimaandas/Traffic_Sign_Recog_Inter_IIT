@@ -7,9 +7,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddImage from './steps/addImage';
 import Confirm from './Confirmation';
-// import RangeSlider from './Balance'
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
+import RangeSlider from './Balance';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -88,6 +88,8 @@ const HorizontalLinearStepper = (props) => {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  props = {handleReset};
 
   return (
 
