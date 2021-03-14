@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
+import Jimp from "jimp";
+import fs from "fs";
 
 const augmentationOptions = [
   { value: 0, label: "Flip", augments: "Horizontal, Vertical" },
@@ -90,6 +92,15 @@ const AugmentationModal = ({
   allAugs,
   setAllAugs,
 }) => {
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    Jimp.read("brain.jpg").then(function (img) {
+      img.brightness(-0.5).getBase64(Jimp.AUTO, function (err, src) {
+        setImage(src);
+      });
+    });
+  }, []);
   return (
     <Modal show={show} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
@@ -110,7 +121,7 @@ const AugmentationModal = ({
             <Col sm={6} className="text-center">
               <p className="lead">Augmented Image</p>
               <Image
-                src="/brain.jpg"
+                src={image}
                 alt="Picture of the author"
                 width={300}
                 height={300}
