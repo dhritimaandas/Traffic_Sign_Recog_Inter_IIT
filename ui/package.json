@@ -15,6 +15,7 @@
     "@types/material-ui": "^0.21.8",
     "bootstrap": "^4.6.0",
     "clsx": "^1.1.1",
+    "cropperjs": "^1.5.11",
     "firebase": "^8.2.10",
     "fs": "^0.0.1-security",
     "jimp": "^0.16.1",
@@ -23,6 +24,7 @@
     "react": "17.0.1",
     "react-bootstrap": "^1.5.1",
     "react-dom": "17.0.1",
+    "react-image-crop": "^8.6.6",
     "react-select": "^4.2.1",
     "recharts": "^2.0.8"
   }

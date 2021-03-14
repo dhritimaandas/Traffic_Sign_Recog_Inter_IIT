@@ -9,7 +9,7 @@ import AddImage from './steps/addImage';
 import Confirm from './Confirmation';
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
-// import RangeSlider from './Balance';
+import CropImage from './augmentations/cropImage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +31,8 @@ function getSteps() {
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <AddImage />;
+      // return <AddImage />;
+      return <CropImage />
     case 1:
       return <Preprocess />;
     case 2:
