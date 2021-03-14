@@ -5,21 +5,25 @@ import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
 import fs from "fs";
+import FlipModal from "../jimpModals/flip";
+import RotateModal from "../jimpModals/rotate";
+import BrightnessModal from "../jimpModals/brightness";
+import ContrastModal from "../jimpModals/contrast";
+import GrayscaleModal from "../jimpModals/grayscale";
 
 const augmentationOptions = [
   { value: 0, label: "Flip", augments: "Horizontal, Vertical" },
-  { value: 1, label: "Crop", augments: "0% Minimum Zoom, 40% Maximum Zoom" },
-  { value: 3, label: "Blur", augments: "Up to 1.5px" },
+  { value: 1, label: "Rotate", augments: "0% Minimum Zoom, 40% Maximum Zoom" },
+  { value: 2, label: "Brightness", augments: "Up to 1.5px" },
+  { value: 3, label: "Contrast", augments: "Up to 1.5px" },
+  { value: 3, label: "Grayscale", augments: "Up to 1.5px" },
+  { value: 3, label: "Invert Colors", augments: "Up to 1.5px" },
 ];
 
 export default function Augment() {
-  const [augs, setAugs] = useState({
-    Flip: true,
-    Crop: true,
-    Blur: false,
-  });
+  const [augs, setAugs] = useState({});
   const [selected, setSelected] = useState();
-
+  const [modalName, setModalName] = useState();
   const handleChange = (augment) => {
     setSelected(augment);
   };
@@ -35,13 +39,47 @@ export default function Augment() {
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
-      <AugmentationModal
-        allAugs={augs}
-        setAllAugs={setAugs}
-        augmentation={selected || ""}
-        show={showModal}
-        handleClose={handleClose}
-      />
+      {modalName == "Flip" ? (
+        <FlipModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Rotate" ? (
+        <RotateModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Brightness" ? (
+        <BrightnessModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Contrast" ? (
+        <ContrastModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Grayscale" ? (
+        <GrayscaleModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : null}
       <Col>
         <h5>Add Augmentations</h5>
         <Row className="pt-3">
@@ -54,7 +92,10 @@ export default function Augment() {
           </Col>
           <Col md={6}>
             <Button
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setShow(true);
+                setModalName(selected.label);
+              }}
               variant="dark"
               disabled={selected == null}
             >
@@ -67,96 +108,22 @@ export default function Augment() {
         <h5>Selected Augmentations</h5>
         <Row className="pt-3">
           <Col>
-            {Object.keys(augs).map((current) => {
-              if (augs[current] == true)
-                return (
-                  <Chip
-                    className="mx-1"
-                    label={current}
-                    onDelete={() => handleDelete(current)}
-                    color="primary"
-                  />
-                );
-            })}
+            {Object.keys(augs).length
+              ? Object.keys(augs).map((current) => {
+                  if (augs[current] == true)
+                    return (
+                      <Chip
+                        className="mx-1"
+                        label={current}
+                        onDelete={() => handleDelete(current)}
+                        color="primary"
+                      />
+                    );
+                })
+              : "No Augmentations Added"}
           </Col>
         </Row>
       </Col>
     </Container>
   );
 }
-
-const AugmentationModal = ({
-  show,
-  handleClose,
-  augmentation,
-  allAugs,
-  setAllAugs,
-}) => {
-  const [image, setImage] = useState("");
-
-  useEffect(() => {
-    Jimp.read("brain.jpg").then(function (img) {
-      img.brightness(-0.5).getBase64(Jimp.AUTO, function (err, src) {
-        setImage(src);
-      });
-    });
-  }, []);
-  return (
-    <Modal show={show} onHide={handleClose} centered size="md">
-      <Modal.Header closeButton>
-        <Modal.Title>{augmentation.label} Image</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Container>
-          <Row>
-            <Col sm={6} className="text-center">
-              <p className="lead">Original Image</p>
-              <Image
-                src="/brain.jpg"
-                alt="Picture of the author"
-                width={300}
-                height={300}
-              />
-            </Col>
-            <Col sm={6} className="text-center">
-              <p className="lead">Augmented Image</p>
-              <Image
-                src={image}
-                alt="Picture of the author"
-                width={300}
-                height={300}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-3">
-            <Col lg={3} />
-            <Col lg={6}>
-              <Form className="text-center">
-                <Form.Group controlId="formBasicRange">
-                  <Form.Control type="range" />
-                  <Form.Label>Select an Value</Form.Label>
-                </Form.Group>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            let newDict = { ...allAugs };
-            newDict[augmentation.label] = true; // update with value
-            setAllAugs(newDict);
-            handleClose();
-          }}
-        >
-          Add
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
