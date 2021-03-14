@@ -31,8 +31,7 @@ function getSteps() {
 function getStepContent(step) {
   switch (step) {
     case 0:
-      // return <AddImage />;
-      return <CropImage />
+      return <AddImage />;
     case 1:
       return <Preprocess />;
     case 2:

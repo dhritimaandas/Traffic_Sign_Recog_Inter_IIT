@@ -6,14 +6,17 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 class CropImage extends React.Component {
 
-state = {
-        src: null,
-        crop: {
-          unit: '%',
-          width: 30,
-          aspect: 16 / 9,
-        },
-      };
+    constructor(props){
+        super(props);
+        this.state = {
+            src: "./brain.jpg",
+            crop: {
+              unit: '%',
+              width: 30,
+              aspect: 16 / 9,
+            },
+          };
+    }
 
       onSelectFile = e => {
         if (e.target.files && e.target.files.length > 0) {
@@ -74,7 +77,7 @@ state = {
               console.error('Canvas is empty');
               return;
             }
-            blob.name = fileName;
+            // blob.name = fileName;
             window.URL.revokeObjectURL(this.fileUrl);
             this.fileUrl = window.URL.createObjectURL(blob);
             resolve(this.fileUrl);
@@ -82,7 +85,7 @@ state = {
         });
       }
 
-      state = {
+    state = {
         setOpen: false
       };
     
@@ -114,10 +117,10 @@ return (
             <p className="lead">Original Image</p>
 
             <div className="App">
-                <div>
+                {/* <div>
                 <input type="file" accept="image/*" onChange={this.onSelectFile} />
-                </div>
-                {src && (
+                </div> */}
+                { src  && (
                 <ReactCrop
                     src={src}
                     crop={crop}
