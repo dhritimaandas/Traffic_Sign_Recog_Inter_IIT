@@ -10,14 +10,20 @@ import RotateModal from "../jimpModals/rotate";
 import BrightnessModal from "../jimpModals/brightness";
 import ContrastModal from "../jimpModals/contrast";
 import GrayscaleModal from "../jimpModals/grayscale";
+import BlurModal from "../jimpModals/blur";
+import GaussianModal from "../jimpModals/gaussian";
+import OpacityModal from "../jimpModals/opacity";
 
 const augmentationOptions = [
   { value: 0, label: "Flip", augments: "Horizontal, Vertical" },
   { value: 1, label: "Rotate", augments: "0% Minimum Zoom, 40% Maximum Zoom" },
   { value: 2, label: "Brightness", augments: "Up to 1.5px" },
   { value: 3, label: "Contrast", augments: "Up to 1.5px" },
-  { value: 3, label: "Grayscale", augments: "Up to 1.5px" },
-  { value: 3, label: "Invert Colors", augments: "Up to 1.5px" },
+  { value: 4, label: "Grayscale", augments: "Up to 1.5px" },
+  { value: 5, label: "Invert Colors", augments: "Up to 1.5px" },
+  { value: 6, label: "Blur", augments: "Up to 1.5px" },
+  { value: 7, label: "Gaussian", augments: "Up to 1.5px" },
+  { value: 8, label: "Opacity", augments: "Up to 1.5px" },
 ];
 
 export default function Augment() {
@@ -73,6 +79,30 @@ export default function Augment() {
         />
       ) : modalName == "Grayscale" ? (
         <GrayscaleModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Blur" ? (
+        <BlurModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Gaussian" ? (
+        <GaussianModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Opacity" ? (
+        <OpacityModal
           allAugs={augs}
           setAllAugs={setAugs}
           augmentation={selected || ""}
