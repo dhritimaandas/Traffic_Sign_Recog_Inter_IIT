@@ -6,12 +6,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import CropImage from "./augmentations/cropImage";
-import CropModal from './cropModal'
 
-
-// const CropModal = () => {
-//   CropImage
-// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +54,6 @@ export default function SingleLineGridList(props) {
   const [imgurl, setUrl] = React.useState();
 
   const handleClick = (url) => {
-    console.log(imgurl);
     setUrl(url);
     setShow(true);
   }

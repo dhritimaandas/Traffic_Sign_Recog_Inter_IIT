@@ -99,6 +99,7 @@ class CropImage extends React.Component {
     // }
 
 render(){
+  this.state.src = this.props.imgsrc;
     const { crop, croppedImageUrl, src } = this.state;
 
 return (

@@ -7,7 +7,6 @@ import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
 import FirebasPage from './firebaseTest';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -44,7 +43,7 @@ export default function Home() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-         <Stepper /> 
+         <Stepper />
         </Container>
       </main>
     </div>
