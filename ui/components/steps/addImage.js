@@ -9,6 +9,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import ImageTiles from "../imageTiles";
+import {updateState} from "../../data/ourRedux";
 
 const styles = (theme) => ({
   formControl: {
@@ -47,16 +48,18 @@ class DropzoneDialogExample extends Component {
     const filesNew = files.map((file) => {
       var reader = new FileReader();
       var url = reader.readAsDataURL(file);
-      console.log(file);
-      console.log(url);
+      // console.log(file);
+      // console.log(url);
       return [file, this.state.class];
     });
     const filesOld = this.state.files;
     const filesNewState = filesNew.concat(filesOld);
+
     this.setState({
       files: filesNewState,
       open: false,
     });
+    updateState("images", filesNewState)
   }
 
   handleOpen() {
