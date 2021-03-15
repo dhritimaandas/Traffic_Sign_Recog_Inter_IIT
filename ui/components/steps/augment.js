@@ -4,6 +4,7 @@ import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
+import {updateState} from "../../data/ourRedux";
 import fs from "fs";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
@@ -42,6 +43,8 @@ export default function Augment() {
 
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
+
+  updateState("augmentations", augs); //Update the augmentations
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>

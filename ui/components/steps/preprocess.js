@@ -3,6 +3,7 @@ import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
+import {updateState} from "../../data/ourRedux";
 
 const preprocessingOptions = [
   { value: 0, label: "Grayscale" },
@@ -32,6 +33,8 @@ export default function Augment() {
 
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
+
+  updateState("preprocessing", augs); //Update the preprocessing steps
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
