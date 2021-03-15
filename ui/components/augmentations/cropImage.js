@@ -9,11 +9,12 @@ class CropImage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            src: "./brain.jpg",
+            src: this.props.imgsrc,
             crop: {
               unit: '%',
               width: 30,
-              aspect: 16 / 9,
+              height:30,
+              //aspect: 16 / 9,
             },
           };
     }
@@ -45,7 +46,7 @@ class CropImage extends React.Component {
           const croppedImageUrl = await this.getCroppedImg(
             this.imageRef,
             crop,
-            'newFile.jpeg'
+            'newFile.png'
           );
           this.setState({ croppedImageUrl });
         }
@@ -81,31 +82,30 @@ class CropImage extends React.Component {
             window.URL.revokeObjectURL(this.fileUrl);
             this.fileUrl = window.URL.createObjectURL(blob);
             resolve(this.fileUrl);
-          }, 'image/jpeg');
+          }, 'image/png');
         });
       }
 
-    state = {
-        setOpen: false
-      };
+    // state = {
+    //     setOpen: false
+    //   };
     
-    open = () => {
-        this.setState({setOpen:true});
-    }
+    // open = () => {
+    //     this.setState({setOpen:true});
+    // }
     
-    close = () => {
-        this.setState({setOpen:false});
-    }
+    // close = () => {
+    //     this.setState({setOpen:false});
+    // }
 
 render(){
-
     const { crop, croppedImageUrl, src } = this.state;
 
 return (
       
     <div>
-    <Button onClick={this.open}>Open</Button>
-    <Modal onHide={this.close} show={this.state.setOpen} centered size="md">
+    
+    <Modal show={this.props.show} onHide={this.props.handleClose} centered size="md">
       <Modal.Header closeButton>
         <Modal.Title>Crop Image</Modal.Title>
       </Modal.Header>
@@ -144,7 +144,7 @@ return (
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={this.close}>
+        <Button variant="secondary" onClick={this.props.handleClose}>
           Close
         </Button>
         <Button variant="primary" onClick={this.close}>

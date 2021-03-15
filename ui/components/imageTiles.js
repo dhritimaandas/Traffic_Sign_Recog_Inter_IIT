@@ -5,8 +5,13 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import CropImage from "./augmentations/cropImage";
 import CropModal from './cropModal'
 
+
+// const CropModal = () => {
+//   CropImage
+// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,13 +56,17 @@ export default function SingleLineGridList(props) {
   const classes = useStyles();
   const [showModal, setShow] = React.useState(false);
   const handleClose = () => setShow(false);
+  const [imgurl, setUrl] = React.useState();
+
+  const handleClick = (url) => {
+    console.log(imgurl);
+    setUrl(url);
+    setShow(true);
+  }
 
   return (
     <div className={classes.root}>
-      <CropModal
-        show={showModal}
-        handleClose={handleClose}
-      />
+      
       <GridList className={classes.gridList} cols={2.5}>
         {props.tileData.map((tile) => (
           <GridListTile key={tile[0].name}>
@@ -69,14 +78,18 @@ export default function SingleLineGridList(props) {
                 title: classes.title,
               }}
               actionIcon={
-                <IconButton onClick={() => setShow(true)} aria-label={`star ${tile.title}`}>
+                <IconButton onClick={ () => handleClick(URL.createObjectURL(tile[0])) } aria-label={`star ${tile.title}`}>
                   <EditIcon className={classes.title} />
                 </IconButton>
               }
             />
-          </GridListTile>
+          </GridListTile>  
         ))}
       </GridList>
+      <CropImage show={showModal} handleClose={handleClose} imgsrc={imgurl} />
     </div>
   );
 }
+
+
+
