@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy } from "react";
 import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
-import {updateState} from "../../data/ourRedux";
-import fs from "fs";
+import { updateState } from "../../data/ourRedux";
+
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
 import BrightnessModal from "../jimpModals/brightness";
@@ -14,17 +14,18 @@ import GrayscaleModal from "../jimpModals/grayscale";
 import BlurModal from "../jimpModals/blur";
 import GaussianModal from "../jimpModals/gaussian";
 import OpacityModal from "../jimpModals/opacity";
+import InvertModal from "../jimpModals/invert";
 
 const augmentationOptions = [
-  { value: 0, label: "Flip", augments: "Horizontal, Vertical" },
-  { value: 1, label: "Rotate", augments: "0% Minimum Zoom, 40% Maximum Zoom" },
-  { value: 2, label: "Brightness", augments: "Up to 1.5px" },
-  { value: 3, label: "Contrast", augments: "Up to 1.5px" },
-  { value: 4, label: "Grayscale", augments: "Up to 1.5px" },
-  { value: 5, label: "Invert Colors", augments: "Up to 1.5px" },
-  { value: 6, label: "Blur", augments: "Up to 1.5px" },
-  { value: 7, label: "Gaussian", augments: "Up to 1.5px" },
-  { value: 8, label: "Opacity", augments: "Up to 1.5px" },
+  { value: 0, label: "Flip" },
+  { value: 1, label: "Rotate" },
+  { value: 2, label: "Brightness" },
+  { value: 3, label: "Contrast" },
+  { value: 4, label: "Grayscale" },
+  { value: 5, label: "Invert Colors" },
+  { value: 6, label: "Blur" },
+  { value: 7, label: "Gaussian" },
+  { value: 8, label: "Opacity" },
 ];
 
 export default function Augment() {
@@ -37,7 +38,7 @@ export default function Augment() {
 
   const handleDelete = (augmentationKey) => {
     let newDict = { ...augs };
-    newDict[augmentationKey] = false;
+    delete newDict[augmentationKey];
     setAugs(newDict);
   };
 
@@ -112,6 +113,14 @@ export default function Augment() {
           show={showModal}
           handleClose={handleClose}
         />
+      ) : modalName == "Invert Colors" ? (
+        <InvertModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
       ) : null}
       <Col>
         <h5>Add Augmentations</h5>
@@ -143,11 +152,14 @@ export default function Augment() {
           <Col>
             {Object.keys(augs).length
               ? Object.keys(augs).map((current) => {
-                  if (augs[current] == true)
+                  if (augs[current].status == true)
                     return (
                       <Chip
+                        key={current}
                         className="mx-1"
-                        label={current}
+                        label={
+                          current + ": " + JSON.stringify(augs[current].value)
+                        }
                         onDelete={() => handleDelete(current)}
                         color="primary"
                       />

@@ -88,7 +88,11 @@ export default function AugmentationModal({
           variant="primary"
           onClick={() => {
             let newDict = { ...allAugs };
-            newDict[augmentation.label] = true;
+            if (contrast != "0")
+              newDict[augmentation.label] = {
+                status: true,
+                value: parseInt(contrast),
+              };
             setAllAugs(newDict);
             handleClose();
           }}

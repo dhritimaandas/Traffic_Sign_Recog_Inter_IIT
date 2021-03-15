@@ -23,7 +23,7 @@ export default function AugmentationModal({
 
   const augmentImage = () => {
     Jimp.read("/brain.jpg").then(function (img) {
-      const val = Math.max(parseInt(blur),1);
+      const val = Math.max(parseInt(blur), 1);
       img.blur(val).getBase64(Jimp.AUTO, function (err, src) {
         setImage(src);
       });
@@ -65,7 +65,7 @@ export default function AugmentationModal({
                       <Form.Control
                         type="number"
                         value={blur}
-                        min="-100"
+                        min="0"
                         max="100"
                         onChange={(e) => setBlur(e.target.value)}
                       />
@@ -73,7 +73,7 @@ export default function AugmentationModal({
                   </Col>
                   <Col sm={5}>
                     <Button onClick={() => augmentImage()}>
-                      Blur Value
+                      Set Blur Radius
                     </Button>
                   </Col>
                 </Row>
@@ -91,6 +91,11 @@ export default function AugmentationModal({
           onClick={() => {
             let newDict = { ...allAugs };
             newDict[augmentation.label] = true;
+            if (blur != "0")
+              newDict[augmentation.label] = {
+                status: true,
+                value: parseInt(blur),
+              };
             setAllAugs(newDict);
             handleClose();
           }}

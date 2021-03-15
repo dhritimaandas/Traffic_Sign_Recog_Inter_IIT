@@ -10,7 +10,6 @@ export default function AugmentationModal({
   allAugs,
   setAllAugs,
 }) {
-  
   const [image, setImage] = useState("/brain.jpg");
   const [horizontal, setHorizontal] = useState(false);
   const [vertical, setVertical] = useState(false);
@@ -77,7 +76,15 @@ export default function AugmentationModal({
           variant="primary"
           onClick={() => {
             let newDict = { ...allAugs };
-            newDict[augmentation.label] = true;
+            var flipChoice = [];
+            if (horizontal) flipChoice.push("Horizontal");
+            if (vertical) flipChoice.push("Vertical");
+
+            if (horizontal != "0" || vertical != "0")
+              newDict[augmentation.label] = {
+                status: true,
+                value: flipChoice,
+              };
             setAllAugs(newDict);
             handleClose();
           }}

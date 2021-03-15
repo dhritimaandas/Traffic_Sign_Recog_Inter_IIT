@@ -3,7 +3,7 @@ import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
-import {updateState} from "../../data/ourRedux";
+import { updateState } from "../../data/ourRedux";
 
 const preprocessingOptions = [
   { value: 0, label: "Grayscale" },
@@ -74,6 +74,7 @@ export default function Augment() {
               if (augs[current] == true)
                 return (
                   <Chip
+                    key={current}
                     className="mx-1"
                     label={current}
                     onDelete={() => handleDelete(current)}

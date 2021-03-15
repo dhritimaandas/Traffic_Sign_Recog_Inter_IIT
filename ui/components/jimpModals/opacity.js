@@ -65,16 +65,14 @@ export default function AugmentationModal({
                       <Form.Control
                         type="number"
                         value={opacity}
-                        min="-100"
+                        min="0"
                         max="100"
                         onChange={(e) => setOpacity(e.target.value)}
                       />
                     </Form.Group>
                   </Col>
                   <Col sm={5}>
-                    <Button onClick={() => augmentImage()}>
-                      Set Opacity
-                    </Button>
+                    <Button onClick={() => augmentImage()}>Set Opacity</Button>
                   </Col>
                 </Row>
               </Form>
@@ -90,7 +88,11 @@ export default function AugmentationModal({
           variant="primary"
           onClick={() => {
             let newDict = { ...allAugs };
-            newDict[augmentation.label] = true;
+            if (opacity != "0")
+              newDict[augmentation.label] = {
+                status: true,
+                value: parseInt(opacity),
+              };
             setAllAugs(newDict);
             handleClose();
           }}

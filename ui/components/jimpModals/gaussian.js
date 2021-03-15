@@ -15,14 +15,14 @@ export default function AugmentationModal({
   show,
   handleClose,
   augmentation,
-  allAugs,
+  allAugs,  
   setAllAugs,
 }) {
   const [image, setImage] = useState("/brain.jpg");
   const [gauss, setGaussian] = useState(0);
 
-  const augmentImage = () => {
-    Jimp.read("/brain.jpg").then(function (img) {
+  const augmentImage = async () => {
+    await Jimp.read("/brain.jpg").then(function (img) {
       const val = parseInt(gauss) || 1;
       img.gaussian(val).getBase64(Jimp.AUTO, function (err, src) {
         setImage(src);
@@ -65,15 +65,15 @@ export default function AugmentationModal({
                       <Form.Control
                         type="number"
                         value={gauss}
-                        min="-100"
-                        max="100"
+                        min="0"
+                        max="20"
                         onChange={(e) => setGaussian(e.target.value)}
                       />
                     </Form.Group>
                   </Col>
                   <Col sm={5}>
                     <Button onClick={() => augmentImage()}>
-                      Gaussian Value
+                      Set Gaussian Blur Radius
                     </Button>
                   </Col>
                 </Row>
@@ -90,7 +90,11 @@ export default function AugmentationModal({
           variant="primary"
           onClick={() => {
             let newDict = { ...allAugs };
-            newDict[augmentation.label] = true;
+            if (gauss != "0")
+              newDict[augmentation.label] = {
+                status: true,
+                value: parseInt(gauss),
+              };
             setAllAugs(newDict);
             handleClose();
           }}

@@ -69,7 +69,8 @@ export default function AugmentationModal({
           variant="primary"
           onClick={() => {
             let newDict = { ...allAugs };
-            newDict[augmentation.label] = true;
+            if (grayscale)
+              newDict[augmentation.label] = { status: true, value: true };
             setAllAugs(newDict);
             handleClose();
           }}

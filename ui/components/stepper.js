@@ -1,14 +1,15 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import AddImage from './steps/addImage';
-import Confirm from './Confirmation';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import AddImage from "./steps/addImage";
+import Confirm from "./Confirmation";
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
+import { Row, Container } from "react-bootstrap";
 // import RangeSlider from './Balance';
 
 const useStyles = makeStyles((theme) => ({
@@ -89,10 +90,9 @@ const HorizontalLinearStepper = (props) => {
     setActiveStep(0);
   };
 
-  props = {handleReset};
+  props = { handleReset };
 
   return (
-
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
@@ -117,12 +117,22 @@ const HorizontalLinearStepper = (props) => {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
-              All the steps are completed. Do you want to reset all your progress or Confirm?
+              All the steps are completed. Do you want to reset all your
+              progress or Confirm?
             </Typography>
-            <Confirm open={props.pop} display={props.openBox} /> 
-            <Button onClick={handleReset} className={classes.button} color="secondary" variant="contained">
-              Reset
-            </Button>
+            <Container>
+              <Row>
+                <Confirm open={props.pop} display={props.openBox} />
+                <Button
+                  onClick={handleReset}
+                  className={classes.button}
+                  color="secondary"
+                  variant="contained"
+                >
+                  Reset
+                </Button>
+              </Row>
+            </Container>
           </div>
         ) : (
           <div>
@@ -137,6 +147,14 @@ const HorizontalLinearStepper = (props) => {
               >
                 Back
               </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNext}
+                className={classes.button}
+              >
+                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              </Button>
               {isStepOptional(activeStep) && (
                 <Button
                   variant="contained"
@@ -147,21 +165,11 @@ const HorizontalLinearStepper = (props) => {
                   Skip
                 </Button>
               )}
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-              >
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
             </div>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 export default HorizontalLinearStepper;
-
