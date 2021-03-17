@@ -1,15 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import AddImage from './steps/addImage';
-import Confirm from './Confirmation';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import AddImage from "./steps/addImage";
+import Confirm from "./Confirmation";
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
+import { Row, Container } from "react-bootstrap";
 // import RangeSlider from './Balance';
+import CropImage from "./augmentations/cropImage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,13 +21,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
   },
 }));
 
 function getSteps() {
-  return ["Add a new image for a class", "Preprocessing steps", "Augmentation"];
+  return [
+    "Add New Images to the Dataset",
+    "Preprocessing and Augmentations on Existing Dataset",
+  ];
 }
 
 function getStepContent(step) {
@@ -33,8 +38,6 @@ function getStepContent(step) {
     case 0:
       return <AddImage />;
     case 1:
-      return <Preprocess />;
-    case 2:
       return <Augment />;
     default:
       return "Unknown step";
@@ -89,10 +92,9 @@ const HorizontalLinearStepper = (props) => {
     setActiveStep(0);
   };
 
-  props = {handleReset};
+  props = { handleReset };
 
   return (
-
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
@@ -116,52 +118,54 @@ const HorizontalLinearStepper = (props) => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>
-              All the steps are completed. Do you want to reset all your progress or Confirm?
-            </Typography>
-            <Confirm open={props.pop} display={props.openBox} /> 
-            <Button onClick={handleReset} className={classes.button} color="secondary" variant="contained">
-              Reset
-            </Button>
+            <Container>
+              <Typography className={classes.instructions}>
+                All the steps are completed. Do you want to reset all your
+                progress or Confirm?
+              </Typography>
+
+              <Row>
+                <Confirm open={props.pop} display={props.openBox} />
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  onClick={handleReset}
+                  className={classes.button}
+                  color="secondary"
+                  variant="contained"
+                >
+                  Reset
+                </Button>
+              </Row>
+            </Container>
           </div>
         ) : (
           <div>
-            <Typography className={classes.instructions}>
-              {getStepContent(activeStep)}
-            </Typography>
-            <div>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.button}
-              >
-                Back
-              </Button>
-              {isStepOptional(activeStep) && (
+            <Container>
+              <Typography className={classes.instructions}>
+                {getStepContent(activeStep)}
+              </Typography>
+              <div>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  className={classes.button}
+                >
+                  Back
+                </Button>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSkip}
+                  onClick={handleNext}
                   className={classes.button}
                 >
-                  Skip
+                  {activeStep === steps.length - 1 ? "Finish" : "Next"}
                 </Button>
-              )}
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-              >
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
-            </div>
+              </div>
+            </Container>
           </div>
         )}
       </div>
     </div>
   );
-}
+};
 export default HorizontalLinearStepper;
-

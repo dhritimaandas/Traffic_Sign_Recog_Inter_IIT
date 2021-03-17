@@ -9,28 +9,30 @@ let state = {
   dataSplits: {
     train: 100,
     test: 0,
-    validate: 0
+    validate: 0,
   }, //Train test validate splits
-  augmentations : {}, //All the augmentations
-  preprocessing : {}, //All the preprocessings
+  augmentations: {}, //All the augmentations
+  preprocessing: {}, //All the preprocessings
   balance: false, //Do you want to balance the dataset? No by default
 };
 
 const updateState = (property, value) => {
-  state[property] = value
-  
-  return state
-}
+  state[property] = value;
+  return state;
+};
 
 const getState = () => {
   return state;
-}
+};
+const getStateProperty = (property) => {
+  return state[property];
+};
 
 module.exports = {
-  updateState: updateState,
-  getState: getState
-}
-
+  updateState,
+  getState,
+  getStateProperty,
+};
 
 // Test
 // const newDir = {

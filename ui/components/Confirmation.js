@@ -63,7 +63,7 @@ class Confirm extends Component {
   render() {
     const pop = this.state.pop;
     return (
-      <div style={{display:'inline-block', marginRight:'10px'}}>
+      <div>
         <Button onClick={this.openBox} className="mainBtn" color="primary" variant="contained">Confirm</Button>
         <Dialog
           open={pop}

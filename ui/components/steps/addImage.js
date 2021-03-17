@@ -9,7 +9,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import ImageTiles from "../imageTiles";
-import {updateState} from "../../data/ourRedux";
+import { updateState } from "../../data/ourRedux";
+import { Container } from "react-bootstrap";
 
 const styles = (theme) => ({
   formControl: {
@@ -59,7 +60,7 @@ class DropzoneDialogExample extends Component {
       files: filesNewState,
       open: false,
     });
-    updateState("images", filesNewState)
+    updateState("images", filesNewState);
   }
 
   handleOpen() {
@@ -71,7 +72,7 @@ class DropzoneDialogExample extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid>
+      <Grid style={{ minHeight: "50vh" }}>
         <Grid container justify="center" alignItems="center">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-helper-label">
@@ -111,14 +112,16 @@ class DropzoneDialogExample extends Component {
             onClose={this.handleClose.bind(this)}
           />
         </Grid>
-        <div style={{ marginTop: "40px", marginBottom: "50px" }}>
-          <h4 style={{ marginBottom: "20px" }}>Images Uploaded</h4>
-          {this.state.files.length === 0 ? (
-            <p>No images</p>
-          ) : (
-            <ImageTiles tileData={this.state.files} />
-          )}
-        </div>
+        <Container>
+          <div style={{ margin: "40px 0px" }}>
+            <h4 style={{ marginBottom: "20px" }}>Images Uploaded</h4>
+            {this.state.files.length === 0 ? (
+              <p>No images</p>
+            ) : (
+              <ImageTiles tileData={this.state.files} />
+            )}
+          </div>
+        </Container>
       </Grid>
     );
   }
