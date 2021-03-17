@@ -1,7 +1,7 @@
 import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Image from "next/image";
 
-const CropModal = ({ show, handleClose }) => {
+const CropModal = ({ show, handleClose, imgsrc }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="md">
       <Modal.Header closeButton>
