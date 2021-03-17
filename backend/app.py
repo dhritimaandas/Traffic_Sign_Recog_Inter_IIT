@@ -48,12 +48,10 @@ class PredictImage(Resource):
 
 class TrainImages(Resource):
     def get(self):
-        args = parser.parse_args()
-        images = list(args['images'])
-        labels = list(args['labels'])
+        pass
 
 api.add_resource(PredictImage, '/predict')
 api.add_resource(TrainImages, '/train')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
