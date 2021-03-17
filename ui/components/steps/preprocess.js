@@ -126,31 +126,31 @@ export default function PreprocessComponent() {
           </Col>
         </Row>
       </Col>
-      <Col className="mt-3">
-        <h6>
-          <u>Selected Preprocessing Steps</u>
-        </h6>
-        <Row className="pt-3">
-          <Col>
-            {Object.keys(steps).length
-              ? Object.keys(steps).map((current) => {
-                  if (steps[current].status == true)
-                    return (
-                      <Chip
-                        key={current}
-                        className="mx-1"
-                        label={
-                          current + ": " + JSON.stringify(steps[current].value)
-                        }
-                        onDelete={() => handleDelete(current)}
-                        color="primary"
-                      />
-                    );
-                })
-              : "No Steps Added"}
-          </Col>
-        </Row>
-      </Col>
+      {Object.keys(steps).length ? (
+        <Col className="mt-3">
+          <h6>
+            <u>Selected Preprocessing Steps</u>
+          </h6>
+          <Row className="pt-3">
+            <Col>
+              {Object.keys(steps).map((current) => {
+                if (steps[current] && steps[current].status == true)
+                  return (
+                    <Chip
+                      key={current}
+                      className="mx-1"
+                      label={
+                        current + ": " + JSON.stringify(steps[current].value)
+                      }
+                      onDelete={() => handleDelete(current)}
+                      color="primary"
+                    />
+                  );
+              })}
+            </Col>
+          </Row>
+        </Col>
+      ) : null}
     </>
   );
 }

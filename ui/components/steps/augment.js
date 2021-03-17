@@ -88,31 +88,31 @@ export default function Augment() {
           </Col>
         </Row>
       </Col>
-      <Col className="mt-3">
-        <h6>
-          <u>Selected Augmentations</u>
-        </h6>
-        <Row className="pt-3">
-          <Col>
-            {Object.keys(augs).length
-              ? Object.keys(augs).map((current) => {
-                  if (augs[current].status == true)
-                    return (
-                      <Chip
-                        key={current}
-                        className="mx-1"
-                        label={
-                          current + ": " + JSON.stringify(augs[current].value)
-                        }
-                        onDelete={() => handleDelete(current)}
-                        color="primary"
-                      />
-                    );
-                })
-              : "No Augmentations Added"}
-          </Col>
-        </Row>
-      </Col>
+      {Object.keys(augs).length ? (
+        <Col className="mt-3">
+          <h6>
+            <u>Selected Augmentations</u>
+          </h6>
+          <Row className="pt-3">
+            <Col>
+              {Object.keys(augs).map((current) => {
+                if (augs[current] && augs[current].status == true)
+                  return (
+                    <Chip
+                      key={current}
+                      className="mx-1"
+                      label={
+                        current + ": " + JSON.stringify(augs[current].value)
+                      }
+                      onDelete={() => handleDelete(current)}
+                      color="primary"
+                    />
+                  );
+              })}
+            </Col>
+          </Row>
+        </Col>
+      ) : null}
     </Container>
   );
 }
