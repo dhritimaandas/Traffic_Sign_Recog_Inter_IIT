@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Chip from "@material-ui/core/Chip";
-import { updateState } from "../../data/ourRedux";
+import { updateState, getStateProperty } from "../../data/ourRedux";
 import BrightnessModal from "../jimpModals/brightness";
 import ContrastModal from "../jimpModals/contrast";
 import GrayscaleModal from "../jimpModals/grayscale";
@@ -22,14 +22,15 @@ const availableSteps = [
 ];
 
 export default function PreprocessComponent() {
-  const [steps, setSteps] = useState({});
+  const [steps, setSteps] = useState(getStateProperty("preprocessing"));
+  console.log(steps, "ddddddddddd", getStateProperty("preprocessing"));
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   useEffect(() => {
-    updateState("preprocessings", steps); //Update the preprocessings
+    updateState("preprocessing", steps); //Update the preprocessings
   }, [steps]);
 
   const handleChange = (augment) => {
