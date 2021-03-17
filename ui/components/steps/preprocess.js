@@ -1,63 +1,123 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
-import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import { updateState } from "../../data/ourRedux";
+import BrightnessModal from "../jimpModals/brightness";
+import ContrastModal from "../jimpModals/contrast";
+import GrayscaleModal from "../jimpModals/grayscale";
+import BlurModal from "../jimpModals/blur";
+import GaussianModal from "../jimpModals/gaussian";
+import OpacityModal from "../jimpModals/opacity";
+import InvertModal from "../jimpModals/invert";
 
-const preprocessingOptions = [
-  { value: 0, label: "Grayscale" },
-  { value: 1, label: "Contrast" },
-  { value: 2, label: "Tile" },
-  { value: 3, label: "Resize" },
+const availableSteps = [
+  { value: 2, label: "Brightness" },
+  { value: 3, label: "Contrast" },
+  { value: 4, label: "Grayscale" },
+  { value: 5, label: "Invert Colors" },
+  { value: 6, label: "Blur" },
+  { value: 7, label: "Gaussian" },
+  { value: 8, label: "Opacity" },
 ];
 
-export default function Augment() {
-  const [augs, setAugs] = useState({
-    Grayscale: true,
-    Contrast: true,
-    Resize: false,
-    Tile: false,
-  });
+export default function PreprocessComponent() {
+  const [steps, setSteps] = useState({});
   const [selected, setSelected] = useState();
+  const [modalName, setModalName] = useState();
+  const [showModal, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+
+  useEffect(() => {
+    updateState("preprocessings", steps); //Update the preprocessings
+  }, [steps]);
 
   const handleChange = (augment) => {
     setSelected(augment);
   };
 
-  const handleDelete = (augmentationKey) => {
-    let newDict = { ...augs };
-    newDict[augmentationKey] = false;
-    setAugs(newDict);
+  const handleDelete = (step) => {
+    let newDict = { ...steps };
+    delete newDict[step];
+    setSteps(newDict);
   };
 
-  const [showModal, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-
-  updateState("preprocessing", augs); //Update the preprocessing steps
-
   return (
-    <Container className="py-3" style={{ minHeight: "50vh" }}>
-      <AugmentationModal
-        allAugs={augs}
-        setAllAugs={setAugs}
-        preprocessing={selected || ""}
-        show={showModal}
-        handleClose={handleClose}
-      />
+    <>
+      {modalName == "Brightness" ? (
+        <BrightnessModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Contrast" ? (
+        <ContrastModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Grayscale" ? (
+        <GrayscaleModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Blur" ? (
+        <BlurModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Gaussian" ? (
+        <GaussianModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Opacity" ? (
+        <OpacityModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Invert Colors" ? (
+        <InvertModal
+          allAugs={steps}
+          setAllAugs={setSteps}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : null}
+
       <Col>
-        <h5>Add Preprocessing Steps</h5>
+        <h5 className="pt-3">Add Preprocessing Steps</h5>
         <Row className="pt-3">
           <Col md={6}>
             <Select
-              options={preprocessingOptions}
+              options={availableSteps}
               value={selected}
               onChange={handleChange}
             />
           </Col>
           <Col md={6}>
             <Button
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setShow(true);
+                setModalName(selected.label);
+              }}
               variant="dark"
               disabled={selected == null}
             >
@@ -67,92 +127,30 @@ export default function Augment() {
         </Row>
       </Col>
       <Col className="mt-3">
-        <h5>Selected Steps</h5>
+        <h6>
+          <u>Selected Preprocessing Steps</u>
+        </h6>
         <Row className="pt-3">
           <Col>
-            {Object.keys(augs).map((current) => {
-              if (augs[current] == true)
-                return (
-                  <Chip
-                    key={current}
-                    className="mx-1"
-                    label={current}
-                    onDelete={() => handleDelete(current)}
-                    color="primary"
-                  />
-                );
-            })}
+            {Object.keys(steps).length
+              ? Object.keys(steps).map((current) => {
+                  if (steps[current].status == true)
+                    return (
+                      <Chip
+                        key={current}
+                        className="mx-1"
+                        label={
+                          current + ": " + JSON.stringify(steps[current].value)
+                        }
+                        onDelete={() => handleDelete(current)}
+                        color="primary"
+                      />
+                    );
+                })
+              : "No Steps Added"}
           </Col>
         </Row>
       </Col>
-    </Container>
+    </>
   );
 }
-
-const AugmentationModal = ({
-  show,
-  handleClose,
-  preprocessing,
-  augmentation,
-  allAugs,
-  setAllAugs,
-}) => {
-  return (
-    <Modal show={show} onHide={handleClose} centered size="md">
-      <Modal.Header closeButton>
-        <Modal.Title>Add {preprocessing.label}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Container>
-          <Row>
-            <Col sm={6} className="text-center">
-              <p className="lead">Original Image</p>
-              <Image
-                src="/brain.jpg"
-                alt="Picture of the author"
-                width={300}
-                height={300}
-              />
-            </Col>
-            <Col sm={6} className="text-center">
-              <p className="lead">Augmented Image</p>
-              <Image
-                src="/brain.jpg"
-                alt="Picture of the author"
-                width={300}
-                height={300}
-              />
-            </Col>
-          </Row>
-          <Row className="mt-3">
-            <Col lg={3} />
-            <Col lg={6}>
-              <Form className="text-center">
-                <Form.Group controlId="formBasicRange">
-                  <Form.Control type="range" />
-                  <Form.Label>Select an Value</Form.Label>
-                </Form.Group>
-              </Form>
-            </Col>
-          </Row>
-        </Container>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            let newDict = { ...allAugs };
-            newDict[preprocessing.label] = true; // update with value
-            setAllAugs(newDict);
-            handleClose();
-          }}
-        >
-          Add
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};

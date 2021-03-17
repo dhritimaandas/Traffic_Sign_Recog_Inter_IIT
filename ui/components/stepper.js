@@ -21,13 +21,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
   },
 }));
 
 function getSteps() {
-  return ["Add a new image for a class", "Preprocessing steps", "Augmentation"];
+  return [
+    "Add New Images to the Dataset",
+    "Preprocessing and Augmentations on Existing Dataset",
+  ];
 }
 
 function getStepContent(step) {
@@ -35,8 +38,6 @@ function getStepContent(step) {
     case 0:
       return <AddImage />;
     case 1:
-      return <Preprocess />;
-    case 2:
       return <Augment />;
     default:
       return "Unknown step";
@@ -117,14 +118,16 @@ const HorizontalLinearStepper = (props) => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>
-              All the steps are completed. Do you want to reset all your
-              progress or Confirm?
-            </Typography>
             <Container>
+              <Typography className={classes.instructions}>
+                All the steps are completed. Do you want to reset all your
+                progress or Confirm?
+              </Typography>
+
               <Row>
                 <Confirm open={props.pop} display={props.openBox} />
                 <Button
+                  style={{ marginLeft: "10px" }}
                   onClick={handleReset}
                   className={classes.button}
                   color="secondary"
@@ -137,6 +140,7 @@ const HorizontalLinearStepper = (props) => {
           </div>
         ) : (
           <div>
+             <Container>
             <Typography className={classes.instructions}>
               {getStepContent(activeStep)}
             </Typography>
@@ -156,17 +160,9 @@ const HorizontalLinearStepper = (props) => {
               >
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>
-              {isStepOptional(activeStep) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )}
+              
             </div>
+              </Container>
           </div>
         )}
       </div>

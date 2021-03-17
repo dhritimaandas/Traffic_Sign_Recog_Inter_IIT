@@ -5,7 +5,7 @@ import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
 import { updateState } from "../../data/ourRedux";
-
+import Preprocess from "./preprocess";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
 import BrightnessModal from "../jimpModals/brightness";
@@ -19,19 +19,19 @@ import InvertModal from "../jimpModals/invert";
 const augmentationOptions = [
   { value: 0, label: "Flip" },
   { value: 1, label: "Rotate" },
-  { value: 2, label: "Brightness" },
-  { value: 3, label: "Contrast" },
-  { value: 4, label: "Grayscale" },
-  { value: 5, label: "Invert Colors" },
-  { value: 6, label: "Blur" },
-  { value: 7, label: "Gaussian" },
-  { value: 8, label: "Opacity" },
 ];
 
 export default function Augment() {
   const [augs, setAugs] = useState({});
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
+  const [showModal, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+
+  useEffect(() => {
+    updateState("augmentations", augs); //Update the augmentations
+  }, [augs]);
+
   const handleChange = (augment) => {
     setSelected(augment);
   };
@@ -41,11 +41,6 @@ export default function Augment() {
     delete newDict[augmentationKey];
     setAugs(newDict);
   };
-
-  const [showModal, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-
-  updateState("augmentations", augs); //Update the augmentations
 
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
@@ -65,65 +60,12 @@ export default function Augment() {
           show={showModal}
           handleClose={handleClose}
         />
-      ) : modalName == "Brightness" ? (
-        <BrightnessModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Contrast" ? (
-        <ContrastModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Grayscale" ? (
-        <GrayscaleModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Blur" ? (
-        <BlurModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Gaussian" ? (
-        <GaussianModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Opacity" ? (
-        <OpacityModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
-      ) : modalName == "Invert Colors" ? (
-        <InvertModal
-          allAugs={augs}
-          setAllAugs={setAugs}
-          augmentation={selected || ""}
-          show={showModal}
-          handleClose={handleClose}
-        />
       ) : null}
-      <Col>
-        <h5>Add Augmentations</h5>
+
+      <Preprocess />
+      <Col className="mt-3">
+        <hr />
+        <h5 className="pt-3">Add Augmentations</h5>
         <Row className="pt-3">
           <Col md={6}>
             <Select
@@ -147,7 +89,9 @@ export default function Augment() {
         </Row>
       </Col>
       <Col className="mt-3">
-        <h5>Selected Augmentations</h5>
+        <h6>
+          <u>Selected Augmentations</u>
+        </h6>
         <Row className="pt-3">
           <Col>
             {Object.keys(augs).length
