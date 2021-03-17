@@ -4,7 +4,7 @@ import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
-import { updateState,getStateProperty } from "../../data/ourRedux";
+import { updateState, getStateProperty } from "../../data/ourRedux";
 import Preprocess from "./preprocess";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
@@ -22,7 +22,7 @@ const augmentationOptions = [
 ];
 
 export default function Augment() {
-  const [augs, setAugs] = useState(getStateProperty('augmentations'));
+  const [augs, setAugs] = useState(getStateProperty("augmentations"));
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
   const [showModal, setShow] = useState(false);
@@ -61,7 +61,12 @@ export default function Augment() {
           handleClose={handleClose}
         />
       ) : null}
-
+      <Container>
+        <p>
+          Select the augmentations and preprocessings you want to apply on the
+          whole existing dataset.
+        </p>
+      </Container>
       <Preprocess />
       <Col className="mt-3">
         <hr />
