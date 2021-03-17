@@ -20,18 +20,16 @@ parser.add_argument("images")
 parser.add_argument("labels")
 
 
+
+
 class PredictImage(Resource):
     def get(self):
         args = parser.parse_args()
         image = Image.open(args['images'])
         model = load_latest_model_from_db()
         pred_label, pred_label_proba = predict_image(image, model)
-        if pred_label == label:
-            acc = 1
-        else:
-            acc = 0
-        output_pred = {'pred': pred_label, 'confidence': pred_label_proba, 'accuracy': acc}
-        return acc
+        output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
+        return output_pred
 
     def load_image(self, image, size=(32, 32)):
         trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
@@ -50,10 +48,12 @@ class PredictImage(Resource):
 
 class TrainImages(Resource):
     def get(self):
-        pass
+        args = parser.parse_args()
+        images = list(args['images'])
+        labels = list(args['labels'])
 
 api.add_resource(PredictImage, '/predict')
 api.add_resource(TrainImages, '/train')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
