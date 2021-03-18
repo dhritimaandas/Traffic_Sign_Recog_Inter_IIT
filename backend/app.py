@@ -10,8 +10,13 @@ import copy
 import torch
 from torch.autograd import Variable
 from torchvision import transforms
+<<<<<<< HEAD
 sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/gtsrb_base_model/engine/')
 sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/gtsrb_base_model/utils')
+=======
+sys.path.insert(1, '../gtsrb_base_model/engine/')
+sys.path.insert(1, '../gtsrb_base_model/utils/')
+>>>>>>> b60c52fd03297d8e91e6ded97c1ec8662b04f1b3
 from model import TrafficSignNet
 from dataloader import preprocess, GTSRB
 from app_utils import create_dataframe
@@ -20,6 +25,7 @@ from torchvision import transforms
 from torch import nn, optim
 from tools import save_ckp
 from sklearn.model_selection import train_test_split
+import werkzeug
 
 app = Flask(__name__)
 api = Api(app)
@@ -27,7 +33,7 @@ api = Api(app)
 # argument parsing
 parser = reqparse.RequestParser()
 parser.add_argument("event")
-parser.add_argument("images")
+parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
 parser.add_argument("labels")
 parser.add_argument("split")
 
@@ -43,18 +49,31 @@ BATCH_SIZE = 4
 class PredictImage(Resource):
     def get(self):
         args = parser.parse_args()
-        image = Image.open(args['images'])
+        image = Image.open(args['file'])
+        # print(image)
         model = TrafficSignNet()
-        model = self.load_model('/43_classes.pt', model)# To be edited with load_model_from_pkl
+        model = self.load_model('./43_classes.pt', model)# To be edited with load_model_from_pkl
+        # print(model)
         pred_label, pred_label_proba = self.predict_image(image, model)
         output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
         return output_pred
+
+    # def load_image(self, image, size=(32, 32)):
+    #     trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
+    #     trans_image = trans(image).float()
+    #     trans_image = Variable(trans_image, requires_grad = True)
+    #     return trans_image
 
     def load_image(self, image, size=(32, 32)):
         trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
         trans_image = trans(image).float()
         trans_image = Variable(trans_image, requires_grad = True)
+<<<<<<< HEAD
         trans_image.unsqueeze(0)
+=======
+        trans_image=trans_image.unsqueeze(0)
+        print("Shape:", trans_image)
+>>>>>>> b60c52fd03297d8e91e6ded97c1ec8662b04f1b3
         return trans_image
     
     def predict_image(self, image, model):
@@ -101,7 +120,11 @@ class TrainImages(Resource):
         model.load_state_dict(checkpoint['state_dict'])
         return model
 
+class Home(Resource):
+    def get(self):
+        return 'Hello World! Yash daddy here!',200
 
+api.add_resource(Home, '/')
 api.add_resource(PredictImage, '/predict')
 api.add_resource(TrainImages, '/train')
 
