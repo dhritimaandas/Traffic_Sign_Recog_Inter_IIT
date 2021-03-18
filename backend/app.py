@@ -3,15 +3,15 @@ from flask_restful import reqparse, abort, Api, Resource
 import pickle
 import numpy as np
 import pandas as pd
-from db import load_latest_model_from_db
+#from db import load_latest_model_from_db
 from PIL import Image
 import sys
 import copy
 import torch
 from torch.autograd import Variable
 from torchvision import transforms
-sys.path.insert(1, '/gtsrb_base_model/engine/')
-sys.path.insert(1, '/gtsrb_base_model/utils/')
+sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/gtsrb_base_model/engine/')
+sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/gtsrb_base_model/utils')
 from model import TrafficSignNet
 from dataloader import preprocess, GTSRB
 from app_utils import create_dataframe
@@ -54,6 +54,7 @@ class PredictImage(Resource):
         trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
         trans_image = trans(image).float()
         trans_image = Variable(trans_image, requires_grad = True)
+        trans_image.unsqueeze(0)
         return trans_image
     
     def predict_image(self, image, model):

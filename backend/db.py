@@ -1,4 +1,4 @@
-import Pyrebase
+import pyrebase
 import pickle
 
 #Firebase configuration dictionary
