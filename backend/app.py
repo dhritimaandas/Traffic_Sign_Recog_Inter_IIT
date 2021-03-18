@@ -53,10 +53,18 @@ class PredictImage(Resource):
         output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
         return output_pred
 
+    # def load_image(self, image, size=(32, 32)):
+    #     trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
+    #     trans_image = trans(image).float()
+    #     trans_image = Variable(trans_image, requires_grad = True)
+    #     return trans_image
+
     def load_image(self, image, size=(32, 32)):
         trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
         trans_image = trans(image).float()
         trans_image = Variable(trans_image, requires_grad = True)
+        trans_image=trans_image.unsqueeze(0)
+        print("Shape:", trans_image)
         return trans_image
     
     def predict_image(self, image, model):
