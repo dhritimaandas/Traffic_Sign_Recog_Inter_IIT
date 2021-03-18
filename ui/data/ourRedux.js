@@ -3,8 +3,10 @@
 // Preprocessing steps
 // Data splits
 // Balance the dataset
+import axios from "../utils/axios";
 
 let state = {
+  files: [],
   images: [], //All the new added images and their classes
   dataSplits: {
     train: 100,
@@ -28,10 +30,17 @@ const getStateProperty = (property) => {
   return state[property];
 };
 
+const sendBackend = () => {
+  console.log(state.images)
+  // BAckend must work to uncomment
+  //axios.post("endpointPath", { images: state.images });
+};
+
 module.exports = {
   updateState,
   getState,
   getStateProperty,
+  sendBackend,
 };
 
 // Test
