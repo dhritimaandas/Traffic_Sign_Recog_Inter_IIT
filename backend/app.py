@@ -7,6 +7,7 @@ import pandas as pd
 from db import load_latest_model_from_db
 from PIL import Image
 import sys
+import base64
 import copy
 import torch
 from torch.autograd import Variable
@@ -92,21 +93,27 @@ class TrainImages(Resource):
     def __init__(self):
         self.batch_size = 4
         self.dim = 3
+        self.split = 0.2
     def post(self):
         args = parser.parse_args()
         images = args["images"]
         # print(images)
-        labels = args["labels"]
-        split = args["split"]
-        images, labels = self.prepare_data(images, labels)
-        self.check_exp(images, labels, split)
-        val_acc = self.train(images, labels, split, self.batch_size)
+        images, labels = self.prepare_data(images)
+        self.check_exp(images, labels, self.split)
+        val_acc = self.train(images, labels, self.split, self.batch_size)
         return val_acc
 
-    def prepare_data(self, images, labels):
-        ###### To be done ###### 
-        #### convert images to a list of numpy arrays and labels to a list of integers ####
-        return images, labels
+    def prepare_data(self, images):
+        array_imgs = []
+        labels = []
+        for pair in images:
+            im_bytes = base64.b64decode(pair[0])
+            im_arr = np.frombuffer(im_bytes, dtype=np.uint8)  # im_arr is one-dim Numpy array
+            img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+
+            array_imgs.append(img)
+            labels.append(pair[1])
+        return array_imgs, labels
 
     def check_exp(self, images, labels, split): ### custom value error function
         if len(images)!=len(labels):
