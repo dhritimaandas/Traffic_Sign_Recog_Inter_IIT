@@ -46,6 +46,7 @@ class PredictImage(Resource):
         args = parser.parse_args()
         image = Image.open(args['file'])
         output_pred = self.result(image)
+        # print(output_pred)
         return output_pred
         
     def result(self, img):
@@ -54,7 +55,7 @@ class PredictImage(Resource):
         model = self.load_model('./43_classes.pt', model)# To be edited with load_model_from_pkl
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
-        output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
+        output_pred = {'pred': int(pred_label[0]), 'confidence': float(pred_label_proba[0])}
         return output_pred
 
     def load_image(self, image, size=(32, 32)):
