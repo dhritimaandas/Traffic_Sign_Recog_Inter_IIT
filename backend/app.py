@@ -71,6 +71,7 @@ class PredictImage(Resource):
         torch_image = self.load_image(image)
         with torch.no_grad():
             output = model(torch_image)
+            print("hello_output:", output[0])
             print("output_size: ", output.size())
             _, pred = torch.max(output, 1)
             pred_proba = output[0][pred]
