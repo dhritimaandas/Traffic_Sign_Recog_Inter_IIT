@@ -11,8 +11,8 @@ import Select from "@material-ui/core/Select";
 import ImageTiles from "../imageTiles";
 import { updateState, getStateProperty } from "../../data/ourRedux";
 import { Container } from "react-bootstrap";
-import Jimp from "jimp";
 import Preprocess from "../addImage/preprocess";
+import Augment from "../addImage/augment";
 
 const styles = (theme) => ({
   formControl: {
@@ -154,7 +154,8 @@ class DropzoneDialogExample extends Component {
             )}
           </div>
         </Container>
-        {/*<Preprocess />*/}
+        <Preprocess />
+        <Augment />
       </Grid>
     );
   }
