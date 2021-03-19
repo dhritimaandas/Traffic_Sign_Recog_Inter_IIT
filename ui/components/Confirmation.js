@@ -59,7 +59,7 @@ class Confirm extends Component {
     console.log(getState());
 
     sendBackend();
-   // this.props.router.push('/dashboard');
+  //  this.props.router.push('/dashboard');
   }
 
   render() {

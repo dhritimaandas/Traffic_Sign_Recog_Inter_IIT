@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import reqparse, abort, Api, Resource
 import pickle
 import numpy as np
@@ -24,11 +25,16 @@ import werkzeug
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app, origins=['*'])
+app.config['SECRET_KEY'] = 'disable the web security'
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 # argument parsing
 parser = reqparse.RequestParser()
 parser.add_argument("event")
 parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+parser.add_argument('images', required=True, location=['json'])
 parser.add_argument("labels")
 parser.add_argument("split")
 
@@ -83,9 +89,10 @@ class PredictImage(Resource):
         return model
 
 class TrainImages(Resource):
-    def get(self):
+    def post(self):
         args = parser.parse_args()
         images = args["images"]
+        # print(images)
         labels = args["labels"]
         split = args["split"]
         df = create_dataframe(images, labels)
@@ -114,9 +121,19 @@ class TrainImages(Resource):
 
 class Home(Resource):
     def get(self):
+        args = parser.parse_args()
+        # print(request)
+        images = args["images"]
+        print(images)
         return 'Hello World! Yash daddy here!',200
+    def post(self):
+        args = parser.parse_args()
+        # print(request)
+        images = args["images"]
+        print(images)
+        return "hello"
 
-api.add_resource(Home, '/')
+api.add_resource(Home, '/yash')
 api.add_resource(PredictImage, '/predict')
 api.add_resource(TrainImages, '/train')
 

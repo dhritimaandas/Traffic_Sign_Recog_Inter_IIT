@@ -13,6 +13,7 @@ torch = "==1.8.0"
 pandas = "*"
 torchvision = "*"
 scikit-learn = "*"
+flask-cors = "*"
 
 [dev-packages]
 
