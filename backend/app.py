@@ -15,7 +15,7 @@ sys.path.insert(1, '../gtsrb_base_model/engine/')
 sys.path.insert(1, '../gtsrb_base_model/utils/')
 from model import TrafficSignNet
 from dataloader import preprocess, GTSRB
-from app_utils import create_dataframe
+from app_utils import ValidationError as VE
 from train import train_model
 from torchvision import transforms
 from torch import nn, optim
@@ -89,16 +89,39 @@ class PredictImage(Resource):
         return model
 
 class TrainImages(Resource):
+    def __init__(self):
+        self.batch_size = 4
+        self.dim = 3
     def post(self):
         args = parser.parse_args()
         images = args["images"]
         # print(images)
         labels = args["labels"]
         split = args["split"]
-        df = create_dataframe(images, labels)
-        dataset_sizes,dataloaders = preprocess(df,ratio=split,batch_size=BATCH_SIZE)
+        images, labels = self.prepare_data(images, labels)
+        self.check_exp(images, labels, split)
+        val_acc = self.train(images, labels, split, self.batch_size)
+        return val_acc
+
+    def prepare_data(self, images, labels):
+        ###### To be done ###### 
+        #### convert images to a list of numpy arrays and labels to a list of integers ####
+        return images, labels
+
+    def check_exp(self, images, labels, split): ### custom value error function
+        if len(images)!=len(labels):
+            raise VE(400, msg="Number of images is not equal to number of labels")
+        if len(np.array(images[0]).shape)!=3:
+            raise VE(400, msg="Dimension of an image should be 3")
+        if split > 1 or split < 0:
+            raise VE(400, msg="validation split must be less than 1 and greater than 0")
+        return
+        
+    def train(self, images, labels, split, batch_size):
+        dataset_sizes,dataloaders = preprocess(images, labels, ratio=split,batch_size=batch_size)
         model = TrafficSignNet()
-        model = self.load_model('/43_classes.pt', model)# To be edited with load_model_from_pkl
+        ### change path accordingly
+        model = self.load_model('/content/43_classes.pt', model)# To be edited with load_model_from_pkl
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=LR)
 
@@ -110,13 +133,15 @@ class TrainImages(Resource):
                 'state_dict': model.state_dict(),
                 'optimizer': optimizer.state_dict(),
             }
-        checkpoint_path = "/content/drive/MyDrive/competitions/bosh-inter-iit/model3.pt"
+        ### change path accordingly
+        checkpoint_path = "/content/43_classes_1.pt"
         save_ckp(checkpoint, checkpoint_path)
         return {'valid_acc': best_acc}
     
     def load_model(self, checkpoint_path, model):
         checkpoint = torch.load(checkpoint_path, DEVICE)
         model.load_state_dict(checkpoint['state_dict'])
+        model.train()
         return model
 
 class Home(Resource):
