@@ -74,7 +74,13 @@ const getStateProperty = (property) => {
 const sendBackend = () => {
   console.log(state.images);
   // BAckend must work to uncomment
-  //axios.post("endpointPath", { images: state.images });
+  // console.log({ images: state.images[0][0] })
+  axios.post("yash", { images: state.images })
+  .then(res => {
+    console.log(res)
+  }).catch(e => {
+    console.log(e)
+  })
 };
 
 module.exports = {

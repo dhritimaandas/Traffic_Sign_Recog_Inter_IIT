@@ -6,14 +6,14 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-restful = "*"
-pyrebase = "*"
+pyrebase4 = "*"
 numpy = "==1.18.5"
 pillow = "==8.1.2"
 torch = "==1.8.0"
 pandas = "*"
 torchvision = "*"
-tensorboard = "*"
 scikit-learn = "*"
+flask-cors = "*"
 
 [dev-packages]
 
