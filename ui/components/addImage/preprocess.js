@@ -22,15 +22,15 @@ const availableSteps = [
 ];
 
 export default function PreprocessComponent() {
-  const [steps, setSteps] = useState(getStateProperty("preprocessing"));
-  
+  const [steps, setSteps] = useState(getStateProperty("newpps"));
+
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   useEffect(() => {
-    updateState("preprocessing", steps); //Update the preprocessings
+    updateState("newpps", steps); //Update the preprocessings
   }, [steps]);
 
   const handleChange = (augment) => {

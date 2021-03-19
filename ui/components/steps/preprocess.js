@@ -23,7 +23,7 @@ const availableSteps = [
 
 export default function PreprocessComponent() {
   const [steps, setSteps] = useState(getStateProperty("preprocessing"));
-  
+
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
   const [showModal, setShow] = useState(false);

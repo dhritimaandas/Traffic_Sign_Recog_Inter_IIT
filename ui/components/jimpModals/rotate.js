@@ -1,13 +1,5 @@
-import { useEffect, useState } from "react";
-import {
-  Container,
-  Form,
-  FormControl,
-  Modal,
-  Col,
-  Row,
-  Button,
-} from "react-bootstrap";
+import { useState } from "react";
+import { Container, Form, Modal, Col, Row, Button } from "react-bootstrap";
 import Image from "next/image";
 import Jimp from "jimp";
 

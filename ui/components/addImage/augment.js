@@ -3,7 +3,6 @@ import { Container, Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Chip from "@material-ui/core/Chip";
 import { updateState, getStateProperty, getState } from "../../data/ourRedux";
-import Preprocess from "./preprocess";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
 
@@ -13,14 +12,14 @@ const augmentationOptions = [
 ];
 
 export default function Augment() {
-  const [augs, setAugs] = useState(getStateProperty("augmentations"));
+  const [augs, setAugs] = useState(getStateProperty("newags"));
   const [selected, setSelected] = useState();
   const [modalName, setModalName] = useState();
   const [showModal, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
   useEffect(() => {
-    updateState("augmentations", augs); //Update the augmentations
+    updateState("newags", augs); //Update the augmentations
   }, [augs]);
 
   const handleChange = (augment) => {
@@ -34,7 +33,7 @@ export default function Augment() {
   };
   console.log(getState());
   return (
-    <Container className="py-3" style={{ minHeight: "50vh" }}>
+    <Container className="py-3">
       {modalName == "Flip" ? (
         <FlipModal
           allAugs={augs}
@@ -52,15 +51,8 @@ export default function Augment() {
           handleClose={handleClose}
         />
       ) : null}
-      <Container>
-        <p>
-          Select the augmentations and preprocessings you want to apply on the
-          whole existing dataset.
-        </p>
-      </Container>
-      <Preprocess />
-      <Col className="mt-3">
-        <hr />
+
+      <div className="mt-3">
         <h5 className="pt-3">Add Augmentations</h5>
         <Row className="pt-3">
           <Col md={6}>
@@ -83,9 +75,9 @@ export default function Augment() {
             </Button>
           </Col>
         </Row>
-      </Col>
+      </div>
       {Object.keys(augs).length ? (
-        <Col className="mt-3">
+        <div className="mt-3">
           <h6>
             <u>Selected Augmentations</u>
           </h6>
@@ -107,7 +99,7 @@ export default function Augment() {
               })}
             </Col>
           </Row>
-        </Col>
+        </div>
       ) : null}
     </Container>
   );

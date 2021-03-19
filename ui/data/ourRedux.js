@@ -4,6 +4,7 @@
 // Data splits
 // Balance the dataset
 import axios from "../utils/axios";
+import Jimp from "jimp";
 
 let state = {
   files: [],
@@ -15,8 +16,48 @@ let state = {
   }, //Train test validate splits
   augmentations: {}, //All the augmentations
   preprocessing: {}, //All the preprocessings
+  newpps: {}, //new data preprocessings
+  newags: {},
+  ppi: [], // preprocessed images
   balance: false, //Do you want to balance the dataset? No by default
 };
+
+const PreprocessedImageObserver = () => {
+  useEffect(() => {
+    preprocessImages(state.images);
+  }, [state.newpps]);
+  return null;
+};
+
+/*
+
+const preprocessImages = () => {
+	var finalImages 
+  state.images.map(async (el) => [await toBase64(el[0]), el[1]]);
+
+  var array = files.map(async (el) => [await toBase64(el[0]), el[1]]);
+  const carray = await Promise.all(array);
+  this.setState({
+    images: carray,
+  });
+
+
+
+  for (let i = 0; i < state.images.length; i++) {
+    
+    Jimp.read().then(function (img) {
+      const val = Math.max(parseInt(blur), 1);
+      img.blur(val).getBase64(Jimp.AUTO, function (err, src) {
+        setImage(src);
+      });
+    });
+  }
+
+  console.log(state.newpps);
+};
+
+
+*/
 
 const updateState = (property, value) => {
   state[property] = value;
@@ -31,7 +72,7 @@ const getStateProperty = (property) => {
 };
 
 const sendBackend = () => {
-  console.log(state.images)
+  console.log(state.images);
   // BAckend must work to uncomment
   // console.log({ images: state.images[0][0] })
   axios.post("yash", { images: state.images })
