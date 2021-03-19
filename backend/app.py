@@ -55,7 +55,7 @@ class PredictImage(Resource):
         model = self.load_model('./43_classes.pt', model)# To be edited with load_model_from_pkl
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
-        output_pred = {'pred': int(pred_label[0]), 'confidence': float(pred_label_proba[0])}
+        output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
         return output_pred
 
     def load_image(self, image, size=(32, 32)):
@@ -74,7 +74,7 @@ class PredictImage(Resource):
             print("output_size: ", output.size())
             _, pred = torch.max(output, 1)
             pred_proba = output[0][pred]
-        return list(pred.numpy()), list(pred_proba.numpy())
+        return int(pred.numpy()), float(pred_proba.numpy())
     
     def load_model(self, checkpoint_path, model):
         checkpoint = torch.load(checkpoint_path, DEVICE)
