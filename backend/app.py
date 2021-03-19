@@ -34,7 +34,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 parser = reqparse.RequestParser()
 parser.add_argument("event")
 parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
-parser.add_argument('images', required=True, location=['json'])
+parser.add_argument('images', location=['json'])
 parser.add_argument("labels")
 parser.add_argument("split")
 
@@ -121,10 +121,10 @@ class TrainImages(Resource):
 
 class Home(Resource):
     def get(self):
-        args = parser.parse_args()
-        # print(request)
-        images = args["images"]
-        print(images)
+        # args = parser.parse_args()
+        # # print(request)
+        # images = args["images"]
+        # print(images)
         return 'Hello World! Yash daddy here!',200
     def post(self):
         args = parser.parse_args()
