@@ -45,19 +45,17 @@ class PredictImage(Resource):
     def get(self):
         args = parser.parse_args()
         image = Image.open(args['file'])
+        output_pred = self.result(image)
+        return output_pred
+        
+    def result(self, img):
         # print(image)
         model = TrafficSignNet()
         model = self.load_model('./43_classes.pt', model)# To be edited with load_model_from_pkl
         # print(model)
-        pred_label, pred_label_proba = self.predict_image(image, model)
+        pred_label, pred_label_proba = self.predict_image(img, model)
         output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
         return output_pred
-
-    # def load_image(self, image, size=(32, 32)):
-    #     trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
-    #     trans_image = trans(image).float()
-    #     trans_image = Variable(trans_image, requires_grad = True)
-    #     return trans_image
 
     def load_image(self, image, size=(32, 32)):
         trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
@@ -72,9 +70,10 @@ class PredictImage(Resource):
         torch_image = self.load_image(image)
         with torch.no_grad():
             output = model(torch_image)
+            print("output_size: ", output.size())
             _, pred = torch.max(output, 1)
-            pred_proba = output[pred]
-        return pred, pred_proba
+            pred_proba = output[0][pred]
+        return list(pred.numpy()), list(pred_proba.numpy())
     
     def load_model(self, checkpoint_path, model):
         checkpoint = torch.load(checkpoint_path, DEVICE)
