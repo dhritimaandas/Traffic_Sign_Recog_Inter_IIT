@@ -4,7 +4,7 @@ import Select from "react-select";
 import Image from "next/image";
 import Chip from "@material-ui/core/Chip";
 import Jimp from "jimp";
-import { updateState, getStateProperty } from "../../data/ourRedux";
+import { updateState, getStateProperty,getState } from "../../data/ourRedux";
 import Preprocess from "./preprocess";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
@@ -41,7 +41,7 @@ export default function Augment() {
     delete newDict[augmentationKey];
     setAugs(newDict);
   };
-
+console.log(getState())
   return (
     <Container className="py-3" style={{ minHeight: "50vh" }}>
       {modalName == "Flip" ? (

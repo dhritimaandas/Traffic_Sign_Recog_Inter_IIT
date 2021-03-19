@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -9,8 +9,10 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import ImageTiles from "../imageTiles";
-import { updateState } from "../../data/ourRedux";
+import { updateState, getStateProperty } from "../../data/ourRedux";
 import { Container } from "react-bootstrap";
+import Jimp from "jimp";
+import Preprocess from "../addImage/preprocess";
 
 const styles = (theme) => ({
   formControl: {
@@ -22,13 +24,21 @@ const styles = (theme) => ({
   },
 });
 
+const Observer = ({ value, didUpdate }) => {
+  useEffect(() => {
+    didUpdate(value);
+  }, [value]);
+  return null;
+};
+
 class DropzoneDialogExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       class: "",
-      files: [],
+      files: getStateProperty("files"),
+      images: getStateProperty("images"),
     };
   }
 
@@ -60,7 +70,15 @@ class DropzoneDialogExample extends Component {
       files: filesNewState,
       open: false,
     });
-    updateState("images", filesNewState);
+    updateState("files", filesNewState);
+  }
+
+  async updateImages(files) {
+    var array = files.map(async (el) => [await toBase64(el[0]), el[1]]);
+    const carray = await Promise.all(array);
+    this.setState({
+      images: carray,
+    });
   }
 
   handleOpen() {
@@ -70,9 +88,23 @@ class DropzoneDialogExample extends Component {
   }
 
   render() {
+    updateState("images", this.state.images);
+    if (this.state.files.length)
+      console.log(
+        "AAA",
+        this.state.files[0][0],
+        toBase64(this.state.files[0][0])
+      );
+    console.log(this.state.files);
     const { classes } = this.props;
+    console.log(this.state.images);
     return (
       <Grid style={{ minHeight: "50vh" }}>
+        <Observer
+          value={this.state.files}
+          didUpdate={this.updateImages.bind(this)}
+        />
+
         <Grid container justify="center" alignItems="center">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-helper-label">
@@ -122,9 +154,18 @@ class DropzoneDialogExample extends Component {
             )}
           </div>
         </Container>
+        {/*<Preprocess />*/}
       </Grid>
     );
   }
 }
 
 export default withStyles(styles)(DropzoneDialogExample);
+
+const toBase64 = async (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });

@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import RangeSlider from './Balance';
 import {withRouter} from 'next/router';
-import {updateState, getState} from '../data/ourRedux';
+import {updateState, getState,sendBackend} from '../data/ourRedux';
 // import HorizontalLinearStepper from './stepper'
 
 class Confirm extends Component {
@@ -57,7 +57,9 @@ class Confirm extends Component {
     updateState("balance", balance); //Update balance bool in the main data object
     updateState("dataSplits", this.state.datasetSplit); //Update the dataset splits in the main data object
     console.log(getState());
-    this.props.router.push('/dashboard');
+
+    sendBackend();
+   // this.props.router.push('/dashboard');
   }
 
   render() {
