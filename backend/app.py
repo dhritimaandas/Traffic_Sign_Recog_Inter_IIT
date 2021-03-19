@@ -14,9 +14,9 @@ from torchvision import transforms
 sys.path.insert(1, '../gtsrb_base_model/engine/')
 sys.path.insert(1, '../gtsrb_base_model/utils/')
 from model import TrafficSignNet
-from dataloader import preprocess, GTSRB
+from dataloader_back import preprocess, GTSRB
 from app_utils import ValidationError as VE
-from train import train_model
+from train_back import train_model
 from torchvision import transforms
 from torch import nn, optim
 from tools import save_ckp
@@ -41,9 +41,9 @@ parser.add_argument("split")
 from torch.utils.tensorboard import SummaryWriter
 
 EPOCHS = 10
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+DEVICE = torch.device("cpu")
 print(DEVICE)
-LR = 0.001
+LR = 0.000001
 BATCH_SIZE = 4
 
 
@@ -116,7 +116,7 @@ class TrainImages(Resource):
         if split > 1 or split < 0:
             raise VE(400, msg="validation split must be less than 1 and greater than 0")
         return
-        
+
     def train(self, images, labels, split, batch_size):
         dataset_sizes,dataloaders = preprocess(images, labels, ratio=split,batch_size=batch_size)
         model = TrafficSignNet()
