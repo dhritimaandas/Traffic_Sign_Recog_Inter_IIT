@@ -1,8 +1,8 @@
-import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
-import Image from "next/image";
+import { Container, Modal, Col, Row, Button } from "react-bootstrap";
 import React from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { getStateProperty, updateState } from "../../data/ourRedux";
 
 class CropImage extends React.Component {
   constructor(props) {
@@ -11,38 +11,22 @@ class CropImage extends React.Component {
       src: this.props.imgsrc,
       crop: {
         unit: "%",
-        width: 30,
-        height: 30,
+        width: 100,
+        height: 100,
         //aspect: 16 / 9,
       },
     };
   }
 
-  onSelectFile = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.addEventListener("load", () =>
-        this.setState({ src: reader.result })
-      );
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
-
-  onImageLoaded = (image) => {
-    this.imageRef = image;
-  };
-
-  onCropComplete = (crop) => {
-    this.makeClientCrop(crop);
-  };
-
-  onCropChange = (crop, percentCrop) => {
-    this.setState({ crop });
-  };
+  onImageLoaded = (image) => (this.imageRef = image);
+  onCropComplete = (crop) => this.makeClientCrop(crop);
+  onCropChange = (crop) => this.setState({ crop });
+  changeIndex = (index) =>
+    this.setState({ src: index, crop: { unit: "%", width: 100, height: 100 } });
 
   async makeClientCrop(crop) {
     if (this.imageRef && crop.width && crop.height) {
-      const croppedImageUrl = await this.getCroppedImg(
+      const croppedImageUrl = this.getCroppedImg(
         this.imageRef,
         crop,
         "newFile.png"
@@ -51,7 +35,7 @@ class CropImage extends React.Component {
     }
   }
 
-  getCroppedImg(image, crop, fileName) {
+  getCroppedImg(image, crop) {
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
@@ -70,39 +54,24 @@ class CropImage extends React.Component {
       crop.width,
       crop.height
     );
-
-    return new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          console.error("Canvas is empty");
-          return;
-        }
-        // blob.name = fileName;
-        window.URL.revokeObjectURL(this.fileUrl);
-        this.fileUrl = window.URL.createObjectURL(blob);
-        resolve(this.fileUrl);
-      }, "image/png");
-    });
+    return canvas.toDataURL("image/jpeg");
   }
 
-  // state = {
-  //     setOpen: false
-  //   };
+  addCropping = () => {
+    var arr = getStateProperty("images");
+    arr[this.state.src] = [this.state.croppedImageUrl, arr[this.state.src][1]];
+    updateState("images", arr);
 
-  // open = () => {
-  //     this.setState({setOpen:true});
-  // }
-
-  // close = () => {
-  //     this.setState({setOpen:false});
-  // }
+    this.props.handleClose();
+  };
 
   render() {
-    this.state.src = this.props.imgsrc;
-    const { crop, croppedImageUrl, src } = this.state;
-
     return (
       <div>
+        <OnPropChange
+          changable={this.props.imgsrc}
+          setChange={this.changeIndex.bind(this)}
+        />
         <Modal
           show={this.props.show}
           onHide={this.props.handleClose}
@@ -117,15 +86,13 @@ class CropImage extends React.Component {
               <Row>
                 <Col sm={6} className="text-center">
                   <p className="lead">Original Image</p>
-
                   <div className="App">
-                    {/* <div>
-                <input type="file" accept="image/*" onChange={this.onSelectFile} />
-                </div> */}
-                    {src && (
+                    {getStateProperty("images")[this.state.src] && (
                       <ReactCrop
-                        src={src}
-                        crop={crop}
+                        src={URL.createObjectURL(
+                          getStateProperty("files")[this.state.src][0]
+                        )}
+                        crop={this.state.crop}
                         ruleOfThirds
                         onImageLoaded={this.onImageLoaded}
                         onComplete={this.onCropComplete}
@@ -138,11 +105,11 @@ class CropImage extends React.Component {
                 <Col sm={6} className="text-center">
                   <p className="lead">Cropped Image</p>
                   {/* <Image src="/brain.jpg" alt="Picture of the author" width={300} height={300} /> */}
-                  {croppedImageUrl && (
+                  {this.state.croppedImageUrl && (
                     <img
-                      alt="Crop"
+                      alt="Cropped Image"
                       style={{ maxWidth: "100%" }}
-                      src={croppedImageUrl}
+                      src={this.state.croppedImageUrl}
                     />
                   )}
                 </Col>
@@ -153,7 +120,7 @@ class CropImage extends React.Component {
             <Button variant="secondary" onClick={this.props.handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={this.close}>
+            <Button variant="primary" onClick={this.addCropping}>
               Add
             </Button>
           </Modal.Footer>
@@ -162,4 +129,12 @@ class CropImage extends React.Component {
     );
   }
 }
+
+const OnPropChange = ({ changable, setChange }) => {
+  React.useEffect(() => {
+    setChange(changable);
+  }, [changable]);
+  return null;
+};
+
 export default CropImage;
