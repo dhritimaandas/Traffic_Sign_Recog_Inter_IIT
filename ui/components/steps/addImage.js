@@ -13,6 +13,10 @@ import { updateState, getStateProperty } from "../../data/ourRedux";
 import { Container } from "react-bootstrap";
 import Preprocess from "../addImage/preprocess";
 import Augment from "../addImage/augment";
+// import Head from 'next/head';
+import Title from './dynamic_title';
+
+import classNames from "../../data/classNames";
 
 const styles = (theme) => ({
   formControl: {
@@ -100,6 +104,7 @@ class DropzoneDialogExample extends Component {
     console.log(this.state.images);
     return (
       <Grid style={{ minHeight: "50vh" }}>
+        <Title open={this.state.open}/>
         <Observer
           value={this.state.files}
           didUpdate={this.updateImages.bind(this)}
@@ -119,9 +124,11 @@ class DropzoneDialogExample extends Component {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={"Class 1"}>Class One</MenuItem>
-              <MenuItem value={"Class 2"}>Class Two</MenuItem>
-              <MenuItem value={"Class 3"}>Class Three</MenuItem>
+              {classNames.map((clName, id) => {
+                return (
+                  <MenuItem value={id} key={clName}>{clName}</MenuItem>
+                )
+              })}
             </Select>
             <FormHelperText>
               Select a class for the images you are going to add
