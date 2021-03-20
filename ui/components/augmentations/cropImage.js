@@ -89,7 +89,9 @@ class CropImage extends React.Component {
                   <div className="App">
                     {getStateProperty("images")[this.state.src] && (
                       <ReactCrop
-                        src={getStateProperty("images")[this.state.src][0]}
+                        src={URL.createObjectURL(
+                          getStateProperty("files")[this.state.src][0]
+                        )}
                         crop={this.state.crop}
                         ruleOfThirds
                         onImageLoaded={this.onImageLoaded}
