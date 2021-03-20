@@ -6,6 +6,8 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { Card, CardImg, CardBody, CardTitle, CardSubtitle, Row, Col } from 'reactstrap';
 import axios from '../utils/axios'
 
+import classesNames from '../data/classNames'
+
 const Predictions = (props) => {
   return (
     <Row>
@@ -13,7 +15,7 @@ const Predictions = (props) => {
         <Card>
           <CardImg top height="300px" src={URL.createObjectURL(props.images)} alt="Card image cap" />
           <CardBody>
-            <CardTitle tag="h5">Predicted Class: {props.predictions.pred}</CardTitle>
+            <CardTitle tag="h5"><b>Predicted Class:</b> ({classesNames[props.predictions.pred]})</CardTitle>
             <CardSubtitle tag="h6" className="mb-2 text-muted">Confidence: {props.predictions.confidence}</CardSubtitle>
           </CardBody>
         </Card>
