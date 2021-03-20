@@ -6,7 +6,8 @@ import Container from '@material-ui/core/Container';
 import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
 import FirebasPage from './firebaseTest';
-
+import Title from '../components/steps/dynamic_title';
+// import Head from 'next/head';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -38,6 +39,7 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
+      <Title/>
       <CssBaseline />
       <NavBar />
       <main className={classes.content}>

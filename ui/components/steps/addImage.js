@@ -13,6 +13,8 @@ import { updateState, getStateProperty } from "../../data/ourRedux";
 import { Container } from "react-bootstrap";
 import Preprocess from "../addImage/preprocess";
 import Augment from "../addImage/augment";
+// import Head from 'next/head';
+import Title from './dynamic_title';
 
 const styles = (theme) => ({
   formControl: {
@@ -100,6 +102,7 @@ class DropzoneDialogExample extends Component {
     console.log(this.state.images);
     return (
       <Grid style={{ minHeight: "50vh" }}>
+        <Title open={this.state.open}/>
         <Observer
           value={this.state.files}
           didUpdate={this.updateImages.bind(this)}
