@@ -4,6 +4,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BarChartIcon from '@material-ui/icons/BarChart';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import Link from 'next/link'
 
 export const mainListItems = (
@@ -29,5 +30,13 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
+    <Link href='/predict' passHref>
+      <ListItem button component='a'>
+        <ListItemIcon>
+          <TimelineIcon />
+        </ListItemIcon>
+        <ListItemText primary="Predict" />
+      </ListItem>
+    </Link>
   </div>
 );

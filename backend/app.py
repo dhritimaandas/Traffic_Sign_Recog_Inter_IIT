@@ -32,7 +32,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # argument parsing
 parser = reqparse.RequestParser()
 parser.add_argument("event")
-parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location=['json','form','files'])
 parser.add_argument('images', location=['json'])
 parser.add_argument("labels")
 parser.add_argument("split")
@@ -47,9 +47,10 @@ BATCH_SIZE = 4
 
 
 class PredictImage(Resource):
-    def get(self):
+    def post(self):
         args = parser.parse_args()
         image = Image.open(args['file'])
+        # print(image)
         output_pred = self.result(image)
         # print(output_pred)
         return output_pred
@@ -68,7 +69,7 @@ class PredictImage(Resource):
         trans_image = trans(image).float()
         trans_image = Variable(trans_image, requires_grad = True)
         trans_image=trans_image.unsqueeze(0)
-        print("Shape:", trans_image)
+        # print("Shape:", trans_image)
         return trans_image
     
     def predict_image(self, image, model):
@@ -76,8 +77,8 @@ class PredictImage(Resource):
         torch_image = self.load_image(image)
         with torch.no_grad():
             output = model(torch_image)
-            print("hello_output:", output[0])
-            print("output_size: ", output.size())
+            # print("hello_output:", output[0])
+            # print("output_size: ", output.size())
             _, pred = torch.max(output, 1)
             pred_proba = output[0][pred]
         return int(pred.numpy()), float(pred_proba.numpy())
