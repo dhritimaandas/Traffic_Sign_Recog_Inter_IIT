@@ -51,10 +51,10 @@ export default function SingleLineGridList(props) {
   const classes = useStyles();
   const [showModal, setShow] = React.useState(false);
   const handleClose = () => setShow(false);
-  const [imgurl, setUrl] = React.useState();
+  const [ind, setIndex] = React.useState();
 
-  const handleClick = (url) => {
-    setUrl(url);
+  const handleClick = (index) => {
+    setIndex(index);
     setShow(true);
   }
 
@@ -62,9 +62,9 @@ export default function SingleLineGridList(props) {
     <div className={classes.root}>
       
       <GridList className={classes.gridList} cols={2.5}>
-        {props.tileData.map((tile) => (
+        {props.tileData.map((tile,index) => (
           <GridListTile key={tile[0].name}>
-            <img src={URL.createObjectURL(tile[0])} alt={tile[1]} />
+            <img style={{minWidth:"15rem"}} src={tile[0]} alt={tile[1]} />
             <GridListTileBar
               title={tile[1]}
               classes={{
@@ -72,7 +72,7 @@ export default function SingleLineGridList(props) {
                 title: classes.title,
               }}
               actionIcon={
-                <IconButton onClick={ () => handleClick(URL.createObjectURL(tile[0])) } aria-label={`star ${tile.title}`}>
+                <IconButton onClick={ () => handleClick(index)} aria-label={`star ${tile.title}`}>
                   <EditIcon className={classes.title} />
                 </IconButton>
               }
@@ -80,7 +80,7 @@ export default function SingleLineGridList(props) {
           </GridListTile>  
         ))}
       </GridList>
-      <CropImage show={showModal} handleClose={handleClose} imgsrc={imgurl} />
+      <CropImage show={showModal} handleClose={handleClose} imgsrc={ind} />
     </div>
   );
 }

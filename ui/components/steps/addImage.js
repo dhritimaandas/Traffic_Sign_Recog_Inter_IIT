@@ -150,7 +150,7 @@ class DropzoneDialogExample extends Component {
             {this.state.files.length === 0 ? (
               <p>No images</p>
             ) : (
-              <ImageTiles tileData={this.state.files} />
+              <ImageTiles tileData={this.state.images} />
             )}
           </div>
         </Container>
