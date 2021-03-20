@@ -13,6 +13,8 @@ import Orders from '../components/stats/Orders';
 import Copyright from '../components/Copyright';
 import NavBar from '../components/navbar/Navbar';
 
+import Title from '../components/steps/dynamic_title';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +47,7 @@ export default function Dashboard() {
 
   return (
     <div className={classes.root}>
+      <Title/>
       <CssBaseline />
       <NavBar />
       <main className={classes.content}>
