@@ -30,24 +30,63 @@ const updateState = (property, value) => {
 const getState = () => state;
 const getStateProperty = (property) => state[property];
 
-const sendBackend = () => {
-  console.log(state);
-  // TODO: Arrange the data as per backend
-
-  axios
-    .post("yash", { images: state.images })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((e) => {
-      console.log(e);
+const preprocessImages = async () => {
+  const convert = async (url) => {
+    var image = await Jimp.read(url);
+    image = image.resize(32, 32);
+    Object.keys(state.newpps).map((e) => {
+      if (state.newpps[e].status) {
+        if (e == "Brightness")
+          image = image.brightness(state.newpps[e].value / 100);
+        else if (e == "Contrast")
+          image = image.contrast(state.newpps[e].value / 100);
+        else if (e == "Grayscale") image = image.grayscale();
+        else if (e == "Invert Colors") image = image.invert();
+        else if (e == "Blur") image = image.blur(state.newpps[e].value);
+        else if (e == "Gaussian") image = image.gaussian(state.newpps[e].value);
+        else if (e == "Opacity")
+          image = image.opacity(state.newpps[e].value / 100);
+      }
     });
+
+    Object.keys(state.newags).map((e) => {
+      if (state.newags[e].status) {
+        if (e == "Rotate") image = image.rotate(state.newags[e].value);
+        else if (e == "Flip") {
+          var horizontal = state.newags[e].value.includes("Horizontal");
+          var vertical = state.newags[e].value.includes("Vertical");
+          image = image.flip(horizontal, vertical);
+        }
+      }
+    });
+    return await image.getBase64Async(Jimp.AUTO);
+  };
+
+  const newImages = state.images.map(async (element) => [
+    await convert(element[0]),
+    element[1],
+  ]);
+
+  return await Promise.all(newImages);
+};
+
+const sendBackend = async () => {
+  data = { split: state.dataSplits, images: await preprocessImages() };
+  axios.post("train", data).then(
+    (result) => {
+      console.log(result);
+    },
+    (e) => {
+      console.log(e);
+    }
+  );
 };
 
 module.exports = {
   updateState,
   getState,
   getStateProperty,
+  preprocessImages,
   sendBackend,
 };
 
@@ -61,33 +100,9 @@ module.exports = {
 // console.log(updateState("dataSplits", newDir));
 // console.log(getState())
 
-/*
 const PreprocessedImageObserver = () => {
   useEffect(() => {
     preprocessImages(state.images);
   }, [state.newpps]);
   return null;
 };
-
-//// NOT USABLE YET ////
-const preprocessImages = () => {
-	var finalImages 
-  state.images.map(async (el) => [await toBase64(el[0]), el[1]]);
-  var array = files.map(async (el) => [await toBase64(el[0]), el[1]]);
-  const carray = await Promise.all(array);
-  this.setState({
-    images: carray,
-  });
-  for (let i = 0; i < state.images.length; i++) {
-    
-    Jimp.read().then(function (img) {
-      const val = Math.max(parseInt(blur), 1);
-      img.blur(val).getBase64(Jimp.AUTO, function (err, src) {
-        setImage(src);
-      });
-    });
-  }
-
-  console.log(state.newpps);
-};
-*/
