@@ -14,6 +14,7 @@ pandas = "*"
 torchvision = "*"
 scikit-learn = "*"
 flask-cors = "*"
+opencv-python = "*"
 
 [dev-packages]
 

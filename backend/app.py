@@ -15,6 +15,7 @@ from torchvision import transforms
 sys.path.insert(1, '../gtsrb_base_model/engine/')
 sys.path.insert(1, '../gtsrb_base_model/utils/')
 from app_utils import ValidationError as VE
+import cv2
 from torchvision import transforms
 from torch import nn, optim
 from sklearn.model_selection import train_test_split
