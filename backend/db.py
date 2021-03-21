@@ -40,8 +40,15 @@ def get_latest_model():
 def load_latest_model_from_db():
   latest_model_id = get_latest_model()
   latest_model_name = 'models/'+str(latest_model_id)+'.pt'
-  storage.child(latest_model_name).download('.','models/downloads/'+str(latest_model_id)+'.pt')
-  return 'Downloaded latest model'
+  try:
+    f = open('models/downloads/'+str(latest_model_id)+'.pt')
+    print(latest_model_name + ' already saved in memory')
+    f.close()
+  except IOError:
+    storage.child(latest_model_name).download('.','models/downloads/'+str(latest_model_id)+'.pt')
+    print(latest_model_name + ' downloaded latest model')
+  
+  return latest_model_id
 
 #Saves a new Model to database and storage
 def save_model_to_db(modelId, modelMetrics):
@@ -49,6 +56,6 @@ def save_model_to_db(modelId, modelMetrics):
   model_info = {'modelId': modelId, 'model_metrics':{}, 'created_time': time.time()}
   #Push the json to the database
   db.child("models").push(model_info)
-  storage.child('models/'+str(modelId)+'.pt').put('models/'+str(modelId)+'.pt')
+  storage.child('models/'+str(modelId)+'.pt').put('models/downloads'+str(modelId)+'.pt')
   return 'Uploaded base model'
   return model_info

@@ -26,7 +26,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 
 
-from db import test_db, upload_base_model, load_latest_model_from_db
+from db import test_db, upload_base_model, load_latest_model_from_db, save_model_to_db
 
 app = Flask(__name__)
 api = Api(app)
@@ -64,7 +64,10 @@ class PredictImage(Resource):
     def result(self, img):
         # print(image)
         model = TrafficSignNet()
-        model = self.load_model('./43_classes.pt', model)# To be edited with load_model_from_pkl
+        #Uncomment the commented code in next to next line and delete 0 for using database
+        #Commented to reduce the number of requests to database
+        latestModelId = 0 #load_latest_model_from_db()
+        model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
         output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
@@ -215,8 +218,10 @@ class TrainImages(Resource):
     def train(self, images, labels, split, batch_size):
         dataset_sizes,dataloaders = preprocess(images, labels, ratio=split,batch_size=batch_size)
         model = TrafficSignNet()
-        ### change path accordingly
-        model = self.load_model('43_classes.pt', model)# To be edited with load_model_from_pkl
+        #Uncomment the commented code in next to next line and delete 0 for using database
+        #Commented to reduce the number of requests to database
+        latestModelId = 0 #load_latest_model_from_db()
+        model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=LR)
 
@@ -228,12 +233,17 @@ class TrainImages(Resource):
                 'state_dict': model.state_dict(),
                 'optimizer': optimizer.state_dict(),
             }
-        ### change path accordingly
-        # checkpoint_path = "/content/43_classes_1.pt"
-        # save_ckp(checkpoint, checkpoint_path)
-        print('hello')
-        # print(float(best_acc))
-        print('bye')
+
+        ### Can add a condition in which we want to upload the model like if new accuracy is better or something
+        ### For now added the condition to be true replace that with apt conditions
+        if True:
+            newModelId = latestModelId + 1
+            checkpointPath = 'models/downloads/'+str(newModelId)+'.pt'
+            #Uncomment the next line if you want to start saving the models locally
+            #save_ckp(checkpoint, checkpointPath)
+            ###uncomment the next line when we want to work with databases
+            #save_model_to_db(newModelId, {}) #Replace {} with model metrics
+
         return {'valid_acc': float(best_acc)}
     
     def load_model(self, checkpoint_path, model):
