@@ -11,7 +11,6 @@ let state = {
   images: [], //All the new added images and their classes
   dataSplits: {
     train: 100,
-    test: 0,
     validate: 0,
   }, //Train test validate splits
   augmentations: {}, //All the augmentations
@@ -22,6 +21,22 @@ let state = {
   balance: false, //Do you want to balance the dataset? No by default
 };
 
+const resetState = () => {
+  state = {
+    files: [],
+    images: [], //All the new added images and their classes
+    dataSplits: {
+      train: 100,
+      validate: 0,
+    }, //Train test validate splits
+    augmentations: {}, //All the augmentations
+    preprocessing: {}, //All the preprocessings
+    newpps: {}, //new data preprocessings
+    newags: {},
+    ppi: [], // preprocessed images
+    balance: false, //Do you want to balance the dataset? No by default
+  };
+};
 const updateState = (property, value) => {
   state[property] = value;
   return state;
@@ -30,7 +45,7 @@ const updateState = (property, value) => {
 const getState = () => state;
 const getStateProperty = (property) => state[property];
 
-const preprocessImages = async () => {
+const preprocessImages = async (size) => {
   var newImages = [];
 
   for (let i = 0; i < state.images.length; i++) {
@@ -39,7 +54,7 @@ const preprocessImages = async () => {
     const itsClass = e[1];
 
     var image = await Jimp.read(url);
-    image = image.resize(32, 32);
+    image = image.resize(size, size);
 
     Object.keys(state.newpps).map((e) => {
       if (state.newpps[e].status) {
@@ -58,7 +73,7 @@ const preprocessImages = async () => {
 
     newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
 
-    Object.keys(state.newags).map((e) => {
+    Object.keys(state.newags).map(async (e) => {
       if (state.newags[e].status) {
         if (e == "Rotate") image = image.rotate(state.newags[e].value);
         else if (e == "Flip") {
@@ -67,9 +82,8 @@ const preprocessImages = async () => {
           image = image.flip(horizontal, vertical);
         }
       }
+      newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
     });
-
-    newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
   }
 
   console.log("Final Images in 32x32:", newImages);
@@ -78,7 +92,7 @@ const preprocessImages = async () => {
 };
 
 const sendBackend = async (callback) => {
-  const data = { split: state.dataSplits, images: await preprocessImages() };
+  const data = { split: state.dataSplits, images: await preprocessImages(32) };
   axios.post("train", data).then(
     (result) => {
       console.log("BACKEND ANSWER", result);
@@ -86,7 +100,7 @@ const sendBackend = async (callback) => {
     },
     (e) => {
       console.log(e, e.response);
-      callback()
+      callback();
     }
   );
 };
@@ -97,6 +111,7 @@ module.exports = {
   getStateProperty,
   preprocessImages,
   sendBackend,
+  resetState,
 };
 
 // Test
