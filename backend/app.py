@@ -25,6 +25,9 @@ import werkzeug
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 
+
+from db import test_db, upload_base_model, load_latest_model_from_db
+
 app = Flask(__name__)
 api = Api(app)
 CORS(app, origins=['*'])
@@ -364,23 +367,16 @@ def train_model(model,
     return model, best_acc
 
 class Home(Resource):
-    def get(self):
+    def post(self):
         # args = parser.parse_args()
         # # print(request)
         # images = args["images"]
         # print(images)
-        return 'Hello World! Yash daddy here!',200
-    def post(self):
-        args = parser.parse_args()
-        # print(request)
-        images = args["images"]
-        im1 = images[0][1]
-        print(im1)
-        print('Hello')
-        print(images[2])
-        print('Hello')
-        print(images)
-        return "hello"
+        ans = upload_base_model()
+        return ans ,200
+    def get(self):
+        ans = load_latest_model_from_db()
+        return ans,200
 
 api.add_resource(Home, '/yash')
 api.add_resource(PredictImage, '/predict')
