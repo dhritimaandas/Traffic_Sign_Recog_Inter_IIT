@@ -14,3 +14,8 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.imageCards:hover {
+  box-shadow: 1px 1px 10px #888888;
+  transform: translate3d(0px, -5px, 0px);
+}

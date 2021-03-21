@@ -9,8 +9,21 @@ import AddImage from "./steps/addImage";
 import Confirm from "./Confirmation";
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
-import { Row, Container } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Container,
+  Spinner,
+  CardColumns,
+  Card,
+} from "react-bootstrap";
 import CropImage from "./augmentations/cropImage";
+import {
+  resetState,
+  preprocessImages,
+  getState,
+  getStateProperty,
+} from "../data/ourRedux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +77,9 @@ const HorizontalLinearStepper = (props) => {
       newSkipped.delete(activeStep);
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep == 0 && !getStateProperty("images").length)
+      alert("Add Images to Proceeed!");
+    else setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
 
@@ -89,10 +104,10 @@ const HorizontalLinearStepper = (props) => {
 
   const handleReset = () => {
     setActiveStep(0);
+    resetState();
   };
 
   props = { handleReset };
-
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
@@ -118,15 +133,24 @@ const HorizontalLinearStepper = (props) => {
         {activeStep === steps.length ? (
           <div>
             <Container>
+              <div className="pt-3">
+                <PreprocessedImages />
+              </div>
               <Typography className={classes.instructions}>
                 All the steps are completed. Do you want to reset all your
                 progress or Confirm?
               </Typography>
-
               <Row>
-                <Confirm open={props.pop} display={props.openBox} />
                 <Button
-                  style={{ marginLeft: "10px" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleBack}
+                  className={classes.button}
+                >
+                  Back
+                </Button>
+
+                <Button
                   onClick={handleReset}
                   className={classes.button}
                   color="secondary"
@@ -134,6 +158,7 @@ const HorizontalLinearStepper = (props) => {
                 >
                   Reset
                 </Button>
+                <Confirm open={props.pop} display={props.openBox} />
               </Row>
             </Container>
           </div>
@@ -157,7 +182,7 @@ const HorizontalLinearStepper = (props) => {
                   onClick={handleNext}
                   className={classes.button}
                 >
-                  {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                  Next
                 </Button>
               </div>
             </Container>
@@ -168,3 +193,41 @@ const HorizontalLinearStepper = (props) => {
   );
 };
 export default HorizontalLinearStepper;
+
+import classNames from "../data/classNames";
+const PreprocessedImages = () => {
+  const [images, setImages] = React.useState([]);
+  React.useEffect(() => {
+    preprocessImages(400).then((arr) => setImages(arr));
+  }, getState());
+
+  return (
+    <div>
+      <Typography className="lead my-3 pb-3">
+        Below are the preprocessed and augmented images produced for the given
+        input.
+      </Typography>
+      {!images.length ? (
+        <Container>
+          <Col className="text-center">
+            <Spinner animation="grow" />
+            <p>Loading</p>
+          </Col>
+        </Container>
+      ) : (
+        <CardColumns>
+          {images.map((img) => (
+            <Col>
+              <Card className="imageCards">
+                <Card.Img variant="top" src={img[0]} />
+                <Card.Body>
+                  <Card.Text>Class {classNames[img[1]]}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </CardColumns>
+      )}
+    </div>
+  );
+};
