@@ -77,14 +77,16 @@ const preprocessImages = async () => {
   return newImages;
 };
 
-const sendBackend = async () => {
+const sendBackend = async (callback) => {
   const data = { split: state.dataSplits, images: await preprocessImages() };
   axios.post("train", data).then(
     (result) => {
       console.log("BACKEND ANSWER", result);
+      callback();
     },
     (e) => {
       console.log(e, e.response);
+      callback()
     }
   );
 };
