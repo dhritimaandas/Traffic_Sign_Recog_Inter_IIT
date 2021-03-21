@@ -64,12 +64,12 @@ class Confirm extends Component {
     updateState("dataSplits", this.state.datasetSplit); //Update the dataset splits in the main data object
     console.log(getState());
 
-    sendBackend();
-
     document.getElementById("loaderCircle").style.display="block";
+    sendBackend(() => {
+      this.props.router.push('/dashboard');
+      document.getElementById("loaderCircle").style.display="none";
+    });
     this.closeBox();
-
-   this.props.router.push('/dashboard');
   }
 
   render() {
