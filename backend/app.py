@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import reqparse, abort, Api, Resource
+import json, time
 import pickle
 import numpy as np
 import pandas as pd
@@ -11,6 +12,7 @@ import base64
 import copy
 import torch
 from torch.autograd import Variable
+import torchvision
 from torchvision import transforms
 sys.path.insert(1, '../gtsrb_base_model/engine/')
 sys.path.insert(1, '../gtsrb_base_model/utils/')
@@ -34,7 +36,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 parser = reqparse.RequestParser()
 parser.add_argument("event")
 parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location=['json','form','files'])
-parser.add_argument('images', location=['json'])
+parser.add_argument('images',type=list, location=['json'], action='append')
 parser.add_argument("labels")
 parser.add_argument("split")
 
@@ -190,7 +192,7 @@ class TrainImages(Resource):
         array_imgs = []
         labels = []
         for pair in images:
-            im_bytes = base64.b64decode(pair[0])
+            im_bytes = base64.b64decode(pair[0].split(',')[1])
             im_arr = np.frombuffer(im_bytes, dtype=np.uint8)  # im_arr is one-dim Numpy array
             img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
 
@@ -211,7 +213,7 @@ class TrainImages(Resource):
         dataset_sizes,dataloaders = preprocess(images, labels, ratio=split,batch_size=batch_size)
         model = TrafficSignNet()
         ### change path accordingly
-        model = self.load_model('/content/43_classes.pt', model)# To be edited with load_model_from_pkl
+        model = self.load_model('43_classes.pt', model)# To be edited with load_model_from_pkl
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=LR)
 
@@ -224,9 +226,12 @@ class TrainImages(Resource):
                 'optimizer': optimizer.state_dict(),
             }
         ### change path accordingly
-        checkpoint_path = "/content/43_classes_1.pt"
-        save_ckp(checkpoint, checkpoint_path)
-        return {'valid_acc': best_acc}
+        # checkpoint_path = "/content/43_classes_1.pt"
+        # save_ckp(checkpoint, checkpoint_path)
+        print('hello')
+        # print(float(best_acc))
+        print('bye')
+        return {'valid_acc': float(best_acc)}
     
     def load_model(self, checkpoint_path, model):
         checkpoint = torch.load(checkpoint_path, DEVICE)
@@ -369,6 +374,11 @@ class Home(Resource):
         args = parser.parse_args()
         # print(request)
         images = args["images"]
+        im1 = images[0][1]
+        print(im1)
+        print('Hello')
+        print(images[2])
+        print('Hello')
         print(images)
         return "hello"
 
