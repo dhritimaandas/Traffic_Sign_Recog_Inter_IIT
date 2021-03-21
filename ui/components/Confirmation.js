@@ -78,8 +78,10 @@ class Confirm extends Component {
       <div>
 
        {/* Loader */}
-        <div id="loaderCircle" style = {{ position:"fixed", top:0, bottom:0, left:0, right:0, zIndex:5, backgroundColor:"rgba(0,0,0,0.1)", display:"none" }} ><Loader style={{ position: 'absolute', left: '50%', top: '50%',
-        transform: 'translate(-50%, -50%)' }} type="Puff" color="#00BFFF" height={100} width={100} timeout={8000} /></div>
+        <div id="loaderCircle" style = {{ position:"fixed", top:0, bottom:0, left:0, right:0, zIndex:50000, backgroundColor:"rgba(0,0,0,0.9)", display:"none" }} >
+          <Loader style={{ position: 'absolute', left: '50%', top: '50%',
+                  transform: 'translate(-50%, -50%)' }} type="Puff" color="#00BFFF" height={100} width={100}/>
+        </div>
 
         <Button onClick={this.openBox} className="mainBtn" color="primary" variant="contained">Confirm</Button>
         <Dialog
