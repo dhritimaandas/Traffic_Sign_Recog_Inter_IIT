@@ -31,9 +31,16 @@ const getState = () => state;
 const getStateProperty = (property) => state[property];
 
 const preprocessImages = async () => {
-  const convert = async (url) => {
+  var newImages = [];
+
+  for (let i = 0; i < state.images.length; i++) {
+    let e = state.images[i];
+    const url = e[0];
+    const itsClass = e[1];
+
     var image = await Jimp.read(url);
     image = image.resize(32, 32);
+
     Object.keys(state.newpps).map((e) => {
       if (state.newpps[e].status) {
         if (e == "Brightness")
@@ -49,6 +56,8 @@ const preprocessImages = async () => {
       }
     });
 
+    newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
+
     Object.keys(state.newags).map((e) => {
       if (state.newags[e].status) {
         if (e == "Rotate") image = image.rotate(state.newags[e].value);
@@ -59,25 +68,23 @@ const preprocessImages = async () => {
         }
       }
     });
-    return await image.getBase64Async(Jimp.AUTO);
-  };
 
-  const newImages = state.images.map(async (element) => [
-    await convert(element[0]),
-    element[1],
-  ]);
+    newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
+  }
 
-  return await Promise.all(newImages);
+  console.log("Final Images in 32x32:", newImages);
+
+  return newImages;
 };
 
 const sendBackend = async () => {
-  data = { split: state.dataSplits, images: await preprocessImages() };
+  const data = { split: state.dataSplits, images: await preprocessImages() };
   axios.post("train", data).then(
     (result) => {
-      console.log(result);
+      console.log("BACKEND ANSWER", result);
     },
     (e) => {
-      console.log(e);
+      console.log(e, e.response);
     }
   );
 };
