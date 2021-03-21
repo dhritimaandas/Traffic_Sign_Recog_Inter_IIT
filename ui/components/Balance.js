@@ -8,7 +8,6 @@ import './stepper'
 const useStyles = makeStyles({
   root: {
     width: 300,
-    // display:"none"
     margin: "auto",
     padding:20
   }
@@ -20,54 +19,49 @@ function valuetext(value) {
 
 const RangeSlider = (props) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState([0, 50]);
+  const [value, setValue] = React.useState(50);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    // console.log(props)
-    props.splithandler(value[0],value[1]-value[0],100-value[1]);
+    // props.splithandler(value[0],value[1]-value[0],100-value[1]);
+    props.splithandler(value,100-value);
   };
 
-  // const [slider, setSlider] = React.useState(false);
-
-  // const openSlider = () => {
-  //   setSlider(true);
-  // };
-
-  // const closeSlider = () => {
-  //   setSlider(false);
-  // }
-
-  // props = {slider,setSlider};
+  // var splitValues = [value[1],100-value[1]];
 
   // var splitValues = [value[0],value[1]-value[0],100-value[1]];
 
   return (
     <div className={classes.root}>
-      <Typography id="range-slider" gutterBottom>
+      <Typography id="discrete-slider" gutterBottom>
        <Container>
            <Row>
-               <Col xs={4} md={4}>
+               <Col style={{ textAlign:"center" }} xs={6} md={6}>
                     Train <br></br>
-                    {value[0]}
+                    {value}
                </Col>
-               <Col xs={4} md={4}>
-                   Valid <br></br>
-                   {value[1]-value[0]}
-               </Col>
-               <Col xs={4} md={4}>
-                   Test <br></br>
-                   {100-value[1]}
+               <Col style={{ textAlign:"center" }} xs={6} md={6}>
+                   Validation <br></br>
+                   {100-value}
                </Col>
            </Row>
        </Container>
       </Typography>
       <Slider
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        aria-labelledby="range-slider"
+        // value={value}
+        // onChange={handleChange}
+        // valueLabelDisplay="auto"
+        // aria-labelledby="range-slider"
+        // getAriaValueText={valuetext}
+
+        defaultValue={50}
         getAriaValueText={valuetext}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        onChange={handleChange}
+        step={1}
+        min={0}
+        max={100}
       />
     </div>
   );

@@ -27,8 +27,14 @@
     "react-bootstrap": "^1.5.1",
     "react-dom": "17.0.1",
     "react-image-crop": "^8.6.6",
+    "react-loader-spinner": "^4.0.0",
     "react-select": "^4.2.1",
+<<<<<<< HEAD
     "reactstrap": "^8.9.0",
     "recharts": "^2.0.8"
+=======
+    "recharts": "^2.0.8",
+    "yarn": "^1.22.10"
+>>>>>>> 2083ccdc2df0f6f7da736f40ca81d3d55242cdff
   }
 }

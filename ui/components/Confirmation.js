@@ -7,8 +7,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import RangeSlider from './Balance';
 import {withRouter} from 'next/router';
+import { makeStyles } from '@material-ui/core/styles';
 import {updateState, getState,sendBackend} from '../data/ourRedux';
+import Loader from "react-loader-spinner";
 // import HorizontalLinearStepper from './stepper'
+
 
 class Confirm extends Component {
 
@@ -16,9 +19,11 @@ class Confirm extends Component {
     pop: false,
     balanceDataset: false,
     datasetSplit: {
-      train: 0,
+      // train: 0,
+      // validate: 50,
+      // test: 50
+      train: 50,
       validate: 50,
-      test: 50
     }
   }
 
@@ -34,11 +39,12 @@ class Confirm extends Component {
     })
   };
 
-  changeSplitHandler = (train, validate, test) => {
+  // changeSplitHandler = (train, validate, test) => {
+    changeSplitHandler = (train, validate) => {
     const newSplits = {
       train,
       validate,
-      test
+      // test
     }
     this.setState({
       datasetSplit: newSplits
@@ -59,13 +65,24 @@ class Confirm extends Component {
     console.log(getState());
 
     sendBackend();
-  //  this.props.router.push('/dashboard');
+
+    document.getElementById("loaderCircle").style.display="block";
+    this.closeBox();
+
+   this.props.router.push('/dashboard');
   }
 
   render() {
     const pop = this.state.pop;
     return (
       <div>
+
+       {/* Loader */}
+        <div id="loaderCircle" style = {{ position:"fixed", top:0, bottom:0, left:0, right:0, zIndex:50000, backgroundColor:"rgba(0,0,0,0.9)", display:"none" }} >
+          <Loader style={{ position: 'absolute', left: '50%', top: '50%',
+                  transform: 'translate(-50%, -50%)' }} type="Puff" color="#00BFFF" height={100} width={100}/>
+        </div>
+
         <Button onClick={this.openBox} className="mainBtn" color="primary" variant="contained">Confirm</Button>
         <Dialog
           open={pop}
@@ -77,8 +94,8 @@ class Confirm extends Component {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Do you wish to  balance the Dataset ?
-            <input style={{ margin: 10 }} type="radio" value={true} name="choice" /> Yes
-            <input style={{ margin: 10 }} type="radio" value={false} name="choice" defaultChecked/> No
+            <input style={{ margin: 8 }} type="radio" value={true} name="choice" /> Yes
+            <input style={{ margin: 8 }} type="radio" value={false} name="choice" defaultChecked/> No
             </DialogContentText>
             <div id="slider" ><RangeSlider splithandler={this.changeSplitHandler}/></div>
           </DialogContent>

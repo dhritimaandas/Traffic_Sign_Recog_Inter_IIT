@@ -10,7 +10,6 @@ import Confirm from "./Confirmation";
 import Augment from "./steps/augment";
 import Preprocess from "./steps/preprocess";
 import { Row, Container } from "react-bootstrap";
-// import RangeSlider from './Balance';
 import CropImage from "./augmentations/cropImage";
 
 const useStyles = makeStyles((theme) => ({
