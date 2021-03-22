@@ -29,7 +29,7 @@ class PredictImage(Resource):
         model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
-        output_pred = {'pred': pred_label, 'confidence': pred_label_proba}
+        output_pred = {'pred': pred_label, 'confidence': round(pred_label_proba,4)}
         return output_pred
 
     def load_image(self, image, size=(32, 32)):
