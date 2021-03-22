@@ -1,4 +1,5 @@
-from flask_restful Resource
+from PIL import Image
+from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
 class GTSRB(Dataset):
@@ -12,7 +13,7 @@ class GTSRB(Dataset):
         return self.tensors[0].shape[0]
     def __getitem__(self, index):
         x = self.tensors[0][index]
-        print(x.shape)
+        # print(x.shape)
         x = Image.fromarray(x)
         if self.transform:
             x = self.transform(x)

@@ -12,10 +12,13 @@ def preprocess(image_list, label_list, test=False ,ratio=0.2, batch_size = 64):
                                         stratify=label_list,
                                         test_size=ratio,
                                         random_state=42)
+
+    # print(train_img_list)
     train_img_tensor = np.array(train_img_list).reshape((-1, 32, 32, 3))
     train_label_tensor = np.array(train_label_list)
     val_img_tensor = np.array(val_img_list).reshape((-1, 32, 32, 3))
     val_label_tensor = np.array(val_label_list)
+    
     print(f"train imgs = {len(train_label_list)} val imgs = {len(val_label_list)}")
     df = {'train':(train_img_tensor, train_label_tensor),'val':(val_img_tensor, val_label_tensor)}
     # mean (tensor([0.3401, 0.3120, 0.3212]), std tensor([0.2725, 0.2609, 0.2669]))

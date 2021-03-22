@@ -9,6 +9,8 @@ from utils.trafficSignNet import TrafficSignNet
 from db import load_latest_model_from_db
 from config.appConfig import *
 
+DEVICE = torch.device("cpu")
+
 class PredictImage(Resource):
     def post(self):
         args = parser.parse_args()

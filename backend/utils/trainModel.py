@@ -1,12 +1,29 @@
+from config.appConfig import *
+import torch
+import torchvision
+from torch import nn, optim
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
+
+import pandas as pd
+from PIL import Image
+
+import numpy as np
 import time
 import copy
 
-import torch
-import torchvision
-from torch.utils.tensorboard import SummaryWriter
+from utils.saveCheckpoint import save_ckp
 
-from config.appConfig.py import *
+EPOCHS = 150
+EARLY_EPOCHS = 15
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(DEVICE)
+LR = 1e-5
+BATCH_SIZE = 64
 
+if DEVICE == torch.device('cuda'):
+    scaler = torch.cuda.amp.GradScaler()
 
 def train_model(model, 
                 criterion, 
@@ -14,19 +31,20 @@ def train_model(model,
                 dataloaders,
                 dataset_sizes, 
                 scheduler=None):
+
     device = DEVICE
     num_epochs = EPOCHS
     model = model.to(device)
+
     since = time.time()
+
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
-    writer = SummaryWriter(
-            f"runs/bs_{BATCH_SIZE}_LR_{LR}"
-        )
-    images, _ = next(iter(dataloaders['train']))
-    writer.add_graph(model, images.to(device))
-    # writer.close()
-    step = 0
+
+    loss_p = {'train':[],'val':[]}
+    acc_p = {'train':[],'val':[]}
+    f1_p = {'train':[],'val':[]}
+    not_imp = 0
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
@@ -37,58 +55,96 @@ def train_model(model,
                 model.train()  # Set model to training mode
             else:
                 model.eval()   # Set model to evaluate mode
+
             running_loss = 0.0
             running_corrects = 0
+            all_preds = []
+            all_labels = []
             # Iterate over data.
             for inputs, labels in dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
+
                 # zero the parameter gradients
                 optimizer.zero_grad()
+
                 # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
+                    labels = labels.type(torch.LongTensor)
                     loss = criterion(outputs, labels)
+
                     # backward + optimize only if in training phase
                     if phase == 'train':
-                        loss.backward()
-                        optimizer.step()
+                        if DEVICE == torch.device('cpu'):
+                            loss.backward()
+                            optimizer.step()
+                        else :
+                            scaler.scale(loss).backward()
+                            scaler.step(optimizer)
+                            scaler.update()
+
+                preds_on = preds.to('cpu').tolist()
+                labels_on = labels.data.to('cpu').tolist()
+                all_preds.extend(preds_on)
+                all_labels.extend(labels_on)
+
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
-                if phase == 'train':
-                    img_grid = torchvision.utils.make_grid(inputs)
-                    writer.add_image("gtsrb_images", img_grid)
-                    writer.add_histogram("fc2", model.fc2.weight)
-                    writer.add_scalar("Training loss", loss, global_step=step)
-                    step+=1
+
                 print(f"running_loss {running_loss} running_corrects {running_corrects}")
+
             epoch_loss = running_loss / dataset_sizes[phase]
-            epoch_acc = running_corrects.double() / dataset_sizes[phase]
+            epoch_acc = running_corrects.double().item() / dataset_sizes[phase]
+            F1_score = f1_score( all_labels, all_preds, zero_division=1, average='weighted')
+
+            loss_p[phase].append(epoch_loss)
+            acc_p[phase].append(epoch_acc)
+            f1_p[phase].append(F1_score)
+
             if phase == 'train':
                 if scheduler is not None:
                     scheduler.step()
-                
-                writer.add_hparams(
-                    {"lr": LR, "bsize": BATCH_SIZE},
-                    {
-                        "accuracy": epoch_acc,
-                        "loss": epoch_loss,
-                    },
-                )
+
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
+
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
+                not_imp = 0
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
+                checkpoint = {
+                    'epoch': epoch,
+                    'valid_acc': best_acc,
+                    'state_dict': model.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                    'loss_p':loss_p,
+                    'acc_p':acc_p,
+                    'f1_p': f1_p,
+                }
+                #save checkpoint
+                latestModelId = 10 #load_latest_model_from_db()
+                checkpoint_path = "models/downloads"+ str(latestModelId) +".pt"
+                save_ckp(checkpoint, checkpoint_path)
+            elif phase=='val' and epoch_acc < best_acc:
+                not_imp += 1
+
+            if not_imp > EARLY_EPOCHS:
+                break 
+
+        if not_imp > EARLY_EPOCHS:
+            break             
         print()
+
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
     print('Best val Acc: {:4f}'.format(best_acc))
+
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return model, best_acc
+    return model, best_acc, loss_p, acc_p, f1_p
