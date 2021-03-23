@@ -6,6 +6,7 @@ import cv2
 from torch import nn, optim
 
 from config.appConfig import *
+from flask_restful import Resource
 from app_utils import ValidationError as VE
 from utils.preprocess import preprocess
 from utils.trafficSignNet import TrafficSignNet
