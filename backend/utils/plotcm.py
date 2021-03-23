@@ -2,6 +2,8 @@ import itertools
 import numpy as np
 import base64
 import matplotlib.pyplot as plt
+from torchvision import transforms
+from config.appConfig import *
 
 def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
     if normalize:

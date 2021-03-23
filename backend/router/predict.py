@@ -33,7 +33,7 @@ class PredictImage(Resource):
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
         saliency_map = salience(model, img)
-        output_pred = {'pred': pred_label, 'confidence': round(pred_label_proba,4), 'saliency_map': saliency_map}
+        output_pred = {'pred': pred_label, 'confidence': round(pred_label_proba,4), 'saliency_map': 'saliency_map'} #Please fix this. Images cannot be sent directly in json response.
         return output_pred
     
     def predict_image(self, image, model):
