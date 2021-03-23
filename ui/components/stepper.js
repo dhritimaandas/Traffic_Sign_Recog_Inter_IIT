@@ -25,6 +25,8 @@ import {
   getStateProperty,
 } from "../data/ourRedux";
 
+import PredictionChart from "./predChart";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -50,8 +52,12 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddImage />;
-    // case 1:
-    //   return <Augment />;
+      //return [
+      //  <AddImage />,
+      //  <PredictionChart />
+      //]
+    //case 1:
+    //  return <Augment />;
     default:
       return "Unknown step";
   }
