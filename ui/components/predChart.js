@@ -2,18 +2,7 @@ import React from "react";
 import {loss_p, acc_p, f1_p, valid_acc} from "./data";
 import {Col, Row, Container} from "react-bootstrap";
 import { Line } from 'react-chartjs-2';
-// import ApexCharts from "apexcharts";
-
-// Radial Bar Code (DialPlot)
-
-// var options = {  
-//     chart: {
-//         height: 350,
-//         type: 'radialBar',
-//     },
-//     series: [70],
-//     labels: ['Progress'],
-//   }
+import ReactApexChart from "react-apexcharts";
 
 const lossData = {
      labels: Array.from(Array(loss_p["train"].length).keys()),
@@ -89,14 +78,215 @@ const fData = {
 
 export default class PredictionChart extends React.Component {
 
-    // chart = new ApexCharts(document.querySelector("#chart"), options);
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        
+          series: [100.0*valid_acc],
+          options: {
+            chart: {
+              height: 350,
+              type: 'radialBar',
+              toolbar: {
+                show: true
+              }
+            },
+            plotOptions: {
+              radialBar: {
+                startAngle: -135,
+                endAngle: 225,
+                 hollow: {
+                  margin: 0,
+                  size: '70%',
+                  background: '#fff',
+                  image: undefined,
+                  imageOffsetX: 0,
+                  imageOffsetY: 0,
+                  position: 'front',
+                  dropShadow: {
+                    enabled: true,
+                    top: 3,
+                    left: 0,
+                    blur: 4,
+                    opacity: 0.24
+                  }
+                },
+                track: {
+                  background: '#fff',
+                  strokeWidth: '67%',
+                  margin: 0, // margin is in pixels
+                  dropShadow: {
+                    enabled: true,
+                    top: -3,
+                    left: 0,
+                    blur: 4,
+                    opacity: 0.35
+                  }
+                },
+            
+                dataLabels: {
+                  show: true,
+                  name: {
+                    offsetY: -10,
+                    show: true,
+                    color: '#888',
+                    fontSize: '17px'
+                  },
+                  value: {
+                    formatter: function(val) {
+                      return parseInt(val);
+                    },
+                    color: '#111',
+                    fontSize: '36px',
+                    show: true,
+                  }
+                }
+              }
+            },
+            fill: {
+              type: 'gradient',
+              gradient: {
+                shade: 'dark',
+                type: 'horizontal',
+                shadeIntensity: 0.5,
+                gradientToColors: ['#ABE5A1'],
+                inverseColors: true,
+                opacityFrom: 1,
+                opacityTo: 1,
+                stops: [0, 100]
+              }
+            },
+            stroke: {
+              lineCap: 'round'
+            },
+            labels: ['Validation Accuracy'],
+          },
+        
+        };
+
+        this.stateTwo = {
+        
+            series: [100.0*acc_p["train"][acc_p["train"].length-1]],
+            options: {
+              chart: {
+                height: 350,
+                type: 'radialBar',
+                toolbar: {
+                  show: true
+                }
+              },
+              plotOptions: {
+                radialBar: {
+                  startAngle: -135,
+                  endAngle: 225,
+                   hollow: {
+                    margin: 0,
+                    size: '70%',
+                    background: '#fff',
+                    image: undefined,
+                    imageOffsetX: 0,
+                    imageOffsetY: 0,
+                    position: 'front',
+                    dropShadow: {
+                      enabled: true,
+                      top: 3,
+                      left: 0,
+                      blur: 4,
+                      opacity: 0.24
+                    }
+                  },
+                  track: {
+                    background: '#fff',
+                    strokeWidth: '67%',
+                    margin: 0, // margin is in pixels
+                    dropShadow: {
+                      enabled: true,
+                      top: -3,
+                      left: 0,
+                      blur: 4,
+                      opacity: 0.35
+                    }
+                  },
+              
+                  dataLabels: {
+                    show: true,
+                    name: {
+                      offsetY: -10,
+                      show: true,
+                      color: '#888',
+                      fontSize: '17px'
+                    },
+                    value: {
+                      formatter: function(val) {
+                        return parseInt(val);
+                      },
+                      color: '#111',
+                      fontSize: '36px',
+                      show: true,
+                    }
+                  }
+                }
+              },
+              fill: {
+                type: 'gradient',
+                gradient: {
+                  shade: 'dark',
+                  type: 'horizontal',
+                  shadeIntensity: 0.5,
+                  gradientToColors: ['#ABE5A1'],
+                  inverseColors: true,
+                  opacityFrom: 1,
+                  opacityTo: 1,
+                  stops: [0, 100]
+                }
+              },
+              stroke: {
+                lineCap: 'round'
+              },
+              labels: ['Training Accuracy'],
+            },
+          
+          
+          };
+
+          this.stateThree = {
+          
+            series: [{
+              name: 'Metric1',
+              data: [1,2,3,4,5]
+            },
+            {
+              name: 'Metric2',
+              data: [1,2,3,4,5]
+            }
+            ],
+            options: {
+              chart: {
+                height: 350,
+                type: 'heatmap',
+              },
+              dataLabels: {
+                enabled: false
+              },
+              colors: ["#008FFB"],
+              title: {
+                text: 'HeatMap Chart (Single color)'
+              },
+            },
+          
+          
+          };
+
+
+        } 
 
     render() {
 
         return (
             <Container>
                 <Row>
-                    <Col md={6}>
+                    <Col md={7} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                     <Line 
                         data={lossData}
                         options={{
@@ -113,7 +303,7 @@ export default class PredictionChart extends React.Component {
                         }}
                      />
                     </Col>
-                    <Col md={6}>
+                    <Col md={12} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                         <Line 
                         data={accData}
                         options={{
@@ -129,7 +319,7 @@ export default class PredictionChart extends React.Component {
                         }}
                      />
                     </Col>
-                    <Col md={6}>
+                    <Col md={12} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                         <Line 
                         data={fData}
                         options={{
@@ -142,7 +332,7 @@ export default class PredictionChart extends React.Component {
                             display:true,
                             position:'top'
                             },
-                            scales: {   // Hode Grid in Plot
+                            scales: {   
                                 xAxes: [{
                                     gridLines: {
                                         color: "rgba(0, 0, 0, 0)",
@@ -157,12 +347,14 @@ export default class PredictionChart extends React.Component {
                         }}
                         />
                     </Col>
-                    <Col md={6}>
-                    {/* <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="90" cy="90" r="40" fill="none" stroke="#000000" stroke-width="10" stroke-dasharray="251.68,502.4" stroke-linecap="round"/>
-                    </svg> */}
-                    
-                        {/* <div id="chart"></div> */}
+                    <Col md={12} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+                        <ReactApexChart options={this.state.options} series={this.state.series} type="radialBar" height={350} />
+                    </Col>
+                    <Col md={12} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+                        <ReactApexChart options={this.stateTwo.options} series={this.stateTwo.series} type="radialBar" height={350} />
+                    </Col>
+                    <Col md={12} style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+                        <ReactApexChart options={this.stateThree.options} series={this.stateThree.series} type="heatmap" height={350} />
                     </Col>
                 </Row>
             </Container>
