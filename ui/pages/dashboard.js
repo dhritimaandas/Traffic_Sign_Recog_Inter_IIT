@@ -11,7 +11,8 @@ import Orders from "../components/stats/Orders";
 import { Row } from "react-bootstrap";
 import Copyright from "../components/Copyright";
 import NavBar from "../components/navbar/Navbar";
-
+import Select from "react-select";
+import Typography from "@material-ui/core/Typography";
 import Title from "../components/steps/dynamic_title";
 
 import LossLineChart from "../components/charts/lossLineChart";
@@ -20,6 +21,11 @@ import FLineChart from "../components/charts/f1LineChart";
 import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
 import HeatMap from "../components/charts/heatMap";
+
+const augmentationOptions = [
+  { value: 0, label: "Base Model" },
+  { value: 1, label: "Latest Model" },
+];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +55,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper);
+  const [selected, setSelected] = React.useState();
 
+  const handleChange = (augment) => {
+    setSelected(augment);
+  };
   return (
     <div className={classes.root} style={{}}>
       <Title />
@@ -57,6 +67,16 @@ export default function Dashboard() {
       <NavBar />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Typography variant="h6" style={{ marginBottom: "1em" }}>
+            Select the model for the metrics
+          </Typography>
+          <Select
+            options={augmentationOptions}
+            value={selected}
+            onChange={handleChange}
+          />
+        </Container>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
@@ -83,7 +103,7 @@ export default function Dashboard() {
               </Paper>
             </Grid>
             {/* Recent Orders */}
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <FLineChart />
               </Paper>
