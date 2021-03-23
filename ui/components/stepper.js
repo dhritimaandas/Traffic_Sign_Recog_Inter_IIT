@@ -51,11 +51,11 @@ function getSteps() {
 function getStepContent(step) {
   switch (step) {
     case 0:
-      // return <AddImage />;
-      return [
-        <AddImage />,
-        <PredictionChart />
-      ]
+      return <AddImage />;
+      //return [
+      //  <AddImage />,
+      //  <PredictionChart />
+      //]
     //case 1:
     //  return <Augment />;
     default:
