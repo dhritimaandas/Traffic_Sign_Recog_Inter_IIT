@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
 
 function getSteps() {
   return [
-    "Add New Images to the Dataset",
-    "Preprocessing and Augmentations on Existing Dataset",
+    "Add images to the Dataset",
+    // "Preprocessing and Augmentations on Existing Dataset",
+    "View and split final dataset",
   ];
 }
 
@@ -49,8 +50,8 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddImage />;
-    case 1:
-      return <Augment />;
+    // case 1:
+    //   return <Augment />;
     default:
       return "Unknown step";
   }
@@ -63,7 +64,7 @@ const HorizontalLinearStepper = (props) => {
   const steps = getSteps();
 
   const isStepOptional = (step) => {
-    return step === 1;
+    return step === -1;
   };
 
   const isStepSkipped = (step) => {
@@ -130,7 +131,7 @@ const HorizontalLinearStepper = (props) => {
         })}
       </Stepper>
       <div>
-        {activeStep === steps.length ? (
+        {activeStep === steps.length-1 ? (
           <div>
             <Container>
               <div className="pt-3">
