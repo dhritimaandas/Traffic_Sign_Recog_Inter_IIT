@@ -2,6 +2,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 from torchvision import transforms
+import sys
+sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/backend')
 
 from utils.gtsrb import GTSRB
 
@@ -41,4 +43,4 @@ def preprocess(image_list, label_list, test=False ,ratio=0.2, batch_size = 64):
     dataloader = {x: DataLoader(img_dataset[x], batch_size=batch_size, shuffle=True, num_workers=2)
                 for x in ['train','val']
             }
-    return dataset_sizes, dataloader
+    return dataset_sizes, dataloader, val_img_tensor, val_label_tensor

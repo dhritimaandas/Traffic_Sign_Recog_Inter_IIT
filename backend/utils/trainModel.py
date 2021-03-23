@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/backend')
+
 from config.appConfig import *
 import torch
 import torchvision
@@ -14,6 +17,7 @@ import time
 import copy
 
 from utils.saveCheckpoint import save_ckp
+from utils.trafficSignNet import TrafficSignNet_
 
 EPOCHS = 150
 EARLY_EPOCHS = 15
@@ -140,6 +144,36 @@ def train_model(model,
             break             
         print()
 
+    model_ = TrafficSignNet_()
+    model_ = model_.to(DEVICE)
+    model_.load_state_dict(best_model_wts)
+    model_.eval()
+
+    features, all_labels , cnter = [], [], dict()
+    
+    # class_done = []
+    for inputs, labels in dataloaders['train']:
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        for img, labl in zip(inputs, labels):
+            label = labl.item()
+            # if label in class_done:
+            #     continue
+            if label in cnter.keys():
+                if cnter[label] + 1 > 25:
+                    continue
+                else:
+                    cnter[label]+=1
+
+            else:
+                cnter[label]=1
+
+            outs = model_(torch.unsqueeze(img,0))[1] #for tsne
+            features.extend(outs.to('cpu').tolist()) 
+            all_labels.append(labl.data.to('cpu').tolist())
+
+
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
@@ -147,4 +181,4 @@ def train_model(model,
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return model, best_acc, loss_p, acc_p, f1_p
+    return model, best_acc, loss_p, acc_p, f1_p, features, all_labels
