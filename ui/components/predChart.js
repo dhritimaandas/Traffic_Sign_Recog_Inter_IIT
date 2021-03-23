@@ -7,7 +7,7 @@ import ValidationAccuracyRadial from '../components/charts/validationAccuracyRad
 import TrainingAccuracyRadial from '../components/charts/trainingAccuracyRadial';
 // import HeatMap from '../components/charts/heatMap';
 import { makeStyles } from '@material-ui/core/styles';
-
+import HeatMap from './charts/heatMap'
 const useStyles = makeStyles({
   root: {
     boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
@@ -16,9 +16,7 @@ const useStyles = makeStyles({
 });
 
 const PredictionChart = () => {
-
     const classes = useStyles();
-
     return (
         <Container>
             <Row>
