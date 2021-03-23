@@ -89,6 +89,7 @@ class PredictImage(Resource):
             # print("hello_output:", output[0])
             # print("output_size: ", output.size())
             _, pred = torch.max(output, 1)
+            output = F.softmax(output)
             pred_proba = output[0][pred]
         return int(pred.numpy()), float(pred_proba.numpy())
     

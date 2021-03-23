@@ -91,11 +91,9 @@ def get_heatmaps(idx):
 def get_inn_model(check_point_path, model):
     check_point = torch.load(check_point_path, DEVICE)
     model.load_state_dict(check_point['state_dict'])
-    model.eval()
-    model = torch.nn.Sequential(model, torch.nn.Softmax(dim=1))
-    inn_model = InnvestigateModel(model, lrp_exponent=1,
-                                    method="b-rule",
-                                    beta=0, epsilon=1e-6)
+    inn_model = InnvestigateModel(model, lrp_exponent=2,
+                                    method="e-rule",
+                                    beta=0.5)
     inn_model.eval()
     return inn_model
 
@@ -133,8 +131,8 @@ def load_image(image, size=(32, 32)):
     trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
     trans_image = trans(image).float()
     trans_image = Variable(trans_image, requires_grad = True)
-    trans_image = trans_image[None]
-    print("Shape:", trans_image.size())
+    trans_image = trans_image.unsqueeze(0)
+    #print("Shape:", trans_image.size())
     return trans_image
 
 if __name__=="__main__":
