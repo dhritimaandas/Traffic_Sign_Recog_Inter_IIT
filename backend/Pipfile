@@ -15,6 +15,8 @@ torchvision = "*"
 scikit-learn = "*"
 flask-cors = "*"
 opencv-python = "*"
+matplotlib = "*"
+seaborn = "*"
 
 [dev-packages]
 
