@@ -106,7 +106,7 @@ export default function Dashboard() {
             <Grid item xs={12} md={6}>
               <Paper className={classes.paper}>
                 <div className="gcr" >
-                  <Image src="/tsne.png" fluid contain/>
+                  <Image src="/tsne.png" fluid />
                   </div>
               </Paper>
             </Grid>
