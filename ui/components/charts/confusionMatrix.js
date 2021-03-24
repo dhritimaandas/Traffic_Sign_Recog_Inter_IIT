@@ -52,7 +52,7 @@ export default class HeatMap extends React.Component{
 
         return(
 
-            <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={300} />
+            <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={520} />
 
         )
 

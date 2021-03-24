@@ -7,7 +7,7 @@ import ValidationAccuracyRadial from '../components/charts/validationAccuracyRad
 import TrainingAccuracyRadial from '../components/charts/trainingAccuracyRadial';
 // import HeatMap from '../components/charts/heatMap';
 import { makeStyles } from '@material-ui/core/styles';
-import HeatMap from './charts/heatMap'
+import HeatMap from './charts/confusionMatrix'
 
 const useStyles = makeStyles({
   root: {

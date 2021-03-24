@@ -27,12 +27,17 @@ a {
   .graphContainer {
     min-height: 14rem;
   }
+
+  .tsneContainer {
+    min-height: 16rem;
+  }
 }
 
 .accGraphContainer {
   min-height: 20rem;
 }
-.gcr {
-  min-height: 19rem;
-  max-height: 19.8rem;
+
+.tsneContainer {
+  min-height: 20rem;
 }
+

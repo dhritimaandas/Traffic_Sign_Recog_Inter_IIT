@@ -47,7 +47,14 @@ export default class TSNE extends React.Component {
             <Bubble data={data} options = {{
                 legend : {
                     display : false
-                }
+                },
+                title: {
+                    display:true,
+                    text: "T-SNE Data",
+                    fontSize: 15
+                },
+                maintainAspectRatio : false,
+                responsive: true,
             }} />
 
         )

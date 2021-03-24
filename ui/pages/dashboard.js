@@ -16,12 +16,12 @@ import AccuracyLineChart from "../components/charts/accuracyLineChart";
 import FLineChart from "../components/charts/f1LineChart";
 import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
-import {Image} from 'react-bootstrap';
+import { Image } from "react-bootstrap";
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
 import HeatMap from "../components/charts/confusionMatrix";
-import TSNE from '../components/charts/tsnePlot';
+import TSNE from "../components/charts/tsnePlot";
 
 const augmentationOptions = [
   { value: 0, label: "Base Model" },
@@ -99,26 +99,27 @@ export default function Dashboard() {
 
             <Grid item xs={12} md={6}>
               <Paper className={classes.paper}>
-                <div className="graphContainer">
-                  <HeatMap />
-                </div>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="gcr" >
-                  <Image src="/tsne.png" fluid />
-                  </div>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} >
-              <Paper className={classes.paper}>
                 <div className="accGraphContainer">
                   <AccuracyLineChart />
                 </div>
               </Paper>
             </Grid>
+            <Grid item xs={12} md={6}>
+              <Paper className={classes.paper}>
+                <div className="tsneContainer">
+                  <TSNE />
+                </div>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <div className="heatMapContainer">
+                  <HeatMap />
+                </div>
+              </Paper>
+            </Grid>
+
             <Grid item xs={12} md={6}>
               <Paper className={classes.paper}>
                 <div className="graphContainer">
@@ -132,16 +133,6 @@ export default function Dashboard() {
                 <div className="graphContainer">
                   <FLineChart />
                 </div>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <TSNE/>
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <HeatMap/>
               </Paper>
             </Grid>
           </Grid>
