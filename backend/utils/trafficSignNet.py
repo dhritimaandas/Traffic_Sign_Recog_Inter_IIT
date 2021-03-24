@@ -5,7 +5,7 @@ from utils.stn import Stn
 from torch import nn
 import torch.nn.functional as F
 
-NUM_CLASSES = 43
+NUM_CLASSES = 48
 
 class TrafficSignNet(nn.Module):
     def __init__(self, NUM_CLASSES = 48):

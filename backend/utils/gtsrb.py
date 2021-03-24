@@ -14,7 +14,7 @@ class GTSRB(Dataset):
     def __getitem__(self, index):
         x = self.tensors[0][index]
         # print(x.shape)
-        x = Image.fromarray(x)
+        x = Image.fromarray(x).convert('RGB')
         if self.transform:
             x = self.transform(x)
         y = self.tensors[1][index]

@@ -15,4 +15,4 @@ DEVICE = torch.device("cpu")
 # print(DEVICE)
 LR = 0.000001
 BATCH_SIZE = 4
-NUM_CLASSES = 43  # GTSRB as 43 classes
+NUM_CLASSES = 48  # GTSRB as 48 classes

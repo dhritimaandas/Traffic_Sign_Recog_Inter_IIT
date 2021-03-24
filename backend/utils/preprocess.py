@@ -39,7 +39,7 @@ def preprocess(image_list, label_list, test=False ,ratio=0.2, batch_size = 64):
                 for x in ['train','val']
             }
     dataset_sizes = {x: len(img_dataset[x]) for x in ['train','val']}
-    dataloader = {x: DataLoader(img_dataset[x], batch_size=batch_size, shuffle=True, num_workers=2)
+    dataloader = {x: DataLoader(img_dataset[x], batch_size=batch_size, shuffle=True, num_workers=2, drop_last =True)
                 for x in ['train','val']
             }
     return dataset_sizes, dataloader, val_img_tensor, val_label_tensor

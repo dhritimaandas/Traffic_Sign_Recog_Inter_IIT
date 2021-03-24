@@ -120,20 +120,8 @@ def train_model(model,
                 not_imp = 0
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
-                checkpoint = {
-                    'epoch': epoch,
-                    'valid_acc': best_acc,
-                    'state_dict': model.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'loss_p':loss_p,
-                    'acc_p':acc_p,
-                    'f1_p': f1_p,
-                }
-                #save checkpoint
-                latestModelId = 10 #load_latest_model_from_db()
-                checkpoint_path = "models/downloads/"+ str(latestModelId) +".pt"
-                save_ckp(checkpoint, checkpoint_path)
-            elif phase=='val' and epoch_acc < best_acc:
+               
+            elif phase=='val' and epoch_acc <= best_acc:
                 not_imp += 1
 
             if not_imp > EARLY_EPOCHS:
@@ -180,4 +168,4 @@ def train_model(model,
 
     # load best model weights
     model.load_state_dict(best_model_wts)
-    return model, best_acc, loss_p, acc_p, f1_p, features, all_labels
+    return model, best_acc, epoch, loss_p, acc_p, f1_p, features, all_labels
