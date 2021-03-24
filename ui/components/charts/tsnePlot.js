@@ -1,6 +1,6 @@
 import React from 'react';
 import { Points , labels } from '../tsne_data.json';
-import { Scatter } from "react-chartjs-2";
+import { Bubble } from "react-chartjs-2";
 
 var x = new Array(49); 
 
@@ -8,7 +8,7 @@ for(let i=0 ; i<x.length; i++) x[i] = new Array();
 
 for(let i=0; i<labels.length; i++){
 
-    x[labels[i]].push({x:Points[i][0], y:Points[i][1]});
+    x[labels[i]].push({x:Points[i][0], y:Points[i][1], r:Math.floor((Math.random() * 2) + 1)});
 
 }
 
@@ -32,7 +32,6 @@ for(let i=0 ; i<x.length; i++){
         pointRadius : 3,
         pointHoverRadius : 8,
     })
-
 }
 
 const data = {
@@ -45,7 +44,11 @@ export default class TSNE extends React.Component {
 
         return(
 
-            <Scatter data={data} />
+            <Bubble data={data} options = {{
+                legend : {
+                    display : false
+                }
+            }} />
 
         )
 
