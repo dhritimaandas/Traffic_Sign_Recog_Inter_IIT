@@ -71,6 +71,7 @@ export default function AugmentationModal({
             let newDict = { ...allAugs };
             if (grayscale)
               newDict[augmentation.label] = { status: true, value: true };
+            else delete newDict[augmentation.label];
             setAllAugs(newDict);
             handleClose();
           }}

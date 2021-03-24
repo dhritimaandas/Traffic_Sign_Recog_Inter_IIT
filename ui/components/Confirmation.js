@@ -86,7 +86,7 @@ class Confirm extends Component {
         <Button onClick={this.openBox} className="mainBtn" color="primary" variant="contained">Confirm</Button>
         <Dialog
           open={pop}
-          display={this.openBox}
+          onClose={this.openBox}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >

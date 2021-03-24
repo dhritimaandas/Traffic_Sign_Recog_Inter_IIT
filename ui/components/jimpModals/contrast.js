@@ -85,6 +85,7 @@ export default function AugmentationModal({
                 status: true,
                 value: parseInt(contrast),
               };
+            else delete newDict[augmentation.label];
             setAllAugs(newDict);
             handleClose();
           }}

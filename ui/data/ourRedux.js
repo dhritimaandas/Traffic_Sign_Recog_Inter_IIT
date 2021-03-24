@@ -16,7 +16,7 @@ let state = {
   augmentations: {}, //All the augmentations
   preprocessing: {}, //All the preprocessings
   newpps: {}, //new data preprocessings
-  newags: {},
+  newags: {}, // Augmetations
   ppi: [], // preprocessed images
   balance: false, //Do you want to balance the dataset? No by default
 };
@@ -71,7 +71,7 @@ const preprocessImages = async (size) => {
       }
     });
 
-    newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
+    newImages.push([await image.getBase64Async(Jimp.MIME_JPEG), itsClass]);
 
     Object.keys(state.newags).map(async (e) => {
       if (state.newags[e].status) {
@@ -82,7 +82,7 @@ const preprocessImages = async (size) => {
           image = image.flip(horizontal, vertical);
         }
       }
-      newImages.push([await image.getBase64Async(Jimp.AUTO), itsClass]);
+      newImages.push([await image.getBase64Async(Jimp.MIME_JPEG), itsClass]);
     });
   }
 
@@ -92,7 +92,15 @@ const preprocessImages = async (size) => {
 };
 
 const sendBackend = async (callback) => {
-  const data = { split: state.dataSplits, images: await preprocessImages(32) };
+  const data = {
+    split: state.dataSplits,
+    images: await preprocessImages(32),
+    split: state.dataSplits,
+    augmentations: state.newags,
+    preprocessing: state.newpps,
+    balance: state.balance,
+  };
+
   axios.post("train", data).then(
     (result) => {
       console.log("BACKEND ANSWER", result);
@@ -100,7 +108,7 @@ const sendBackend = async (callback) => {
     },
     (e) => {
       console.log(e, e.response);
-      callback();
+      alert("Error!", e.response.data);
     }
   );
 };
@@ -112,21 +120,4 @@ module.exports = {
   preprocessImages,
   sendBackend,
   resetState,
-};
-
-// Test
-// const newDir = {
-//   train: 50,
-//   test: 50,
-//   valid: 0
-// }
-
-// console.log(updateState("dataSplits", newDir));
-// console.log(getState())
-
-const PreprocessedImageObserver = () => {
-  useEffect(() => {
-    preprocessImages(state.images);
-  }, [state.newpps]);
-  return null;
 };

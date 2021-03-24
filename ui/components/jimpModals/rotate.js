@@ -85,6 +85,7 @@ export default function AugmentationModal({
                 status: true,
                 value: parseInt(angle),
               };
+            else delete newDict[augmentation.label];
             setAllAugs(newDict);
             handleClose();
           }}
