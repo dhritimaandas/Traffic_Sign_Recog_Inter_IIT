@@ -1,5 +1,8 @@
 import React from 'react';
-import ReactApexChart from 'react-chartjs-2';
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 export default class HeatMap extends React.Component{
 
@@ -39,7 +42,7 @@ export default class HeatMap extends React.Component{
 
         return(
 
-            <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={350} />
+            <ReactApexChart options={this.state.options} series={this.state.series} type="heatmap" height={300} />
 
         )
 

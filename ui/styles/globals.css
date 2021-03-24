@@ -28,3 +28,11 @@ a {
     min-height: 14rem;
   }
 }
+
+.accGraphContainer {
+  min-height: 20rem;
+}
+.gcr {
+  min-height: 19rem;
+  max-height: 19.8rem;
+}

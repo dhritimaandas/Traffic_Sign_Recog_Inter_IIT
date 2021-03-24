@@ -13,9 +13,11 @@ import Typography from "@material-ui/core/Typography";
 import Title from "../components/steps/dynamic_title";
 import LossLineChart from "../components/charts/lossLineChart";
 import AccuracyLineChart from "../components/charts/accuracyLineChart";
+import HeatMap from "../components/charts/heatMap";
 import FLineChart from "../components/charts/f1LineChart";
 import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
+import {Image} from 'react-bootstrap';
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
@@ -88,15 +90,30 @@ export default function Dashboard() {
                 <TrainingAccuracyRadial />
               </Paper>
             </Grid>
-
             <Grid item xs={12} md={6}>
               <Paper className={fixedHeightPaper}>
                 <ValidationAccuracyRadial />
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+
+            <Grid item xs={12} md={6}>
               <Paper className={classes.paper}>
                 <div className="graphContainer">
+                  <HeatMap />
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Paper className={classes.paper}>
+                <div className="gcr" >
+                  <Image src="/tsne.png" fluid contain/>
+                  </div>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} >
+              <Paper className={classes.paper}>
+                <div className="accGraphContainer">
                   <AccuracyLineChart />
                 </div>
               </Paper>
