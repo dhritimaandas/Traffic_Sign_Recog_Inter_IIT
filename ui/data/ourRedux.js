@@ -108,7 +108,7 @@ const sendBackend = async (callback) => {
     },
     (e) => {
       console.log(e, e.response);
-      callback();
+      alert("Error!", e.response.data);
     }
   );
 };
