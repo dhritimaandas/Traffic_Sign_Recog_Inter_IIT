@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Container, Modal, Col, Row, Button } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
 import Select from "react-select";
 import Chip from "@material-ui/core/Chip";
 import { updateState, getStateProperty } from "../../data/ourRedux";

@@ -7,7 +7,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import RangeSlider from './Balance';
 import {withRouter} from 'next/router';
-import { makeStyles } from '@material-ui/core/styles';
 import {updateState, getState,sendBackend} from '../data/ourRedux';
 import Loader from "react-loader-spinner";
 // import HorizontalLinearStepper from './stepper'

@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import NavBar from '../components/navbar/Navbar';
 import Stepper from '../components/stepper';
-import FirebasPage from './firebaseTest';
 import Title from '../components/steps/dynamic_title';
 // import Head from 'next/head';
 const useStyles = makeStyles((theme) => ({
