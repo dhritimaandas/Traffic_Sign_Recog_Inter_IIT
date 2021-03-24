@@ -20,7 +20,8 @@ import AccuracyLineChart from "../components/charts/accuracyLineChart";
 import FLineChart from "../components/charts/f1LineChart";
 import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
-import HeatMap from "../components/charts/heatMap";
+import HeatMap from "../components/charts/confusionMatrix";
+import TSNE from '../components/charts/tsnePlot';
 
 const augmentationOptions = [
   { value: 0, label: "Base Model" },
@@ -106,6 +107,16 @@ export default function Dashboard() {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <FLineChart />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <TSNE/>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <HeatMap/>
               </Paper>
             </Grid>
           </Grid>
