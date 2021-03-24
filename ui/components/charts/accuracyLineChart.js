@@ -44,7 +44,9 @@ export default class AccuracyLineChart extends React.Component{
                     legend:{
                     display:true,
                     position:'top'
-                    }
+                    },
+                    maintainAspectRatio : false,
+                    responsive: true,
                 }}
             />
 
