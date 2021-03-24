@@ -87,6 +87,7 @@ export default function AugmentationModal({
                 status: true,
                 value: parseInt(gauss),
               };
+            else delete newDict[augmentation.label];
             setAllAugs(newDict);
             handleClose();
           }}
