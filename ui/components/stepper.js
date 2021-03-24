@@ -7,8 +7,6 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AddImage from "./steps/addImage";
 import Confirm from "./Confirmation";
-import Augment from "./steps/augment";
-import Preprocess from "./steps/preprocess";
 import {
   Row,
   Col,
@@ -17,15 +15,12 @@ import {
   CardColumns,
   Card,
 } from "react-bootstrap";
-import CropImage from "./augmentations/cropImage";
 import {
   resetState,
   preprocessImages,
   getState,
   getStateProperty,
 } from "../data/ourRedux";
-
-import PredictionChart from "./predChart";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,12 +47,6 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddImage />;
-    //return [
-    //  <AddImage />,
-    //  <PredictionChart />
-    //]
-    //case 1:
-    //  return <Augment />;
     default:
       return "Unknown step";
   }
@@ -224,7 +213,7 @@ const PreprocessedImages = () => {
         </Container>
       ) : (
         <CardColumns>
-          {images.map((img,index) => (
+          {images.map((img, index) => (
             <Col key={index}>
               <Card className="imageCards">
                 <Card.Img variant="top" src={img[0]} />
