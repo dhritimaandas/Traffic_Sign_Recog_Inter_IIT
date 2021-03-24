@@ -14,8 +14,7 @@ export default class ValidationAccuracyRadial extends React.Component{
         
           series: [100.0*valid_acc],
           options: {
-            chart: {
-              height: 350,
+            chart: {              
               type: 'radialBar',
               toolbar: {
                 show: true
@@ -99,7 +98,7 @@ export default class ValidationAccuracyRadial extends React.Component{
 
       return(
 
-        <ReactApexChart options={this.state.options} series={this.state.series} type="radialBar" height={350} />
+        <ReactApexChart options={this.state.options} series={this.state.series} type="radialBar" height={300} />
 
       )
 
