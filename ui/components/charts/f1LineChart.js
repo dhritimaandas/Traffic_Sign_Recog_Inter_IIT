@@ -44,6 +44,8 @@ export default class FLineChart extends React.Component{
                     display:true,
                     position:'top'
                     },
+                    maintainAspectRatio : false,
+                    responsive: true,
                     // scales: { 
                     //     xAxes: [{
                     //         gridLines: {

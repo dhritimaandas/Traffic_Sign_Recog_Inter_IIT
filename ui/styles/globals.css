@@ -19,3 +19,25 @@ a {
   box-shadow: 1px 1px 10px #888888;
   transform: translate3d(0px, -5px, 0px);
 }
+
+.graphContainer {
+  min-height: 18rem;
+}
+@media only screen and (max-width: 500px) {
+  .graphContainer {
+    min-height: 14rem;
+  }
+
+  .tsneContainer {
+    min-height: 16rem;
+  }
+}
+
+.accGraphContainer {
+  min-height: 20rem;
+}
+
+.tsneContainer {
+  min-height: 20rem;
+}
+
