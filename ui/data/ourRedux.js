@@ -92,7 +92,15 @@ const preprocessImages = async (size) => {
 };
 
 const sendBackend = async (callback) => {
-  const data = { split: state.dataSplits, images: await preprocessImages(32) };
+  const data = {
+    split: state.dataSplits,
+    images: await preprocessImages(32),
+    split: state.dataSplits,
+    augmentations: state.newags,
+    preprocessing: state.newpps,
+    balance: state.balance,
+  };
+
   axios.post("train", data).then(
     (result) => {
       console.log("BACKEND ANSWER", result);

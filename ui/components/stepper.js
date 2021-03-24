@@ -52,10 +52,10 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddImage />;
-      //return [
-      //  <AddImage />,
-      //  <PredictionChart />
-      //]
+    //return [
+    //  <AddImage />,
+    //  <PredictionChart />
+    //]
     //case 1:
     //  return <Augment />;
     default:
@@ -137,7 +137,7 @@ const HorizontalLinearStepper = (props) => {
         })}
       </Stepper>
       <div>
-        {activeStep === steps.length-1 ? (
+        {activeStep === steps.length - 1 ? (
           <div>
             <Container>
               <div className="pt-3">
@@ -204,9 +204,10 @@ export default HorizontalLinearStepper;
 import classNames from "../data/classNames";
 const PreprocessedImages = () => {
   const [images, setImages] = React.useState([]);
+
   React.useEffect(() => {
     preprocessImages(400).then((arr) => setImages(arr));
-  }, getState());
+  }, [getState()]);
 
   return (
     <div>
@@ -223,8 +224,8 @@ const PreprocessedImages = () => {
         </Container>
       ) : (
         <CardColumns>
-          {images.map((img) => (
-            <Col>
+          {images.map((img,index) => (
+            <Col key={index}>
               <Card className="imageCards">
                 <Card.Img variant="top" src={img[0]} />
                 <Card.Body>
