@@ -17,8 +17,7 @@ DEVICE = torch.device("cpu")
 class PredictImage(Resource):
     def post(self):
         args = parser.parse_args()
-        image = Image.open(args['file'])
-        # print(image)
+        image = Image.open(args['file']).convert('RGB')
         output_pred = self.result(image)
         # print(output_pred)
         return output_pred
@@ -33,7 +32,7 @@ class PredictImage(Resource):
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)
         saliency_map = salience(model, img)
-        output_pred = {'pred': pred_label, 'confidence': round(pred_label_proba,4), 'saliency_map': 'saliency_map'} #Please fix this. Images cannot be sent directly in json response.
+        output_pred = {'pred': pred_label, 'confidence': round(pred_label_proba,4), 'saliency_map': saliency_map} 
         return output_pred
     
     def predict_image(self, image, model):
@@ -54,9 +53,12 @@ class PredictImage(Resource):
         return model
 
 def load_image(image, size=(32, 32)):
-    trans = transforms.Compose([transforms.Resize(size), transforms.ToTensor()])
+    trans = transforms.Compose([
+        transforms.Resize(size), 
+        transforms.ToTensor(),
+        transforms.Normalize([0.3401, 0.3120, 0.3212],[0.2725, 0.2609, 0.2669]),
+        ])
     trans_image = trans(image).float()
     trans_image = Variable(trans_image, requires_grad = True)
     trans_image=trans_image.unsqueeze(0)
-    # print("Shape:", trans_image)
     return trans_image

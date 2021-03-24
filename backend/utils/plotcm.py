@@ -4,6 +4,9 @@ import base64
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from config.appConfig import *
+import torch
+
+DEVICE = torch.device("cpu")
 
 def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
     if normalize:
@@ -33,7 +36,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
         im_b64 = base64.b64encode(f.read())
     return im_b64
 
-def transform(img):
+def transform_img(img):
     transform = transforms.Compose([
         transforms.Resize((32,32)),
         transforms.ToTensor(),
@@ -44,7 +47,7 @@ def transform(img):
 
 def salience(model,image):
     
-    x = transform(image).unsqueeze(0)
+    x = transform_img(image).unsqueeze(0)
     model.eval()
     x = x.to(DEVICE)
     x.requires_grad_(True)
@@ -59,4 +62,5 @@ def salience(model,image):
     plt.savefig('plots/salience.jpg')
     with open("plots/salience.jpg", "rb") as f:
         im_b64 = base64.b64encode(f.read())
+    im_b64 = im_b64.decode("utf-8")
     return im_b64

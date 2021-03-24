@@ -22,7 +22,6 @@ from utils.trafficSignNet import TrafficSignNet_
 EPOCHS = 150
 EARLY_EPOCHS = 15
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(DEVICE)
 LR = 1e-5
 BATCH_SIZE = 64
 
@@ -99,7 +98,7 @@ def train_model(model,
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
 
-                print(f"running_loss {running_loss} running_corrects {running_corrects}")
+                # print(f"running_loss {running_loss} running_corrects {running_corrects}")
 
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double().item() / dataset_sizes[phase]
@@ -132,7 +131,7 @@ def train_model(model,
                 }
                 #save checkpoint
                 latestModelId = 10 #load_latest_model_from_db()
-                checkpoint_path = "models/downloads"+ str(latestModelId) +".pt"
+                checkpoint_path = "models/downloads/"+ str(latestModelId) +".pt"
                 save_ckp(checkpoint, checkpoint_path)
             elif phase=='val' and epoch_acc < best_acc:
                 not_imp += 1

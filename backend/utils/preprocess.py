@@ -15,7 +15,6 @@ def preprocess(image_list, label_list, test=False ,ratio=0.2, batch_size = 64):
                                         test_size=ratio,
                                         random_state=42)
 
-    # print(train_img_list)
     train_img_tensor = np.array(train_img_list).reshape((-1, 32, 32, 3))
     train_label_tensor = np.array(train_label_list)
     val_img_tensor = np.array(val_img_list).reshape((-1, 32, 32, 3))

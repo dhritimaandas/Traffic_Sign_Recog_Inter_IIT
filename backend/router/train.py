@@ -16,6 +16,7 @@ from utils.trainModel import train_model
 from utils.saveCheckpoint import save_ckp
 from db import load_latest_model_from_db, save_model_to_db
 from utils.tsne import fit_tsne
+LR = 1e-5
 
 class TrainImages(Resource):
     def __init__(self):
@@ -37,7 +38,10 @@ class TrainImages(Resource):
         for pair in images:
             im_bytes = base64.b64decode(pair[0].split(',')[1])
             im_arr = np.frombuffer(im_bytes, dtype=np.uint8)  # im_arr is one-dim Numpy array
-            img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+            img_ = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
+            img = cv2.resize(img_ , (32,32))
+            # img = Image.fromarray(img_).convert('RGB')
+
 
             array_imgs.append(img)
             labels.append(pair[1])
@@ -69,7 +73,7 @@ class TrainImages(Resource):
         checkpoint = {
                 'epoch': EPOCHS,
                 'valid_acc': best_acc,
-                'state_dict': model.state_dict(),
+                'state_dict': final_model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'loss_p':loss_p,
                 'acc_p':acc_p,
@@ -83,10 +87,10 @@ class TrainImages(Resource):
             newModelId = latestModelId + 1
             checkpointPath = 'models/downloads/'+str(newModelId)+'.pt'
             #Uncomment the next line if you want to start saving the models locally
-            save_ckp(checkpoint, checkpointPath)
+            # save_ckp(checkpoint, checkpointPath)
             ###uncomment the next line when we want to work with databases
-            train_info = {'epoch': EPOCHS, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'val_preds': val_preds, 'val_labels': val_labels, 'tsne_features': tsne_features}
-            save_model_to_db(newModelId, train_info) #Replace {} with model metrics
+            # train_info = {'epoch': EPOCHS, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'val_preds': val_preds, 'val_labels': val_labels, 'tsne_features': tsne_features}
+            # save_model_to_db(newModelId, train_info) #Replace {} with model metrics
 
         return train_info
     
