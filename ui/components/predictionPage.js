@@ -47,6 +47,7 @@ class DropzoneAreaExample extends Component {
   submitHandler = () => {
     let form_data = new FormData();
     form_data.append('file', this.state.files[0]);
+
     axios
       .post("predict", form_data)
       .then(res => {
@@ -66,6 +67,7 @@ class DropzoneAreaExample extends Component {
         <DropzoneArea
           onChange={this.handleChange.bind(this)}
           showPreviews={false}
+          filesLimit={1}
         />
         <br />
         <Button
