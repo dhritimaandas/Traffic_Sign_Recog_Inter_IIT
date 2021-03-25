@@ -55,7 +55,7 @@ export default function Dashboard() {
               </Typography>
               <Select
                 id="modelSelector"
-                options={augmentationOptions}
+                options={modelOptions}
                 value={selected}
                 onChange={handleChange}
               />
@@ -189,7 +189,7 @@ export default function Dashboard() {
   );
 }
 
-const augmentationOptions = [
+const modelOptions = [
   { value: 0, label: "Base Model" },
   { value: 1, label: "Latest Model" },
 ];
