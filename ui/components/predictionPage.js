@@ -16,8 +16,13 @@ const Predictions = (props) => {
           <CardImg top height="300px" src={URL.createObjectURL(props.images)} alt="Card image cap" />
           <CardBody>
             <CardTitle tag="h5"><b>Predicted Class:</b> ({classesNames[props.predictions.pred]})</CardTitle>
-            <CardSubtitle tag="h6" className="mb-2 text-muted">Confidence: {props.predictions.confidence}</CardSubtitle>
+            <CardSubtitle tag="h6" className="mb-2 text-muted">Confidence: {props.predictions.confidence * 100 + '%'}</CardSubtitle>
           </CardBody>
+        </Card>
+      </Col>
+      <Col lg="4" md="6" sm="12">
+        <Card>
+          <CardImg src={'data:image/jpg;base64,' + props.predictions.saliency_map} alt="Saliency map" />
         </Card>
       </Col>
     </Row>
@@ -46,7 +51,7 @@ class DropzoneAreaExample extends Component {
       .post("predict", form_data)
       .then(res => {
         this.setState({ predictions: res.data, images: this.state.files[0] })
-   
+
       })
       .catch((e) => {
         alert('Some Error Occured');

@@ -101,6 +101,7 @@ const sendBackend = async (callback) => {
   axios.post("train", data).then(
     (result) => {
       callback();
+      console.log(result)
     },
     (e) => {
       if (e.response) alert("Error!", e.response.data);
