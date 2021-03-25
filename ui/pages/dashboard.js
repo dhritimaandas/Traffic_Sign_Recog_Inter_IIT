@@ -110,7 +110,7 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   <Paper className={classes.paper}>
                     <div className="heatMapContainer">
-                      <HeatMap />
+                      <HeatMap matrix={models[Object.keys(models)[0]].model_metrics.matrix}/>
                     </div>
                     <p>
                       The Confusion Matrix helps us to understand how well the

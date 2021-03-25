@@ -24,6 +24,20 @@ export default class HeatMap extends React.Component {
   constructor(props) {
     super(props);
 
+    var dataSet = new Array();
+
+    for (let i = 0; i < this.props.matrix.length; i++) {
+      var arr = new Array();
+      for (let j = 0; j < this.props.matrix.length; j++) {
+        if (this.props.matrix[i][j] === 0) arr.push(10);
+        else  arr.push( this.props.matrix[i][j]+10);
+      }
+      dataSet.push({
+        name: "" + (i + 1),
+        data: arr,
+      });
+    }
+
     this.state = {
       series: dataSet,
       options: {

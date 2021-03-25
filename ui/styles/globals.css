@@ -40,3 +40,13 @@ a {
 .tsneContainer {
   min-height: 19rem;
 }
+
+.saliency {
+  min-height: 29.5rem;
+}
+
+@media only screen and (min-width: 576px) and (max-width: 968px) {
+  .saliency {
+    min-height: 22rem;
+  }
+}
