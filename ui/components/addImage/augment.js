@@ -5,10 +5,22 @@ import Chip from "@material-ui/core/Chip";
 import { updateState, getStateProperty, getState } from "../../data/ourRedux";
 import FlipModal from "../jimpModals/flip";
 import RotateModal from "../jimpModals/rotate";
+import BrightnessModal from "../jimpModals/brightness";
+import ContrastModal from "../jimpModals/contrast";
+import GrayscaleModal from "../jimpModals/grayscale";
+import BlurModal from "../jimpModals/blur";
+import OpacityModal from "../jimpModals/opacity";
+import InvertModal from "../jimpModals/invert";
 
 const augmentationOptions = [
   { value: 0, label: "Flip" },
   { value: 1, label: "Rotate" },
+  { value: 2, label: "Brightness" },
+  { value: 3, label: "Contrast" },
+  { value: 4, label: "Grayscale" },
+  { value: 5, label: "Invert Colors" },
+  { value: 6, label: "Blur" },
+  { value: 7, label: "Opacity" }
 ];
 
 export default function Augment() {
@@ -44,6 +56,54 @@ export default function Augment() {
         />
       ) : modalName == "Rotate" ? (
         <RotateModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Brightness" ? (
+        <BrightnessModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Contrast" ? (
+        <ContrastModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Grayscale" ? (
+        <GrayscaleModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Invert Colors" ? (
+        <InvertModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Blur" ? (
+        <BlurModal
+          allAugs={augs}
+          setAllAugs={setAugs}
+          augmentation={selected || ""}
+          show={showModal}
+          handleClose={handleClose}
+        />
+      ) : modalName == "Opacity" ? (
+        <OpacityModal
           allAugs={augs}
           setAllAugs={setAugs}
           augmentation={selected || ""}
