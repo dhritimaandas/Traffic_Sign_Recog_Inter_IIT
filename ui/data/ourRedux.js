@@ -98,17 +98,20 @@ const sendBackend = async (callback) => {
     balance: state.balance,
   };
 
-  axios.post("train", data).then(
-    (result) => {
-      callback();
-      console.log(result)
-    },
-    (e) => {
-      if (e.response) alert("Error!", e.response.data);
-      else alert("Some Error Occurred! Either increase the dataset size, or change the validation split to increase the images in each set. Redirecting...");
-      callback();
-    }
-  );
+  axios
+    .post("train", data)
+    .then(
+      (result) => {
+        callback();
+        console.log(result);
+      },
+      (e) => {
+        if (e.response) alert("Error!", e.response.data);
+        else alert("Some Error Occurred! Either increase the dataset size, or change the validation split such that it increase the images in each set. Redirecting...");
+        callback();
+      }
+    )
+    .finally(() => resetState());
 };
 
 module.exports = {
