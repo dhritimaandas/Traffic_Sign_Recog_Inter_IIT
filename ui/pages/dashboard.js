@@ -9,18 +9,24 @@ import NavBar from "../components/navbar/Navbar";
 import dynamic from "next/dynamic";
 import Typography from "@material-ui/core/Typography";
 import Title from "../components/steps/dynamic_title";
-import LossLineChart from "../components/charts/lossLineChart";
-import AccuracyLineChart from "../components/charts/accuracyLineChart";
-import FLineChart from "../components/charts/f1LineChart";
-import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
-import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
-
-const Select = dynamic(() => import("react-select"), {
-  ssr: false,
-});
+import { fetchModels } from "../context/database";
+import { Spinner } from "react-bootstrap";
+const Select = dynamic(() => import("react-select"), { ssr: false });
+const LossLineChart = dynamic(() =>
+  import("../components/charts/lossLineChart")
+);
+const AccuracyLineChart = dynamic(() =>
+  import("../components/charts/accuracyLineChart")
+);
+const FLineChart = dynamic(() => import("../components/charts/f1LineChart"));
+const ValidationAccuracyRadial = dynamic(() =>
+  import("../components/charts/validationAccuracyRadial")
+);
+const TrainingAccuracyRadial = dynamic(() =>
+  import("../components/charts/trainingAccuracyRadial")
+);
 const HeatMap = dynamic(() => import("../components/charts/confusionMatrix"));
 const TSNE = dynamic(() => import("../components/charts/tsnePlot"));
-import { fetchModels } from "../context/database";
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -47,71 +53,79 @@ export default function Dashboard() {
           <Typography variant="h4">Model Statistics</Typography>
           <hr />
         </Container>
-        <Container maxWidth="lg" style={{ paddingBottom: "2rem" }}>
-          <Typography variant="h6" style={{ marginBottom: "1em" }}>
-            Select the model for the metrics
-          </Typography>
-          <Select
-            id="modelSelector"
-            options={augmentationOptions}
-            value={selected}
-            onChange={handleChange}
-          />
-        </Container>
+        {Object.keys(models).length ? (
+          <>
+            <Container maxWidth="lg" style={{ paddingBottom: "2rem" }}>
+              <Typography variant="h6" style={{ marginBottom: "1em" }}>
+                Select the model for the metrics
+              </Typography>
+              <Select
+                id="modelSelector"
+                options={augmentationOptions}
+                value={selected}
+                onChange={handleChange}
+              />
+            </Container>
 
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <TrainingAccuracyRadial />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <ValidationAccuracyRadial />
-              </Paper>
-            </Grid>
+            <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <TrainingAccuracyRadial />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <ValidationAccuracyRadial />
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="accGraphContainer">
-                  <AccuracyLineChart />
-                </div>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="tsneContainer">
-                  <TSNE />
-                </div>
-              </Paper>
-            </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="accGraphContainer">
+                      <AccuracyLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="tsneContainer">
+                      <TSNE />
+                    </div>
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <div className="heatMapContainer">
-                  <HeatMap />
-                </div>
-              </Paper>
-            </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <div className="heatMapContainer">
+                      <HeatMap />
+                    </div>
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="graphContainer">
-                  <LossLineChart />
-                </div>
-              </Paper>
-            </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="graphContainer">
+                      <LossLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <div className="graphContainer">
-                  <FLineChart />
-                </div>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <div className="graphContainer">
+                      <FLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </>
+        ) : (
+          <Container maxWidth="lg" className="text-center">
+            <Spinner animation="border" />
+          </Container>
+        )}
       </main>
     </div>
   );
