@@ -25,7 +25,7 @@ This project is about German Traffic Sign Recognition and uses the German Traffi
 
 **<h2 id="datacreation">Data Creation</h2>**
 
-We use the GTSRB dataset (German Traffic Sign Recognition Benchmark) provided by the Institut für Neuroinformatik group. Images are spread across 43 different types of traffic signs and contain a total of 39,209 train examples. As per our analysis of the dataset, it is very unbalanced, some of the classes having 2000 samples, and some of them having only 200 samples. Although the images in each class of the dataset have some variance the number of images in some classes is so shallow that we had to append images to the existing dataset further to improve its variance. Although we couldn’t compensate for the class imbalance present in the dataset, our aim in adding the new images was to improve the overall diversity of the dataset
+We use the GTSRB dataset (German Traffic Sign Recognition Benchmark) provided by the Institut für Neuroinformatik group. Images are spread across 43 different types of traffic signs and contain a total of 39,209 train examples. As per our analysis of the dataset, it is very unbalanced, some of the classes having 2000 samples, and some of them having only 200 samples. Although the images in each class of the dataset have some variance the number of images in some classes is so shallow that we had to append images to the existing dataset further to improve its variance. As we couldn’t compensate for the class imbalance present in the dataset, our aim in adding the new images was to improve the overall diversity of the dataset
 
 <div align="center">
 <img src="images/data_creation.png">
