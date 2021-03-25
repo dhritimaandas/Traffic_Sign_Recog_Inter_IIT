@@ -45,11 +45,11 @@ We implemented the original [IDSIA MCDNN](https://people.lu.usi.ch/mascij/data/p
 
 We use the following regularization techniques to prevent overfitting:
 
-**Dropout**: A simple way to prevent neural networks from overfitting. Dropout is a regularization method that approximates training a large number of neural networks with different architectures in parallel. During training, some number of layer outputs are randomly ignored.
+**Dropout :** A simple way to prevent neural networks from overfitting. Dropout is a regularization method that approximates training a large number of neural networks with different architectures in parallel. During training, some number of layer outputs are randomly ignored.
 
-**Batch Normalization**: During training time, the distribution of the activations is constantly changing. The intermediate layers must learn to adapt themselves to a new distribution in every training step, so training processes slow down. Batch normalization is a method to normalize the inputs of each layer, to fight the internal covariate shift problem.
+**Batch Normalization :** During training time, the distribution of the activations is constantly changing. The intermediate layers must learn to adapt themselves to a new distribution in every training step, so training processes slow down. Batch normalization is a method to normalize the inputs of each layer, to fight the internal covariate shift problem.
 
-**Early Stopping**: A major challenge in training neural networks is how long to train them. If we use too few epochs, we might underfit; if we use too many epochs, we might overfit. A compromise is to train on the training dataset but to stop training at the point when performance on a validation dataset starts to degrade. This simple, effective, and widely used approach to training neural networks is called early stopping. We used early stopping with a patience of 100 epochs. After the validation loss has not improved after 15 epochs, training is stopped.
+**Early Stopping :** A major challenge in training neural networks is how long to train them. If we use too few epochs, we might underfit; if we use too many epochs, we might overfit. A compromise is to train on the training dataset but to stop training at the point when performance on a validation dataset starts to degrade. This simple, effective, and widely used approach to training neural networks is called early stopping. We used early stopping with a patience of 100 epochs. After the validation loss has not improved after 15 epochs, training is stopped.
 
 **<h3 id="stn">Spatial Transformer Networks</h3>**
 
