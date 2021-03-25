@@ -289,7 +289,7 @@ You can add images and predict their classes as shown.
 - There is a **Confusion Matrix** to analyse and study.
 - The user can determine **Training and Validation Loss** and their **F1 Score** through their separate line-charts.
 - You can hover at any point of **Confusion Matrix** or any other chart to view the statistics of that particular coordinate.
-- You can toggle the the view of line-charts to focus on other information by clicking on the legend as shown below:
+- You can toggle the view of line-charts to focus on other information by clicking on the legend as shown below:
 
 <div align="center">
 <img src="images/chart_toggle.png">
