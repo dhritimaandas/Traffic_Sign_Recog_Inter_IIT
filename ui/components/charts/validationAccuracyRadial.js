@@ -9,7 +9,6 @@ export default class ValidationAccuracyRadial extends React.Component {
     super(props);
 
     this.state = {
-      series: [100.0 * this.props.accuracy],
       options: {
         chart: {
           type: "radialBar",
@@ -94,7 +93,7 @@ export default class ValidationAccuracyRadial extends React.Component {
     return (
       <ReactApexChart
         options={this.state.options}
-        series={this.state.series}
+        series={[100.0 * this.props.accuracy]}
         type="radialBar"
         height={300}
       />

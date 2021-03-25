@@ -9,9 +9,6 @@ export default class TrainingAccuracyRadial extends React.Component {
     super(props);
 
     this.state = {
-      series: [
-        100.0 * this.props.acc_p["train"][this.props.acc_p["train"].length - 1],
-      ],
       options: {
         chart: {
           type: "radialBar",
@@ -96,7 +93,10 @@ export default class TrainingAccuracyRadial extends React.Component {
     return (
       <ReactApexChart
         options={this.state.options}
-        series={this.state.series}
+        series={[
+          100.0 *
+            this.props.acc_p["train"][this.props.acc_p["train"].length - 1],
+        ]}
         type="radialBar"
         height={300}
       />
