@@ -1,27 +1,135 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Copyright from "../components/Copyright";
 import NavBar from "../components/navbar/Navbar";
 import dynamic from "next/dynamic";
 import Typography from "@material-ui/core/Typography";
 import Title from "../components/steps/dynamic_title";
-import LossLineChart from "../components/charts/lossLineChart";
-import AccuracyLineChart from "../components/charts/accuracyLineChart";
-import FLineChart from "../components/charts/f1LineChart";
-import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
-import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
-import { Image } from "react-bootstrap";
-const Select = dynamic(() => import("react-select"), {
-  ssr: false,
-});
-import HeatMap from "../components/charts/confusionMatrix";
-import TSNE from "../components/charts/tsnePlot";
+import { fetchModels } from "../context/database";
+import { Spinner } from "react-bootstrap";
+const Select = dynamic(() => import("react-select"), { ssr: false });
+const LossLineChart = dynamic(() =>
+  import("../components/charts/lossLineChart")
+);
+const AccuracyLineChart = dynamic(() =>
+  import("../components/charts/accuracyLineChart")
+);
+const FLineChart = dynamic(() => import("../components/charts/f1LineChart"));
+const ValidationAccuracyRadial = dynamic(() =>
+  import("../components/charts/validationAccuracyRadial")
+);
+const TrainingAccuracyRadial = dynamic(() =>
+  import("../components/charts/trainingAccuracyRadial")
+);
+const HeatMap = dynamic(() => import("../components/charts/confusionMatrix"));
+const TSNE = dynamic(() => import("../components/charts/tsnePlot"));
+
+export default function Dashboard() {
+  const classes = useStyles();
+  const fixedHeightPaper = clsx(classes.paper);
+  const [selected, setSelected] = React.useState();
+  const [models, setModels] = React.useState({});
+
+  useEffect(() => {
+    fetchModels(setModels);
+  }, []);
+
+  console.log(models, "s");
+  const handleChange = (augment) => {
+    setSelected(augment);
+  };
+  return (
+    <div className={classes.root}>
+      <Title />
+      <CssBaseline />
+      <NavBar />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" style={{ paddingTop: "2rem" }}>
+          <Typography variant="h4">Model Statistics</Typography>
+          <hr />
+        </Container>
+        {Object.keys(models).length ? (
+          <>
+            <Container maxWidth="lg" style={{ paddingBottom: "2rem" }}>
+              <Typography variant="h6" style={{ marginBottom: "1em" }}>
+                Select the model for the metrics
+              </Typography>
+              <Select
+                id="modelSelector"
+                options={augmentationOptions}
+                value={selected}
+                onChange={handleChange}
+              />
+            </Container>
+
+            <Container maxWidth="lg" className={classes.container}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <TrainingAccuracyRadial />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <ValidationAccuracyRadial />
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="accGraphContainer">
+                      <AccuracyLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="tsneContainer">
+                      <TSNE />
+                    </div>
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <div className="heatMapContainer">
+                      <HeatMap />
+                    </div>
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Paper className={classes.paper}>
+                    <div className="graphContainer">
+                      <LossLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Paper className={fixedHeightPaper}>
+                    <div className="graphContainer">
+                      <FLineChart />
+                    </div>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </>
+        ) : (
+          <Container maxWidth="lg" className="text-center">
+            <Spinner animation="border" />
+          </Container>
+        )}
+      </main>
+    </div>
+  );
+}
 
 const augmentationOptions = [
   { value: 0, label: "Base Model" },
@@ -52,95 +160,3 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 }));
-
-export default function Dashboard() {
-  const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper);
-  const [selected, setSelected] = React.useState();
-
-  const handleChange = (augment) => {
-    setSelected(augment);
-  };
-  return (
-    <div className={classes.root}>
-      <Title />
-      <CssBaseline />
-      <NavBar />
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" style={{ paddingTop: "2rem" }}>
-          <Typography variant="h4">Model Statistics</Typography>
-          <hr />
-        </Container>
-        <Container maxWidth="lg" style={{ paddingBottom: "2rem" }}>
-          <Typography variant="h6" style={{ marginBottom: "1em" }}>
-            Select the model for the metrics
-          </Typography>
-          <Select
-            id="modelSelector"
-            options={augmentationOptions}
-            value={selected}
-            onChange={handleChange}
-          />
-        </Container>
-
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <TrainingAccuracyRadial />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <ValidationAccuracyRadial />
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="accGraphContainer">
-                  <AccuracyLineChart />
-                </div>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="tsneContainer">
-                  <TSNE />
-                </div>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <div className="heatMapContainer">
-                  <HeatMap />
-                </div>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Paper className={classes.paper}>
-                <div className="graphContainer">
-                  <LossLineChart />
-                </div>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Paper className={fixedHeightPaper}>
-                <div className="graphContainer">
-                  <FLineChart />
-                </div>
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
-  );
-}

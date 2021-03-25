@@ -61,7 +61,7 @@ export default function SingleLineGridList(props) {
     <div className={classes.root}>
       <GridList className={classes.gridList} cols={2.5}>
         {props.tileData.map((tile, index) => (
-          <GridListTile key={tile[0].name}>
+          <GridListTile key={index}>
             <img src={tile[0]} alt={tile[1]} />
             <GridListTileBar
               title={tile[1]}

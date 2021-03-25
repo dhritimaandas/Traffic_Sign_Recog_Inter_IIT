@@ -86,16 +86,13 @@ const preprocessImages = async (size) => {
     });
   }
 
-  console.log("Final Images in 32x32:", newImages);
-
   return newImages;
 };
 
 const sendBackend = async (callback) => {
   const data = {
-    split: state.dataSplits,
     images: await preprocessImages(32),
-    split: state.dataSplits,
+    split: state.dataSplits.validate,
     augmentations: state.newags,
     preprocessing: state.newpps,
     balance: state.balance,
@@ -103,12 +100,12 @@ const sendBackend = async (callback) => {
 
   axios.post("train", data).then(
     (result) => {
-      console.log("BACKEND ANSWER", result);
       callback();
     },
     (e) => {
-      console.log(e, e.response);
-      alert("Error!", e.response.data);
+      if (e.response) alert("Error!", e.response.data);
+      else alert("Some Error Occurred! Redirecting...");
+      callback();
     }
   );
 };

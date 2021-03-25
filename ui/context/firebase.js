@@ -1,10 +1,12 @@
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/storage";
+import "firebase/database"
 
 var firebaseConfig = {
   apiKey: "AIzaSyCaoxPJoGQtfw7FPUo8jsyigxJRCqW37Kk",
   authDomain: "interiit-ui.firebaseapp.com",
+  databaseURL: "https://interiit-ui-default-rtdb.firebaseio.com",
   projectId: "interiit-ui",
   storageBucket: "interiit-ui.appspot.com",
   messagingSenderId: "89989048018",

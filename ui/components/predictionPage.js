@@ -46,10 +46,10 @@ class DropzoneAreaExample extends Component {
       .post("predict", form_data)
       .then(res => {
         this.setState({ predictions: res.data, images: this.state.files[0] })
-        console.log(this.state.predictions)
+   
       })
       .catch((e) => {
-        console.log(e);
+        alert('Some Error Occured');
       });
   }
 

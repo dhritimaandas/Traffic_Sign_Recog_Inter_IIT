@@ -28,8 +28,8 @@ class TrainImages(Resource):
     def post(self):
         args = parser.parse_args()
         images = args["images"]
-        split_val = args["split"]/100
-        balance = args["balance"]
+        split_val = args["split"][0]/100
+        balance = args["balance"][0]    
         # print(images)
         if len(images)*split_val < 1:
             split_val=0.2
@@ -123,7 +123,7 @@ class TrainImages(Resource):
             #Uncomment the next line if you want to start saving the models locally
             save_ckp(checkpoint, checkpointPath)
             ###uncomment the next line when we want to work with databases
-            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'val_preds': val_preds, 'val_labels': val_labels, 'tsne_features': tsne_features}
+            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'matrix': matrix, 'points': tsne_features, "labels": all_labels}
             # save_model_to_db(newModelId, train_info) #Replace {} with model metrics
 
         return train_info

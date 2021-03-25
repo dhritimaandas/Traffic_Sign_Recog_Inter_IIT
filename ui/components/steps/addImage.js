@@ -63,8 +63,6 @@ class DropzoneDialogExample extends Component {
     const filesNew = files.map((file) => {
       var reader = new FileReader();
       var url = reader.readAsDataURL(file);
-      // console.log(file);
-      // console.log(url);
       return [file, this.state.class];
     });
     const filesOld = this.state.files;
@@ -93,15 +91,9 @@ class DropzoneDialogExample extends Component {
 
   render() {
     updateState("images", this.state.images);
-    if (this.state.files.length)
-      console.log(
-        "AAA",
-        this.state.files[0][0],
-        toBase64(this.state.files[0][0])
-      );
-    console.log(this.state.files);
+
     const { classes } = this.props;
-    console.log(this.state.images);
+
     return (
       <Grid style={{ minHeight: "50vh" }}>
         <Title open={this.state.open} />
