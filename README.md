@@ -14,10 +14,12 @@
 
 [**5**. Evaluation](#evaluation)  
 [**6**. Setting up your machine](#settingupmachine)  
-[**7**. Installation](#installation)  
-[**8**. Usage](#usage)  
-[**9**. Dashboard](#dashboard)  
-[**10**. Flowchart](#flowchart)
+[**7**. Setting up UI](#settingupui)  
+[**8**. Setting up Firebase](#settingupfirebase)  
+[**9**. Setting up Backend](#settingupbackend)  
+[**10**. Flowchart](#flowchart)  
+[**11**. Usage](#usage)  
+[**12**. Dashboard](#dashboard)
 
 <h2 id="description">Description</h2>
 
@@ -25,7 +27,7 @@ This project is about German Traffic Sign Recognition and uses the German Traffi
 
 **<h2 id="datacreation">Data Creation</h2>**
 
-We use the GTSRB dataset (German Traffic Sign Recognition Benchmark) provided by the Institut für Neuroinformatik group. Images are spread across 43 different types of traffic signs and contain a total of 39,209 train examples. As per our analysis of the dataset, it is very unbalanced, some of the classes having 2000 samples, and some of them having only 200 samples. Although the images in each class of the dataset have some variance the number of images in some classes is so shallow that we had to append images to the existing dataset further to improve its variance. As we couldn’t compensate for the class imbalance present in the dataset, our aim in adding the new images was to improve the overall diversity of the dataset
+We use the GTSRB dataset (German Traffic Sign Recognition Benchmark) provided by the Institut für Neuroinformatik group. Images are spread across 43 different types of traffic signs and contain a total of 39,209 train examples. As per our analysis of the dataset, it is very unbalanced, some of the classes having 2000 samples, and some of them having only 200 samples. Although the images in each class of the dataset have some variance the number of images in some classes is so shallow that we had to append images to the existing dataset further to improve its variance. Although we couldn’t compensate for the class imbalance present in the dataset, our aim in adding the new images was to improve the overall diversity of the dataset
 
 <div align="center">
 <img src="images/data_creation.png">
@@ -119,7 +121,7 @@ npm install --global yarn
 **3**. Install git according to your os from here:  
 https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
-<h2 id="installation">Installation</h2>
+<h2 id="settingupui">Setting up UI</h2>
 
 **1**. Clone this repo
 
@@ -141,6 +143,64 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+<h2 id="settingupfirebase">Setting up Firebase</h2>
+
+Replace the **firebaseConfig** file with your own config file in Traffic_Sign_Recog_Inter_IIT/backend/config/
+
+<h2 id="settingupbackend">Setting up Backend</h2>
+
+**1**. Clone this repo using
+
+```bash
+git clone https://github.com/dhritimaandas/Traffic_Sign_Recog_Inter_IIT.git
+```
+
+**2**. Navigate to working directory and then to backend folder using
+
+```bash
+cd backend
+```
+
+**3**. Make sure you have installed pipenv. If not run the command
+
+```bash
+pip install pipenv
+```
+
+**4**. Spawn a new virtual environment
+
+```bash
+pipenv shell
+```
+
+**5**. Download all the dependencies
+
+```bash
+pipenv install
+```
+
+**6**. To run flask app execute
+
+```bash
+python app.py
+```
+
+<h2 id="flowchart">Flowchart</h2>
+
+### **Training Flowchart**
+
+<div align="center">
+<img src="images/train_flowchart.jpeg">
+</div>
+<br>
+
+### **Prediction Flowchart**
+
+<div align="center">
+<img src="images/predict_flowchart.png">
+</div>
+<br>
 
 <h2 id="usage">Usage</h2>
 
@@ -198,7 +258,10 @@ You can balance and spilt the dataset from here.
 
 <div align="center">
 <img src="images/7(final).png">
-</div>  
+</div>
+
+> **Note**: Make sure you have integrated the firebase to the backend for the model to work. Refer [Setting up Firebase](#settingupfirebase).
+
 <br>
 
 <h3>Predict</h3>
@@ -208,32 +271,27 @@ You can add images and predict their classes as shown.
 <div align="center">
 <img src="images/8.png">
 </div>
+
+> **Note**: Make sure you have integrated the firebase to the backend for the model to work. Refer [Setting up Firebase](#settingupfirebase).
+
 <br>
 
 <h2 id="dashboard">Dashboard</h2>
 
 <div align="center">
-<img src="images/chart.jpeg">
+<img src="images/chart(cropped).jpeg">
 </div>
 <br>
 
+- You can select the Model for which you want to analyse the metrics.
 - Here you can have access to various information like **Training Accuracy** and **Validation Accuracy** along with their line-charts.
 - The user is shown a discrete graph plot of **T-SNE Data**.
 - There is a **Confusion Matrix** to analyse and study.
 - The user can determine **Training and Validation Loss** and their **F1 Score** through their separate line-charts.
-
-<h2 id="flowchart">Flowchart</h2>
-
-### **Training Flowchart**
+- You can over at any point of **Confusion Matrix** or any other chart to view the statistics of that particular coordinate.
+- You can toggle the the view of line-charts to focus on other information by clicking on the legend as shown below:
 
 <div align="center">
-<img src="images/train_flowchart.jpeg">
-</div>
-<br>
-
-### **Prediction Flowchart**
-
-<div align="center">
-<img src="images/predict_flowchart.png">
+<img src="images/chart_toggle.png">
 </div>
 <br>
