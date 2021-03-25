@@ -61,7 +61,7 @@ class DropzoneAreaExample extends Component {
   render() {
     return (
       <Container>
-        <h3><b>Please Upload images to predict</b></h3>
+        <h3><b>Please Upload a Single Image to predict</b></h3>
         <br />
         <DropzoneArea
           onChange={this.handleChange.bind(this)}
