@@ -55,9 +55,9 @@ def load_latest_model_from_db():
 #Saves a new Model to database and storage
 def save_model_to_db(modelId, modelMetrics):
   #new model json
-  model_info = {'modelId': modelId, 'model_metrics':{}, 'created_time': time.time()}
+  model_info = {'modelId': modelId, 'model_metrics': modelMetrics, 'created_time': time.time()}
   #Push the json to the database
   db.child("models").push(model_info)
-  storage.child('models/'+str(modelId)+'.pt').put('models/downloads'+str(modelId)+'.pt')
+  storage.child('models/'+str(modelId)+'.pt').put('models/downloads/'+str(modelId)+'.pt')
   return 'Uploaded base model'
-  return model_info
+  # return model_info

@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/backend')
 
 from utils.stn import Stn
 from torch import nn

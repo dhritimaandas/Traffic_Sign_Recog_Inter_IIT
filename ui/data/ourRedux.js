@@ -105,7 +105,7 @@ const sendBackend = async (callback) => {
     },
     (e) => {
       if (e.response) alert("Error!", e.response.data);
-      else alert("Some Error Occurred! Redirecting...");
+      else alert("Some Error Occurred! Either increase the dataset size, or change the validation split to increase the images in each set. Redirecting...");
       callback();
     }
   );

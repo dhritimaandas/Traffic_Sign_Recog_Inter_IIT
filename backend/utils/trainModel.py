@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/backend')
 
 from config.appConfig import *
 import torch
@@ -19,7 +18,7 @@ import copy
 from utils.saveCheckpoint import save_ckp
 from utils.trafficSignNet import TrafficSignNet_
 
-EPOCHS = 150
+EPOCHS = 2
 EARLY_EPOCHS = 15
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 LR = 1e-5
@@ -98,8 +97,6 @@ def train_model(model,
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
 
-                # print(f"running_loss {running_loss} running_corrects {running_corrects}")
-
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double().item() / dataset_sizes[phase]
             F1_score = f1_score( all_labels, all_preds, zero_division=1, average='weighted')
@@ -112,8 +109,7 @@ def train_model(model,
                 if scheduler is not None:
                     scheduler.step()
 
-            print('{} Loss: {:.4f} Acc: {:.4f}'.format(
-                phase, epoch_loss, epoch_acc))
+            print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
@@ -138,15 +134,12 @@ def train_model(model,
 
     features, all_labels , cnter = [], [], dict()
     
-    # class_done = []
     for inputs, labels in dataloaders['train']:
         inputs = inputs.to(device)
         labels = labels.to(device)
 
         for img, labl in zip(inputs, labels):
             label = labl.item()
-            # if label in class_done:
-            #     continue
             if label in cnter.keys():
                 if cnter[label] + 1 > 25:
                     continue

@@ -1,6 +1,5 @@
 import base64
 import sys
-sys.path.insert(1, '/home/mainak/Documents/Robotics/Inter IIT/Traffic_Sign_Recog_Inter_IIT/backend')
 import torch
 import numpy as np
 import cv2
@@ -17,6 +16,7 @@ from utils.trainModel import train_model
 from utils.saveCheckpoint import save_ckp
 from db import load_latest_model_from_db, save_model_to_db
 from utils.tsne import fit_tsne
+from sklearn.metrics import confusion_matrix
 LR = 1e-5
 DEVICE = torch.device('cpu') 
 
@@ -30,7 +30,6 @@ class TrainImages(Resource):
         images = args["images"]
         split_val = args["split"][0]/100
         balance = args["balance"][0]    
-        # print(images)
         if len(images)*split_val < 1:
             split_val=0.2
         images, labels = self.prepare_data(images, 48, balance)
@@ -55,31 +54,28 @@ class TrainImages(Resource):
             labels.append(pair[1])
             count[str(int(pair[1]))] += 1
         if balance:
-            num = np.max([np.max(list(count.values())), 10])
+            num = np.min([np.max(list(count.values())), 10])
             for i in range(num_classes):
                 bal_imgs, bal_labels = self.get_balance_data(i, abs(int(num-count[str(i)])))
                 array_imgs+= bal_imgs
                 labels+= bal_labels
-        # print(len(array_imgs), len(labels))
         return array_imgs, labels
 
     def get_balance_data(self, class_id, num_im):
         ims = np.random.randint(0, 10, num_im)+(class_id*10)
-        base_path = 'assets/train images/'+str(class_id)+'/'## needs to be modified
+        base_path = 'assets/train images/'+str(class_id)+'/'
         bal_images = []
-        bal_labels = []#list(np.ones(num_im)*class_id)
+        bal_labels = []
         for j in range(num_im):
             path = base_path+str(ims[j])+'.jpg'
             if os.path.isfile(path):
 	            img = cv2.imread(path)
 	            img = cv2.resize(img , (32,32))
-	            #img = self.transform_image(img)
 	            bal_images.append(img)
 	            bal_labels.append(class_id)
         return bal_images, bal_labels
 
-    def transform_image(self, img):
-        pass
+   
 
     def check_exp(self, images, labels, split): ### custom value error function
         if len(images)!=len(labels):
@@ -93,39 +89,36 @@ class TrainImages(Resource):
     def train(self, images, labels, split, batch_size):
         dataset_sizes,dataloaders, val_images, val_labels = preprocess(images, labels, ratio=split,batch_size=batch_size)
         model = TrafficSignNet()
-        #Uncomment the commented code in next to next line and delete 0 for using database
-        #Commented to reduce the number of requests to database
-        latestModelId = load_latest_model_from_db()
+        
+        latestModelId =  load_latest_model_from_db()
         model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=LR)
 
-        final_model, best_acc, epoch, loss_p, acc_p, f1_p, all_features, all_labels  = train_model(model,criterion,optimizer,dataloaders,dataset_sizes)
+        final_model, best_acc, epoch, loss_p, acc_p, f1_p, all_features, all_labels  = train_model(
+                                                                                                    model,
+                                                                                                    criterion,
+                                                                                                    optimizer,
+                                                                                                    dataloaders,
+                                                                                                    dataset_sizes,
+                                                                                                    )
 
         tsne_features =  fit_tsne(all_features, all_labels)
 
-        checkpoint = {
-                'epoch': epoch,
-                'valid_acc': best_acc,
-                'state_dict': final_model.state_dict(),
-                'optimizer': optimizer.state_dict(),
-                'loss_p':loss_p,
-                'acc_p':acc_p,
-                'f1_p': f1_p,
-            }
-        
         val_preds = self.get_val_preds(final_model, val_images)
-        ### Can add a condition in which we want to upload the model like if new accuracy is better or something
-        ### For now added the condition to be true replace that with apt conditions
+
+        matrix = confusion_matrix(val_labels, val_preds).tolist()
+
+        checkpoint = {
+                'state_dict': final_model.state_dict(),
+            }
+
         if True:
             newModelId = latestModelId + 1
             checkpointPath = 'models/downloads/'+str(newModelId)+'.pt'
-            #Uncomment the next line if you want to start saving the models locally
             save_ckp(checkpoint, checkpointPath)
-            ###uncomment the next line when we want to work with databases
-            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'matrix': [[1,2,3],[1,2,3]], 'points': tsne_features, "labels": all_labels}
-            save_model_to_db(newModelId, train_info) #Replace {} with model metrics
-
+            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'matrix': matrix, 'Points': tsne_features, "labels": all_labels}
+            save_model_to_db(newModelId, train_info) 
         return train_info
     
     def load_model(self, checkpoint_path, model):
@@ -142,8 +135,6 @@ class TrainImages(Resource):
             val_img = load_image(val_img)
             with torch.no_grad():
                 output = model(val_img)
-                # print("hello_output:", output[0])
-                # print("output_size: ", output.size())
                 _, pred = torch.max(output, 1)
             val_preds.append(int(pred.numpy()))
         return val_preds
