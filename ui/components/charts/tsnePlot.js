@@ -35,21 +35,23 @@ export default class TSNE extends React.Component {
     }
 
     return (
-      <Bubble
-        data={{ datasets: dataSet }}
-        options={{
-          legend: {
-            display: false,
-          },
-          title: {
-            display: true,
-            text: "T-SNE Data",
-            fontSize: 15,
-          },
-          maintainAspectRatio: false,
-          responsive: true,
-        }}
-      />
+      <>
+        <Bubble
+          data={{ datasets: dataSet }}
+          options={{
+            legend: {
+              display: false,
+            },
+            title: {
+              display: true,
+              text: "T-SNE Data",
+              fontSize: 15,
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+          }}
+        />
+      </>
     );
   }
 }
