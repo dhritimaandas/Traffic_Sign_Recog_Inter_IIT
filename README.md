@@ -91,16 +91,18 @@ The preprocessing and augmentation of images will take place as directed by the 
 
 **<h2 id="evaluation">Evaluation</h2>**
 
+The following metrics are used to interpret the model's performance :
+
 **1. Accuracy**: Accuracy score gives us information directly about the model. If the score is higher than previous model's score than the changes made by user is helping the model and boosting its performance but if score decreases than the changes made by user is backfiring. In the case where accuracy score decreases the user should
 1) add proper regularization to the network,
-2) add more images for training.
+2) add more images for training
 and retrain the model.
 
 **2. Loss**: If the validation loss seems to be much higher than training loss, it implies us that the model is starting to overfit on the data and hence solution the this 
 issue would be 
 1) to add proper regularization to the network,
 2) to simplify the network,
-3) to add more images for training.
+3) to add more images for training
 and retrain the model.
 
 **3. Confusion Matrix**: The Confusion Matrix helps us to understand on how well the model is performing the classification task. It provides us with the data of True Positives, True  Negatives, False positives and False Negetives, which gives us a broad view on how well the model works. So if True Positives and True Negatives have
