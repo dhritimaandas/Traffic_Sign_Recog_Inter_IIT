@@ -91,11 +91,34 @@ The preprocessing and augmentation of images will take place as directed by the 
 
 **<h2 id="evaluation">Evaluation</h2>**
 
-We have chosen loss, accuracy and weighted F1 score as metrics on which we make our decisions. We plot the graphs of the above-mentioned metrics against the epochs for both training and validation datasets. The plots help analyse the performance of the model over a period of time and help in deciding hyper-parameters such as the number of epochs for early-stopping, and also the stability of training and validation.
+The following metrics are used to interpret the model's performance :
 
-We also present a classification report using the SKLearn library, which shows class-wise precision, recall and f1 score, along with accuracy, macro and weighted f1 score on the whole dataset. This helps analyse class wise performance such as over and under-fitting when compared between train and validation classification reports. Hence, helps in adding new images to a particular class rather than on the whole dataset etc.
+**1. Accuracy**: Accuracy score gives us information directly about the model. If the score is higher than previous model's score than the changes made by user is helping the model and boosting its performance but if score decreases than the changes made by user is backfiring. In the case where accuracy score decreases the user should
+1) add proper regularization to the network,
+2) add more images for training
+and retrain the model.
 
-We provide a saliency map on the images used for training and validation. Deep learning models are often thought of as black-boxes, making them difficult to interpret and debug. The saliency map shows the pixel-wise importance of an image to the neural network trained on it. The higher the importance of the pixel in helping classify the image, the brighter the colour of the pixel in the saliency map. We use the gradients of w.r.t the input images to calculate the feature importance, as the higher the gradient of the predicted class w.r.t to an input feature (pixel) the higher is its correlation with the output, and hence higher the importance. The saliency map helps us understand how the deep learning model sees the input image and whether the image features are captured correctly or not. For example, images that are rotated from their usual position or shifted relative to the frame may not be captured well and will be visible in the saliency map, as the network may have been trained on centred images and specific orientation. The model then can be trained on augmented images making the model more robust to changes.
+**2. Loss**: If the validation loss seems to be much higher than training loss, it implies us that the model is starting to overfit on the data and hence solution the this 
+issue would be 
+1) to add proper regularization to the network,
+2) to simplify the network,
+3) to add more images for training
+and retrain the model.
+
+**3. Confusion Matrix**: The Confusion Matrix helps us to understand on how well the model is performing the classification task. It provides us with the data of True Positives, True  Negatives, False positives and False Negetives, which gives us a broad view on how well the model works. So if True Positives and True Negatives have
+compatively much higher than False Positives and False Negatives then the model is working fine else we need to imporve our model by adding images to data
+set and train it well on our data.
+
+**4. T-SNE Plot**: The T-SNE plot represents the features in the fully connected layers of the neural network which our network learns in 2 dimensions. So if datapoints in the plot for different classes are seen to be not localized properly, it implies us that the model finds it difficult to learn distinguishing features for those classes. Hence the solution is to add more images of these classes and retraining the model with extended dataset.
+
+**5. F1-Score**: F1 Score is an overall measure of the model's accuracy. A good score implies that the model trained has lower number of False Positives and False Negetives.
+If the F1 score decreases then the recent changes made to the model is effecting the model in negetive way. Hence in such case to imporve the model we should
+add more images for training and retrain the model. 
+
+**6. Saliency Map**: Deep learning models are often thought of as black-boxes, making them difficult to interpret and debug.
+The saliency map shows the pixel-wise importance of an image to the neural network trained on it. The higher the importance of the pixel in helping classify the image, 
+the brighter the colour of the pixel in the saliency map. The saliency map helps us understand how the deep learning model sees the input image and whether the image features are captured correctly or not. Thus if the localisation in the Saliency Map is not around the road sign in the image it means that the model isn't learning to classify the image and some kind of bias in the data is effecting its performance. Thus as solution to improve the model could be that we could add more images of the class of the image whose saliency map isn't accurate and is biased in some way so that model can understand the bias and negate its effect.
+
 
 <h2 id="settingupmachine">Setting up your machine</h2>
 
