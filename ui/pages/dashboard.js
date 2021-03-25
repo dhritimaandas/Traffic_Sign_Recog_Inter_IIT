@@ -2,11 +2,9 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Copyright from "../components/Copyright";
 import NavBar from "../components/navbar/Navbar";
 import dynamic from "next/dynamic";
 import Typography from "@material-ui/core/Typography";
@@ -16,7 +14,7 @@ import AccuracyLineChart from "../components/charts/accuracyLineChart";
 import FLineChart from "../components/charts/f1LineChart";
 import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
-import { Image } from "react-bootstrap";
+
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
@@ -136,9 +134,6 @@ export default function Dashboard() {
               </Paper>
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>
