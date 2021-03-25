@@ -28,8 +28,8 @@ class TrainImages(Resource):
     def post(self):
         args = parser.parse_args()
         images = args["images"]
-        split_val = args["split"]/100
-        balance = args["balance"]
+        split_val = args["split"][0]/100
+        balance = args["balance"][0]    
         # print(images)
         if len(images)*split_val < 1:
             split_val=0.2

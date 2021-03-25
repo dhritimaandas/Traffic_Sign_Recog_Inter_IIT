@@ -91,9 +91,8 @@ const preprocessImages = async (size) => {
 
 const sendBackend = async (callback) => {
   const data = {
-    split: state.dataSplits,
     images: await preprocessImages(32),
-    split: state.dataSplits,
+    split: state.dataSplits.validate,
     augmentations: state.newags,
     preprocessing: state.newpps,
     balance: state.balance,
@@ -105,7 +104,8 @@ const sendBackend = async (callback) => {
     },
     (e) => {
       if (e.response) alert("Error!", e.response.data);
-      else alert("Some Error Occurred!");
+      else alert("Some Error Occurred! Redirecting...");
+      callback();
     }
   );
 };
