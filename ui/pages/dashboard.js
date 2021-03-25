@@ -21,6 +21,11 @@ import ValidationAccuracyRadial from "../components/charts/validationAccuracyRad
 import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
 import HeatMap from "../components/charts/confusionMatrix";
 import TSNE from "../components/charts/tsnePlot";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -110,19 +115,29 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   <Paper className={classes.paper}>
                     <div className="heatMapContainer">
-                      <HeatMap matrix={models[Object.keys(models)[0]].model_metrics.matrix}/>
+                      <HeatMap matrix={models[Object.keys(models)[0]].model_metrics.matrix} />
                     </div>
-                    <p>
-                      The Confusion Matrix helps us to understand how well the
-                      model is performing the classification task. It provides
-                      us with the data of True Positives, True Negatives, False
-                      positives, and False Negatives, which gives us a broad
-                      view of how well the model works. So if True Positives and
-                      True Negatives have comparatively much higher than False
-                      Positives and False Negatives, then the model is working
-                      fine. Else we need to improve our model by adding images
-                      to the dataset and training it well on our data.
-                    </p>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header">
+                      <Typography className={classes.heading}><span style={{color:"green"}}><b>How to improve my model?</b></span></Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                            The Confusion Matrix helps us to understand how well the
+                          model is performing the classification task. It provides
+                          us with the data of True Positives, True Negatives, False
+                          positives, and False Negatives, which gives us a broad
+                          view of how well the model works. So if True Positives and
+                          True Negatives have comparatively much higher than False
+                          Positives and False Negatives, then the model is working
+                          fine. Else we need to improve our model by adding images
+                          to the dataset and training it well on our data.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </Paper>
                 </Grid>
 
@@ -139,16 +154,28 @@ export default function Dashboard() {
                       />
                     </div>
                     <div className="pt-3">
-                      If the validation loss seems to be much higher than
-                      training loss, it implies that the model is starting to
-                      overfit on the data, and hence the solution to this issue
-                      would be
-                      <ol>
-                        <li>to add proper regularization to the network,</li>
-                        <li>to simplify the network,</li>
-                        <li>to add more images for training.</li>
-                      </ol>
-                      and retrain the model.
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header">
+                      <Typography className={classes.heading}><span style={{color:"green"}}><b>How to improve my model?</b></span></Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          If the validation loss seems to be much higher than
+                          training loss, it implies that the model is starting to
+                          overfit on the data, and hence the solution to this issue
+                          would be
+                          <ol>
+                            <li>to add proper regularization to the network,</li>
+                            <li>to simplify the network,</li>
+                            <li>to add more images for training.</li>
+                          </ol>
+                          and retrain the model.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
                     </div>
                   </Paper>
                 </Grid>
@@ -164,16 +191,28 @@ export default function Dashboard() {
                         }
                       />
                     </div>
-                    <p className="pt-3">
-                      The T-SNE plot represents the features in the fully
-                      connected layers of the neural network, which our network
-                      learns in 2 dimensions. So if data points in the plot for
-                      different classes are not localized properly, it implies
-                      that the model finds it challenging to learn
-                      distinguishing features for those classes. Hence the
-                      solution is to add more images of these classes and
-                      retrain the model with the extended dataset.
-                    </p>
+                    <div className="pt-3">
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header">
+                      <Typography className={classes.heading}><span style={{color:"green"}}><b>How to improve my model?</b></span></Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          The T-SNE plot represents the features in the fully
+                          connected layers of the neural network, which our network
+                          learns in 2 dimensions. So if data points in the plot for
+                          different classes are not localized properly, it implies
+                          that the model finds it challenging to learn
+                          distinguishing features for those classes. Hence the
+                          solution is to add more images of these classes and
+                          retrain the model with the extended dataset.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>   
+                    </div>
                   </Paper>
                 </Grid>
               </Grid>
@@ -197,6 +236,11 @@ const augmentationOptions = [
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    width: '100%'
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
