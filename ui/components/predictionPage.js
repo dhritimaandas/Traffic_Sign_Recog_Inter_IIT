@@ -3,7 +3,7 @@ import { DropzoneArea } from "material-ui-dropzone";
 import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { CardColumns, Card, Row, Col } from "react-bootstrap";
+import { Spinner, Card, Row, Col } from "react-bootstrap";
 import axios from "../utils/axios";
 
 import classesNames from "../data/classNames";
@@ -53,8 +53,16 @@ class DropzoneAreaExample extends Component {
       files: [],
       predictions: null,
       images: null,
+      loading: false,
     };
   }
+
+  setLoading(value) {
+    this.setState({
+      loading: value,
+    });
+  }
+
   handleChange(files) {
     this.setState({
       files: files,
@@ -64,7 +72,7 @@ class DropzoneAreaExample extends Component {
   submitHandler = () => {
     let form_data = new FormData();
     form_data.append("file", this.state.files[0]);
-
+    this.setLoading(true);
     axios
       .post("predict", form_data)
       .then((res) => {
@@ -73,7 +81,8 @@ class DropzoneAreaExample extends Component {
       })
       .catch((e) => {
         alert("Some Error Occured");
-      });
+      })
+      .finally(() => this.setLoading(false));
   };
 
   render() {
@@ -94,7 +103,7 @@ class DropzoneAreaExample extends Component {
           color="primary"
           startIcon={<CloudUploadIcon />}
           onClick={this.submitHandler}
-          disabled={this.state.files.length == 0}
+          disabled={this.state.files.length == 0 || this.state.loading}
         >
           Predict
         </Button>
@@ -103,13 +112,19 @@ class DropzoneAreaExample extends Component {
         <h3 className="pb-3">
           <b>Predictions</b>
         </h3>
-        {this.state.predictions ? (
-          <Predictions
-            images={this.state.images}
-            predictions={this.state.predictions}
-          />
+        {!this.state.loading ? (
+          this.state.predictions ? (
+            <Predictions
+              images={this.state.images}
+              predictions={this.state.predictions}
+            />
+          ) : (
+            <h5>No predictions</h5>
+          )
         ) : (
-          <h5>No predictions</h5>
+          <div className="text-center">
+            <Spinner animation="border" />
+          </div>
         )}
       </Container>
     );
