@@ -50,6 +50,9 @@ export default function AugmentationModal({
           </Row>
           <Row className="mt-3">
             <Col className="text-center">
+              <p class="font-weight-lighter text-left">
+                Select a value between -100 to 100.
+              </p>
               <Form className="text-center">
                 <Row>
                   <Col sm={7}>

@@ -50,6 +50,9 @@ export default function AugmentationModal({
           </Row>
           <Row className="mt-3">
             <Col className="text-center">
+              <p class="font-weight-lighter text-left">
+                Select an angle between 0 to 360 degrees.
+              </p>
               <Form className="text-center">
                 <Row>
                   <Col sm={8}>

@@ -15,18 +15,12 @@ const Select = dynamic(() => import("react-select"), { ssr: false });
 const LossLineChart = dynamic(() =>
   import("../components/charts/lossLineChart")
 );
-const AccuracyLineChart = dynamic(() =>
-  import("../components/charts/accuracyLineChart")
-);
-const FLineChart = dynamic(() => import("../components/charts/f1LineChart"));
-const ValidationAccuracyRadial = dynamic(() =>
-  import("../components/charts/validationAccuracyRadial")
-);
-const TrainingAccuracyRadial = dynamic(() =>
-  import("../components/charts/trainingAccuracyRadial")
-);
-const HeatMap = dynamic(() => import("../components/charts/confusionMatrix"));
-const TSNE = dynamic(() => import("../components/charts/tsnePlot"));
+import AccuracyLineChart from "../components/charts/accuracyLineChart";
+import FLineChart from "../components/charts/f1LineChart";
+import ValidationAccuracyRadial from "../components/charts/validationAccuracyRadial";
+import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial";
+import HeatMap from "../components/charts/confusionMatrix";
+import TSNE from "../components/charts/tsnePlot";
 
 export default function Dashboard() {
   const classes = useStyles();
@@ -71,26 +65,44 @@ export default function Dashboard() {
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                   <Paper className={fixedHeightPaper}>
-                    <TrainingAccuracyRadial />
+                    <TrainingAccuracyRadial
+                      acc_p={models[Object.keys(models)[0]].model_metrics.acc_p}
+                    />
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Paper className={fixedHeightPaper}>
-                    <ValidationAccuracyRadial />
+                    <ValidationAccuracyRadial
+                      accuracy={
+                        models[Object.keys(models)[0]].model_metrics.valid_acc
+                      }
+                    />
                   </Paper>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
                   <Paper className={classes.paper}>
                     <div className="accGraphContainer">
-                      <AccuracyLineChart />
+                      <AccuracyLineChart
+                        acc_p={
+                          models[Object.keys(models)[0]].model_metrics.acc_p
+                        }
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                      />
                     </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Paper className={classes.paper}>
-                    <div className="tsneContainer">
-                      <TSNE />
+                  <Paper className={fixedHeightPaper}>
+                    <div className="accGraphContainer">
+                      <FLineChart
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                        f1_p={models[Object.keys(models)[0]].model_metrics.f1_p}
+                      />
                     </div>
                   </Paper>
                 </Grid>
@@ -98,24 +110,70 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   <Paper className={classes.paper}>
                     <div className="heatMapContainer">
-                      <HeatMap />
+                      <HeatMap matrix={models[Object.keys(models)[0]].model_metrics.matrix}/>
                     </div>
+                    <p>
+                      The Confusion Matrix helps us to understand how well the
+                      model is performing the classification task. It provides
+                      us with the data of True Positives, True Negatives, False
+                      positives, and False Negatives, which gives us a broad
+                      view of how well the model works. So if True Positives and
+                      True Negatives have comparatively much higher than False
+                      Positives and False Negatives, then the model is working
+                      fine. Else we need to improve our model by adding images
+                      to the dataset and training it well on our data.
+                    </p>
                   </Paper>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
                   <Paper className={classes.paper}>
                     <div className="graphContainer">
-                      <LossLineChart />
+                      <LossLineChart
+                        valid_acc={
+                          models[Object.keys(models)[0]].model_metrics.valid_acc
+                        }
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                      />
+                    </div>
+                    <div className="pt-3">
+                      If the validation loss seems to be much higher than
+                      training loss, it implies that the model is starting to
+                      overfit on the data, and hence the solution to this issue
+                      would be
+                      <ol>
+                        <li>to add proper regularization to the network,</li>
+                        <li>to simplify the network,</li>
+                        <li>to add more images for training.</li>
+                      </ol>
+                      and retrain the model.
                     </div>
                   </Paper>
                 </Grid>
-
                 <Grid item xs={12} md={6}>
-                  <Paper className={fixedHeightPaper}>
-                    <div className="graphContainer">
-                      <FLineChart />
+                  <Paper className={classes.paper}>
+                    <div className="tsneContainer">
+                      <TSNE
+                        points={
+                          models[Object.keys(models)[0]].model_metrics.Points
+                        }
+                        labels={
+                          models[Object.keys(models)[0]].model_metrics.labels
+                        }
+                      />
                     </div>
+                    <p className="pt-3">
+                      The T-SNE plot represents the features in the fully
+                      connected layers of the neural network, which our network
+                      learns in 2 dimensions. So if data points in the plot for
+                      different classes are not localized properly, it implies
+                      that the model finds it challenging to learn
+                      distinguishing features for those classes. Hence the
+                      solution is to add more images of these classes and
+                      retrain the model with the extended dataset.
+                    </p>
                   </Paper>
                 </Grid>
               </Grid>

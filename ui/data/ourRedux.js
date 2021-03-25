@@ -98,17 +98,20 @@ const sendBackend = async (callback) => {
     balance: state.balance,
   };
 
-  axios.post("train", data).then(
-    (result) => {
-      callback();
-      console.log(result)
-    },
-    (e) => {
-      if (e.response) alert("Error!", e.response.data);
-      else alert("Some Error Occurred! Redirecting...");
-      callback();
-    }
-  );
+  axios
+    .post("train", data)
+    .then(
+      (result) => {
+        callback();
+        console.log(result);
+      },
+      (e) => {
+        if (e.response) alert("Error!", e.response.data);
+        else alert("Some Error Occurred! Redirecting...");
+        callback();
+      }
+    )
+    .finally(() => resetState());
 };
 
 module.exports = {
