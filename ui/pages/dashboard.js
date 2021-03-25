@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -18,44 +18,21 @@ import TrainingAccuracyRadial from "../components/charts/trainingAccuracyRadial"
 const Select = dynamic(() => import("react-select"), {
   ssr: false,
 });
-import HeatMap from "../components/charts/confusionMatrix";
-import TSNE from "../components/charts/tsnePlot";
-
-const augmentationOptions = [
-  { value: 0, label: "Base Model" },
-  { value: 1, label: "Latest Model" },
-];
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
-}));
+const HeatMap = dynamic(() => import("../components/charts/confusionMatrix"));
+const TSNE = dynamic(() => import("../components/charts/tsnePlot"));
+import { fetchModels } from "../context/database";
 
 export default function Dashboard() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper);
   const [selected, setSelected] = React.useState();
+  const [models, setModels] = React.useState({});
 
+  useEffect(() => {
+    fetchModels(setModels);
+  }, []);
+
+  console.log(models, "s");
   const handleChange = (augment) => {
     setSelected(augment);
   };
@@ -139,3 +116,33 @@ export default function Dashboard() {
     </div>
   );
 }
+
+const augmentationOptions = [
+  { value: 0, label: "Base Model" },
+  { value: 1, label: "Latest Model" },
+];
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: "100vh",
+    overflow: "auto",
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+  fixedHeight: {
+    height: 240,
+  },
+}));
