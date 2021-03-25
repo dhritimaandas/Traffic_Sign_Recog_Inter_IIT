@@ -266,7 +266,7 @@ You can add several preprocessing techniques to your images as shown
 <br>
 <h3>Step 5</h3>
 
-You can add augmentations to your images as shown
+You can add augmentations to your images as shown. After clicking on next you will be redirected to the the page showing the final images sent to model.
 
 <div align="center">
 <img src="images/5(final).png">
