@@ -28,13 +28,17 @@ class TrainImages(Resource):
     def post(self):
         args = parser.parse_args()
         images = args["images"]
+        split_val = args["split"]/100
+        balance = args["balance"]
         # print(images)
-        images, labels = self.prepare_data(images, 48)
+        if len(images)*split_val < 1:
+            split_val=0.2
+        images, labels = self.prepare_data(images, 48, balance)
         #self.check_exp(images, labels, self.split)
-        val_acc = self.train(images, labels, self.split, self.batch_size)
+        val_acc = self.train(images, labels, split_val, self.batch_size)
         return val_acc
 
-    def prepare_data(self, images, num_classes, balance=True):
+    def prepare_data(self, images, num_classes, balance):
         array_imgs = []
         labels = []
         count = dict()
