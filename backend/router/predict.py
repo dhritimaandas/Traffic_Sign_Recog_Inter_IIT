@@ -27,7 +27,7 @@ class PredictImage(Resource):
         model = TrafficSignNet()
         #Uncomment the commented code in next to next line and delete 0 for using database
         #Commented to reduce the number of requests to database
-        latestModelId = 0 #load_latest_model_from_db()
+        latestModelId = load_latest_model_from_db()
         model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         # print(model)
         pred_label, pred_label_proba = self.predict_image(img, model)

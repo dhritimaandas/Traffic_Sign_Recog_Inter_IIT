@@ -95,7 +95,7 @@ class TrainImages(Resource):
         model = TrafficSignNet()
         #Uncomment the commented code in next to next line and delete 0 for using database
         #Commented to reduce the number of requests to database
-        latestModelId = 0 #load_latest_model_from_db()
+        latestModelId = load_latest_model_from_db()
         model = self.load_model('models/downloads/'+str(latestModelId)+'.pt', model)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=LR)
@@ -123,8 +123,8 @@ class TrainImages(Resource):
             #Uncomment the next line if you want to start saving the models locally
             save_ckp(checkpoint, checkpointPath)
             ###uncomment the next line when we want to work with databases
-            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'matrix': matrix, 'points': tsne_features, "labels": all_labels}
-            # save_model_to_db(newModelId, train_info) #Replace {} with model metrics
+            train_info = {'epoch': epoch, 'valid_acc': best_acc, 'loss_p': loss_p, 'acc_p': acc_p, 'f1_p': f1_p, 'matrix': [[1,2,3],[1,2,3]], 'points': tsne_features, "labels": all_labels}
+            save_model_to_db(newModelId, train_info) #Replace {} with model metrics
 
         return train_info
     

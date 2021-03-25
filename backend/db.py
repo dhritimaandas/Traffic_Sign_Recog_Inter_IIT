@@ -2,6 +2,8 @@ import pyrebase
 import pickle
 import time
 
+from models.baseModelData import baseModelData
+
 #Firebase configuration dictionary
 from config.firebaseConfig import firebaseConfig
 
@@ -22,7 +24,7 @@ def test_db():
 #Uploads base model to db and storage. Always has id 0. Make sure database and storage are empty before using it.
 def upload_base_model():
   #new model json
-  model_info = {'modelId': 0, 'model_metrics':{}, 'created_time': time.time()}
+  model_info = {'modelId': 0, 'model_metrics':baseModelData, 'created_time': time.time()}
   #Push the json to the database
   db.child("models").push(model_info)
   storage.child('models/0.pt').put('models/baseModel.pt')
