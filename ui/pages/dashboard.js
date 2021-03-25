@@ -131,29 +131,6 @@ export default function Dashboard() {
                           </AccordionDetails>
                         </Accordion> 
                       </div>
-                      <div className="pt-3">
-                        <Accordion>
-                          <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header">
-                          <Typography className={classes.heading}><span style={{color:"green"}}><b>How to improve my model?</b></span></Typography>
-                          </AccordionSummary>
-                          <AccordionDetails>
-                            <Typography>
-                              The Confusion Matrix helps us to understand how well the
-                              model is performing the classification task. It provides
-                              us with the data of True Positives, True Negatives,
-                              False positives, and False Negatives, which gives us a
-                              broad view of how well the model works. So if True
-                              Positives and True Negatives have comparatively much
-                              higher than False Positives and False Negatives, then
-                              the model is working fine. Else we need to improve our
-                              model by adding images to the dataset and training it
-                            </Typography>
-                          </AccordionDetails>
-                        </Accordion> 
-                      </div>
                     </Paper>
                   </Grid>
                   <Grid item xs={12} md={6}>
