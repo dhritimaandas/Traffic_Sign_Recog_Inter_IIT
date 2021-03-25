@@ -55,13 +55,11 @@ class Confirm extends Component {
     var arr = document.getElementsByName("choice");
     var balance = arr[0].checked;
 
-    // console.log(this.state)
     this.setState({
       balanceDataset: balance
     })
     updateState("balance", balance); //Update balance bool in the main data object
     updateState("dataSplits", this.state.datasetSplit); //Update the dataset splits in the main data object
-    console.log(getState());
 
     document.getElementById("loaderCircle").style.display="block";
     sendBackend(() => {

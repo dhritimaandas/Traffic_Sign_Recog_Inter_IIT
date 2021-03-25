@@ -31,7 +31,7 @@ export default function Augment() {
     delete newDict[augmentationKey];
     setAugs(newDict);
   };
-  console.log(getState());
+  
   return (
     <Container className="py-3">
       {modalName == "Flip" ? (

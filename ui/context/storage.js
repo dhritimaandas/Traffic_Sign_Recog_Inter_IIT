@@ -32,9 +32,7 @@ export const uploadHandler = (
   }
 
   // Single Promise for all files
-  Promise.all(promises)
-    .then(() => console.log("DONE"))
-    .catch(() => alert("Some Error Occurred"));
+  Promise.all(promises).catch(() => alert("Some Error Occurred"));
   return filePaths;
 };
 
@@ -65,7 +63,6 @@ export const downloadHandler = async () => {
   });
 
   await Promise.all(imgpaths)
-    .then(() => console.log("DONE"))
     .catch(() => alert("Some Error Occurred"));
 
   data.images = imgpaths;
