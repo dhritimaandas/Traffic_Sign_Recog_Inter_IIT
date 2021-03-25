@@ -71,26 +71,46 @@ export default function Dashboard() {
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                   <Paper className={fixedHeightPaper}>
-                    <TrainingAccuracyRadial />
+                    <TrainingAccuracyRadial
+                      acc_p={models[Object.keys(models)[0]].model_metrics.acc_p}
+                    />
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Paper className={fixedHeightPaper}>
-                    <ValidationAccuracyRadial />
+                    <ValidationAccuracyRadial
+                      accuracy={
+                        models[Object.keys(models)[0]].model_metrics.valid_acc
+                      }
+                    />
                   </Paper>
                 </Grid>
 
                 <Grid item xs={12} md={6}>
                   <Paper className={classes.paper}>
                     <div className="accGraphContainer">
-                      <AccuracyLineChart />
+                      <AccuracyLineChart
+                        acc_p={
+                          models[Object.keys(models)[0]].model_metrics.acc_p
+                        }
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                      />
                     </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Paper className={classes.paper}>
                     <div className="tsneContainer">
-                      <TSNE />
+                      <TSNE
+                        points={
+                          models[Object.keys(models)[0]].model_metrics.Points
+                        }
+                        labels={
+                          models[Object.keys(models)[0]].model_metrics.labels
+                        }
+                      />
                     </div>
                   </Paper>
                 </Grid>
@@ -106,7 +126,14 @@ export default function Dashboard() {
                 <Grid item xs={12} md={6}>
                   <Paper className={classes.paper}>
                     <div className="graphContainer">
-                      <LossLineChart />
+                      <LossLineChart
+                        valid_acc={
+                          models[Object.keys(models)[0]].model_metrics.valid_acc
+                        }
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                      />
                     </div>
                   </Paper>
                 </Grid>
@@ -114,7 +141,12 @@ export default function Dashboard() {
                 <Grid item xs={12} md={6}>
                   <Paper className={fixedHeightPaper}>
                     <div className="graphContainer">
-                      <FLineChart />
+                      <FLineChart
+                        loss_p={
+                          models[Object.keys(models)[0]].model_metrics.loss_p
+                        }
+                        f1_p={models[Object.keys(models)[0]].model_metrics.f1_p}
+                      />
                     </div>
                   </Paper>
                 </Grid>
