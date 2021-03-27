@@ -18,7 +18,7 @@ import copy
 from utils.saveCheckpoint import save_ckp
 from utils.trafficSignNet import TrafficSignNet_
 
-EPOCHS = 2
+EPOCHS = 20
 EARLY_EPOCHS = 15
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 LR = 1e-5
